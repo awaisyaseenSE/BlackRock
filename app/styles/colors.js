@@ -1,7 +1,7 @@
 export default {
   white: '#FFFFFF',
   skyBlue: '#3797EF',
-  lightBlack: '#262626',
+  lightBlack: '#4C5668',
   gray: '#9E9E9E',
   black: '#060606',
   blue: '#0063E0',
@@ -26,4 +26,5 @@ export default {
   btnColor: '#D2FFE2',
   onbordingTextColor: '#676464',
   primaryGreen: '#39CE6A',
+  borderColor: '#D0D5DE',
 };
