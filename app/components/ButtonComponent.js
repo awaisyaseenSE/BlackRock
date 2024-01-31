@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     color: colors.white,
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.rubik_medium,
   },
 });
 

@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -84,8 +83,8 @@ export default function LoginScreen() {
                   placeholder="Phone number"
                   onChangeText={text => setPhone(text)}
                   value={phone}
-                  clearIcon={email.length > 0 ? 'Clear' : ''}
-                  onPressClear={() => setEmail('')}
+                  clearIcon={phone.length > 0 ? 'Clear' : ''}
+                  onPressClear={() => setPhone('')}
                   keyboardType="phone-pad"
                 />
               ) : (
