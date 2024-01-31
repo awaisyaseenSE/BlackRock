@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "233986471130",
+    "project_id": "blackrock-fb931",
+    "storage_bucket": "blackrock-fb931.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233986471130:android:dfd512adef37812c5521e3",
+        "android_client_info": {
+          "package_name": "com.blackrock"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgtLTBVRnQMU-o7rBykpXpQ7aehAhHU-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
