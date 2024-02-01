@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList, ScrollView} from 'react-native';
 import React from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,30 +22,33 @@ export default function HomeScreen() {
         colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
         style={{flex: 1}}>
         <ScreenComponent>
-          <View style={styles.container}>
-            <Text style={styles.heading}>Welcome to Home Screen</Text>
-            <ButtonComponent
-              title="Logout"
-              style={styles.btn}
-              onPress={handleLogout}
-            />
-            <FlatList
-              data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
-              renderItem={() => (
-                <View
-                  style={{
-                    // borderWidth: 1,
-                    // borderColor: colors.borderColor,
-                    marginVertical: 20,
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{fontSize: 30, color: colors.lightBlack}}>
-                    Hello This is a text components
-                  </Text>
-                </View>
-              )}
-            />
-          </View>
+          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+            <View style={styles.container}>
+              <Text style={styles.heading}>Welcome to Home Screen</Text>
+              <ButtonComponent
+                title="Logout"
+                style={styles.btn}
+                onPress={handleLogout}
+              />
+              <FlatList
+                data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                renderItem={() => (
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: colors.borderColor,
+                      marginVertical: 20,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{fontSize: 30, color: colors.lightBlack}}>
+                      Hello This is a text components
+                    </Text>
+                  </View>
+                )}
+                scrollEnabled={false}
+              />
+            </View>
+          </ScrollView>
         </ScreenComponent>
       </LinearGradient>
     </>
