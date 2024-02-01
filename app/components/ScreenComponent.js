@@ -10,7 +10,10 @@ import React from 'react';
 export default function ScreenComponent({style, children}) {
   return (
     <>
-      <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
+      <StatusBar
+        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
+        backgroundColor={'black'}
+      />
       {Platform.OS === 'ios' ? (
         <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>
       ) : (

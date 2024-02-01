@@ -21,7 +21,8 @@ function MainNavigator(props) {
   return (
     <AuthsContext.Provider value={{user, setUser}}>
       <NavigationContainer>
-        {user !== null ? <AppNavigator /> : <AuthNavigator />}
+        {/* {user !== null ? <AppNavigator /> : <AuthNavigator />} */}
+        {auth()?.currentUser ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthsContext.Provider>
   );

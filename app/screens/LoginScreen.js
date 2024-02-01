@@ -6,6 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -19,6 +20,11 @@ import TextInputCompo from '../components/TextInputCompo';
 import ButtonComponent from '../components/ButtonComponent';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
+import {validateEmail} from '../helper/validation';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import useAuths from '../auth/useAuth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -28,6 +34,70 @@ export default function LoginScreen() {
   const [isSignIn, setIsSignIn] = useState(false);
   const [isPhoneSelected, setIsPhoneSelected] = useState(false);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const {user, setUser} = useAuths();
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const handleLogin = () => {
+    let emailValid = false;
+    if (email === '') {
+      setEmailError('Email is required!');
+    } else {
+      if (!validateEmail(email)) {
+        setEmailError('Email is invalid!');
+        emailValid = false;
+      } else {
+        setEmailError('');
+        emailValid = true;
+      }
+    }
+
+    if (password === '') {
+      setPasswordError('Password is required!');
+    } else {
+      if (password.length < 6) {
+        setPasswordError('Password is invalid!');
+      } else {
+        setPasswordError('');
+      }
+    }
+
+    try {
+      if (emailValid && password.length > 5) {
+        setLoading(true);
+        auth()
+          .signInWithEmailAndPassword(email, password)
+          .then(result => {
+            setEmail('');
+            setPassword('');
+            setLoading(false);
+            setUser(auth().currentUser);
+          })
+          .catch(error => {
+            setLoading(false);
+
+            if (error.code === 'auth/user-not-found') {
+              setEmailError('Invalid Email please check your email');
+            } else if (error.code === 'auth/invalid-email') {
+              setEmailError('Email is invalid!');
+            } else if (error.code === 'auth/wrong-password') {
+              setPasswordError('Password is invalid!');
+            } else if (error.code === 'auth/internal-error') {
+              Alert.alert('Please enter valid email and password!');
+            } else if (error.code === 'auth/invalid-credential') {
+              Alert.alert('Please enter valid email and password!');
+            } else {
+              console.log('Error while login: ', error);
+            }
+          });
+      }
+    } catch (error) {
+      console.log('Error while Login in handleLogin fun: ', error);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.white}}>
@@ -98,7 +168,19 @@ export default function LoginScreen() {
                   clearIcon={email.length > 0 ? 'Clear' : ''}
                   onPressClear={() => setEmail('')}
                   keyboardType="email-address"
+                  inputStyle={{
+                    marginBottom:
+                      emailError !== ''
+                        ? getResponsiveMargin(6)
+                        : getResponsiveMargin(14),
+                    borderColor:
+                      emailError !== '' ? colors.red : colors.borderColor,
+                  }}
+                  autoCapitalize="none"
                 />
+              )}
+              {emailError !== '' && (
+                <Text style={styles.errorText}>{emailError}</Text>
               )}
               <View style={styles.passwordTextContainer}>
                 <Text style={styles.heading2}>Password</Text>
@@ -117,7 +199,18 @@ export default function LoginScreen() {
                     ? require('../assets/view.png')
                     : require('../assets/hide.png')
                 }
+                inputStyle={{
+                  marginBottom:
+                    passwordError !== ''
+                      ? getResponsiveMargin(6)
+                      : getResponsiveMargin(14),
+                  borderColor:
+                    passwordError !== '' ? colors.red : colors.borderColor,
+                }}
               />
+              {passwordError !== '' && (
+                <Text style={styles.errorText}>{passwordError}</Text>
+              )}
             </View>
             <View style={styles.keepMeSignINContainer}>
               <TouchableOpacity
@@ -137,6 +230,8 @@ export default function LoginScreen() {
             <ButtonComponent
               title="Login"
               style={{marginTop: getResponsiveMargin(18)}}
+              onPress={handleLogin}
+              loading={loading}
             />
             <View style={styles.signINWithContainer}>
               <View style={styles.lineStyle} />
@@ -297,5 +392,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: getResponsiveMargin(24),
+  },
+  errorText: {
+    fontSize: 14,
+    fontFamily: fontFamily.rubik_regular,
+    color: colors.red,
+    paddingLeft: 4,
+    marginBottom: getResponsiveMargin(8),
   },
 });
