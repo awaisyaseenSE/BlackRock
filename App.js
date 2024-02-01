@@ -8,8 +8,8 @@ import SignUpScreen from './app/screens/SignUpScreen';
 export default function App() {
   return (
     <>
-      <SignUpScreen />
-      {/* <LoginScreen /> */}
+      {/* <SignUpScreen /> */}
+      <LoginScreen />
     </>
   );
 }
