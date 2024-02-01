@@ -96,10 +96,8 @@ const styles = StyleSheet.create({
     height: getResponsiveHeight(10),
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
-    // alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 22,
-    paddingTop: 6,
     paddingBottom: 8,
     borderTopLeftRadius: 36,
     borderTopRightRadius: 36,
@@ -108,8 +106,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   iconStyle: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     resizeMode: 'contain',
     tintColor: colors.black,
   },
@@ -122,6 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: fontFamily.rubik_regular,
     color: colors.black,
+    marginTop: 4,
   },
 });
 
