@@ -17,6 +17,8 @@ import {
 } from '../utils/getResponsiveMarginPadding';
 import TextInputCompo from '../components/TextInputCompo';
 import ButtonComponent from '../components/ButtonComponent';
+import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../navigation/navigationStrings';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -25,6 +27,7 @@ export default function LoginScreen() {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isSignIn, setIsSignIn] = useState(false);
   const [isPhoneSelected, setIsPhoneSelected] = useState(false);
+  const navigation = useNavigation();
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.white}}>
@@ -158,7 +161,11 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
             <View style={styles.footer}>
-              <TouchableOpacity style={{padding: 10}}>
+              <TouchableOpacity
+                style={{padding: 10}}
+                onPress={() =>
+                  navigation.navigate(navigationStrings.SIGN_UP_SCREEN)
+                }>
                 <Text style={styles.createAccoutTxt}>Create an account</Text>
               </TouchableOpacity>
             </View>

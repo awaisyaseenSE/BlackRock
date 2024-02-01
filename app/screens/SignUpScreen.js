@@ -21,12 +21,159 @@ import {
 import TextInputCompo from '../components/TextInputCompo';
 import ButtonComponent from '../components/ButtonComponent';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../navigation/navigationStrings';
+import {pickImage} from '../helper/mediaPicker';
+import {validateEmail} from '../helper/validation';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import useAuths from '../auth/useAuth';
 
 export default function SignUpScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const navigation = useNavigation();
+  const [selectedImage, setSelectedImage] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [imageError, setImageError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const {user, setUser} = useAuths();
+
+  const handlePickImage = async () => {
+    try {
+      let res = await pickImage();
+      if (!!res) {
+        setSelectedImage(res);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+    }
+  };
+
+  const uploadImage = async uri => {
+    const imageName = `profileImages/${auth()?.currentUser?.uid}.jpg`;
+    const reference = storage().ref(imageName);
+
+    try {
+      const task = reference.putFile(uri);
+      await task;
+      const downloadURL = await reference.getDownloadURL();
+      return downloadURL;
+    } catch (error) {
+      if (error.code == 'storage/unknown') {
+        setLoading(false);
+        console.log('error while uploading profile picture: ', error);
+        return null;
+      }
+      console.error('Error uploading image: ', error.message);
+      setLoading(false);
+      return null;
+    }
+  };
+
+  const handleUploadUserData = async () => {
+    try {
+      let downloadURLOfImage = await uploadImage(selectedImage);
+      if (!!downloadURLOfImage) {
+        await auth().currentUser?.updateProfile({
+          displayName: name,
+          photoURL: downloadURLOfImage,
+        });
+        await firestore().collection('users').doc(auth().currentUser.uid).set({
+          fullName: name,
+          email: email,
+          imageUrl: downloadURLOfImage,
+          dateOfJoin: new Date(),
+        });
+        setLoading(false);
+        setUser(auth().currentUser);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log('Error while uploading data of user to firestore: ', error);
+    }
+  };
+
+  const handleSignUp = () => {
+    if (selectedImage === '') {
+      setImageError('Image is required!');
+    } else {
+      setImageError('');
+    }
+    if (name === '') {
+      setNameError('Name is required!');
+    } else {
+      setNameError('');
+    }
+    if (password === '') {
+      setPasswordError('Password is required!');
+    } else {
+      if (password.length < 6) {
+        setPasswordError('Password is not less then 6 characters!');
+      } else {
+        setPasswordError('');
+      }
+    }
+
+    if (email === '') {
+      setEmailError('Email is required!');
+    } else {
+      if (!validateEmail(email)) {
+        setEmailError('Email is invalid!');
+      } else {
+        setEmailError('');
+      }
+    }
+
+    try {
+      if (
+        selectedImage !== '' &&
+        name !== '' &&
+        validateEmail(email) &&
+        password.length > 5
+      ) {
+        setLoading(true);
+        auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then(result => {
+            handleUploadUserData();
+            console.log('User account created & signed in!');
+          })
+          .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+              setLoading(false);
+              console.log('That email address is already in use!');
+              setEmailError('That email address is already in use!');
+            }
+            if (error.code === 'auth/invalid-email') {
+              setLoading(false);
+              console.log('That email address is invalid!');
+              setEmailError('That email address is invalid!');
+            }
+            if (error.code == 'auth/weak-password') {
+              setLoading(false);
+              console.log(
+                'Password is weak, password must be 6 characters or more!',
+              );
+              setEmailError('Password is weak, try again!');
+            }
+            setLoading(false);
+            console.log('getting ERROR while Sign up with Eamil: ', error);
+          });
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -44,6 +191,34 @@ export default function SignUpScreen() {
                 {/* <Text style={styles.heading}>Create an account</Text> */}
                 <Text style={styles.heading}>Create an account</Text>
               </View>
+              <View
+                style={{
+                  marginBottom: getResponsiveMargin(20),
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity onPress={handlePickImage}>
+                    <Image
+                      source={
+                        selectedImage !== ''
+                          ? {uri: selectedImage}
+                          : require('../assets/avatar.png')
+                      }
+                      style={styles.profileImage}
+                    />
+                    <View style={styles.cameraIconContainer}>
+                      <Image
+                        source={require('../assets/camera.png')}
+                        style={styles.cameraIcon}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                {imageError !== '' && (
+                  <Text style={[styles.errorText, {marginTop: 4}]}>
+                    {imageError}
+                  </Text>
+                )}
+              </View>
               <KeyboardAvoidingView
                 style={{
                   flex: 1,
@@ -60,16 +235,32 @@ export default function SignUpScreen() {
                       style={{
                         marginBottom: getResponsiveMargin(18),
                       }}>
-                      <Text style={styles.labelText}>Name</Text>
+                      <View style={styles.labelTxtContainer}>
+                        <Text style={styles.labelText}>Name</Text>
+                        {nameError !== '' && (
+                          <Text style={styles.errorText}>{nameError}</Text>
+                        )}
+                      </View>
+
                       <TextInputCompo
                         placeholder="FullName"
                         onChangeText={text => setName(text)}
                         value={name}
                         clearIcon={name.length > 0 ? 'Clear' : ''}
                         onPressClear={() => setName('')}
-                        inputStyle={{marginBottom: getResponsiveMargin(20)}}
+                        inputStyle={{
+                          marginBottom: getResponsiveMargin(20),
+                          borderColor:
+                            nameError !== '' ? colors.red : colors.borderColor,
+                        }}
                       />
-                      <Text style={styles.labelText}>Email</Text>
+
+                      <View style={styles.labelTxtContainer}>
+                        <Text style={styles.labelText}>Email</Text>
+                        {emailError !== '' && (
+                          <Text style={styles.errorText}>{emailError}</Text>
+                        )}
+                      </View>
                       <TextInputCompo
                         placeholder="hello@example.com"
                         onChangeText={text => setEmail(text)}
@@ -77,9 +268,19 @@ export default function SignUpScreen() {
                         clearIcon={email.length > 0 ? 'Clear' : ''}
                         onPressClear={() => setEmail('')}
                         keyboardType="email-address"
-                        inputStyle={{marginBottom: getResponsiveMargin(20)}}
+                        inputStyle={{
+                          marginBottom: getResponsiveMargin(20),
+                          borderColor:
+                            emailError !== '' ? colors.red : colors.borderColor,
+                        }}
+                        autoCapitalize="none"
                       />
-                      <Text style={styles.labelText}>Password</Text>
+                      <View style={styles.labelTxtContainer}>
+                        <Text style={styles.labelText}>Password</Text>
+                        {passwordError !== '' && (
+                          <Text style={styles.errorText}>{passwordError}</Text>
+                        )}
+                      </View>
                       <TextInputCompo
                         placeholder={'Enter Password'}
                         value={password}
@@ -93,6 +294,12 @@ export default function SignUpScreen() {
                             ? require('../assets/view.png')
                             : require('../assets/hide.png')
                         }
+                        inputStyle={{
+                          borderColor:
+                            passwordError !== ''
+                              ? colors.red
+                              : colors.borderColor,
+                        }}
                       />
                     </View>
                     <View style={{marginBottom: getResponsiveMargin(16)}}>
@@ -104,7 +311,11 @@ export default function SignUpScreen() {
                         </Text>
                       </Text>
                     </View>
-                    <ButtonComponent title="Sign up" />
+                    <ButtonComponent
+                      title="Sign up"
+                      onPress={handleSignUp}
+                      loading={loading}
+                    />
                     <View style={styles.orContainer}>
                       <View style={styles.lineStyle} />
                       <Text style={styles.orTxt}>or</Text>
@@ -131,7 +342,10 @@ export default function SignUpScreen() {
                   <Text style={styles.subHeading}>
                     Already have an account?
                   </Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate(navigationStrings.LOGIN_SCREEN)
+                    }>
                     <Text
                       style={[
                         styles.subHeading,
@@ -232,5 +446,37 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     borderRadius: 8,
     backgroundColor: colors.skyBlue,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  cameraIcon: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
+    tintColor: colors.white,
+  },
+  cameraIconContainer: {
+    width: 26,
+    height: 26,
+    backgroundColor: colors.skyBlue,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    position: 'absolute',
+    bottom: 4,
+    right: 0,
+  },
+  errorText: {
+    fontSize: 14,
+    fontFamily: fontFamily.rubik_regular,
+    color: colors.red,
+    paddingLeft: 4,
+  },
+  labelTxtContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
