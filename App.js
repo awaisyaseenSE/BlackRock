@@ -1,15 +1,18 @@
 import 'react-native-gesture-handler';
-import {View, Text, SafeAreaView} from 'react-native';
-import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import LoginScreen from './app/screens/LoginScreen';
-import SignUpScreen from './app/screens/SignUpScreen';
+import MainNavigator from './app/navigation/MainNavigator';
+import SplashScreen from './app/screens/SplashScreen';
 
 export default function App() {
-  return (
-    <>
-      {/* <SignUpScreen /> */}
-      <LoginScreen />
-    </>
-  );
+  const [splashDone, setSplashDone] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSplashDone(true);
+    }, 2000);
+  }, []);
+
+  return <>{splashDone ? <MainNavigator /> : <SplashScreen />}</>;
 }
