@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import React from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,6 +29,22 @@ export default function HomeScreen() {
               style={styles.btn}
               onPress={handleLogout}
             />
+            <FlatList
+              data={[1, 2, 3, 4, 5, 6, 7, 8, 9]}
+              renderItem={() => (
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: colors.borderColor,
+                    marginVertical: 20,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{fontSize: 30, color: colors.lightBlack}}>
+                    Hello This is a text components
+                  </Text>
+                </View>
+              )}
+            />
           </View>
         </ScreenComponent>
       </LinearGradient>
@@ -39,18 +55,20 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    marginBottom: 40,
   },
   heading: {
     fontSize: 20,
     marginVertical: 10,
     color: colors.blue,
     fontFamily: fontFamily.lato_bold,
+    alignSelf: 'center',
   },
   btn: {
     width: '60%',
     borderRadius: 12,
     marginBottom: 30,
+    alignSelf: 'center',
+    marginTop: 8,
   },
 });
