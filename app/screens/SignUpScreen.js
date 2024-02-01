@@ -27,6 +27,7 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+
   return (
     <>
       <LinearGradient
@@ -40,6 +41,7 @@ export default function SignUpScreen() {
             onPress={Keyboard.dismiss}>
             <View style={styles.container}>
               <View style={styles.headingContainer}>
+                {/* <Text style={styles.heading}>Create an account</Text> */}
                 <Text style={styles.heading}>Create an account</Text>
               </View>
               <KeyboardAvoidingView
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
     fontSize: getFontSize(26),
     color: colors.black,
     fontFamily: fontFamily.rubik_bold,
+    textAlign: 'left',
   },
   headingContainer: {
     marginTop: getResponsiveMargin(34),
@@ -222,5 +225,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     marginBottom: getResponsiveMargin(24),
+  },
+  btn: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginVertical: 6,
+    borderRadius: 8,
+    backgroundColor: colors.skyBlue,
   },
 });
