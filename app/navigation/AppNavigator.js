@@ -5,6 +5,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawer from './CustomDrawer';
 import AboutScreen from '../screens/AboutScreen';
 import {Dimensions, Platform} from 'react-native';
+import DetailProductScreen from '../screens/DetailProductScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -64,6 +65,13 @@ function AppNavigator() {
           presentation: 'modal',
           // animationTypeForReplace: 'push',
           // animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen
+        name="DetailProductScreen"
+        component={DetailProductScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

@@ -4,4 +4,5 @@ export default {
   HOME_SCREEN: 'HomeScreen',
   ABOUT_SCREEN: 'AboutScreen',
   MAIN_TAB_ROUTES: 'MainTabRoutes',
+  DETAIL_PRODUCT_ROUTES: 'DetailProductScreen',
 };

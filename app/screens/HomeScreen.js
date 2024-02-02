@@ -10,6 +10,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
@@ -29,6 +30,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 const screenWidth = Dimensions.get('window').width;
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+} from 'react-native-reanimated';
+import LoadingComponent from '../components/LoadingComponent';
 
 export default function HomeScreen() {
   const {logout} = useAuth();
@@ -61,14 +70,30 @@ export default function HomeScreen() {
     }
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({item, index}) => {
+    const time = Date.now();
     return (
-      <View style={{marginVertical: getResponsiveMargin(6)}}>
-        <View style={{}}>
+      <Animated.View
+        entering={FadeInDown.delay(index * 100)
+          .duration(2000)
+          .springify()
+          .damping(8)}
+        style={{marginVertical: getResponsiveMargin(6)}}>
+        <View style={{alignItems: 'center'}}>
           <Text style={styles.heading}>{item?.photographer}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
+                data: item,
+              })
+            }>
+            <Animated.Image
+              source={{uri: item?.src?.landscape}}
+              style={styles.image}
+            />
+          </TouchableOpacity>
         </View>
-        <FastImage source={{uri: item?.src?.landscape}} style={styles.image} />
-      </View>
+      </Animated.View>
     );
   };
   const renderItemOne = ({item}) => {
@@ -81,6 +106,10 @@ export default function HomeScreen() {
       </View>
     );
   };
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <>
@@ -160,8 +189,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   image: {
-    width: '100%',
-    height: getResponsiveHeight(26),
+    width: screenWidth - 50,
+    height: getResponsiveHeight(18),
     resizeMode: 'contain',
   },
   TopImage: {
