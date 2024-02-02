@@ -4,19 +4,39 @@ import TabRoutes from './TabRoutes';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CustomDrawer from './CustomDrawer';
 import AboutScreen from '../screens/AboutScreen';
+import {Dimensions, Platform} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+const {width, height} = Dimensions.get('window');
+
 const DrawerNavigator = () => (
   <>
     <Drawer.Navigator
-      initialRouteName="TabRoutes"
+      // initialRouteName="TabRoutes"
+      // screenOptions={{
+      //   headerShown: false,
+      //   drawerPosition: 'left',
+      //   drawerActiveBackgroundColor: 'transparent',
+      //   drawerInactiveBackgroundColor: 'transparent',
+      // }}
       screenOptions={{
+        drawerStyle: {
+          width: width * 0.7,
+          alignSelf: 'center',
+        },
+        sceneContainerStyle: {
+          // backgroundColor: '#FFFFFF33',
+        },
+        swipeEdgeWidth: Platform.OS === 'android' && 100,
         headerShown: false,
         drawerPosition: 'left',
         drawerActiveBackgroundColor: 'transparent',
         drawerInactiveBackgroundColor: 'transparent',
+        drawerActiveTintColor: 'red',
+        drawerInactiveTintColor: 'green',
+        overlayColor: 'transparent',
       }}
       drawerContent={props => <CustomDrawer {...props} />}>
       <Drawer.Screen
@@ -39,7 +59,12 @@ function AppNavigator() {
       <Stack.Screen
         name="AboutScreen"
         component={AboutScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+          // animationTypeForReplace: 'push',
+          // animation: 'slide_from_right',
+        }}
       />
     </Stack.Navigator>
   );

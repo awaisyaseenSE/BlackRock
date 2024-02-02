@@ -15,7 +15,7 @@ export default function NotificationScreen() {
   return (
     <>
       <ScreenComponent>
-        <View>
+        <View style={{flexGrow: 1, backgroundColor: 'lightcoral'}}>
           <Text>NotificationScreen</Text>
           <ButtonComponent title="Profile" onPress={handleNavigate} />
         </View>

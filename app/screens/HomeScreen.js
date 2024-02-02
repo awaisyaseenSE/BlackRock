@@ -27,6 +27,7 @@ import {
 } from '../utils/getResponsiveMarginPadding';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../navigation/navigationStrings';
 const screenWidth = Dimensions.get('window').width;
 
 export default function HomeScreen() {
@@ -93,7 +94,7 @@ export default function HomeScreen() {
         colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
         style={{flex: 1}}>
         <View style={[styles.container, {paddingTop: insets.top}]}>
-          <View>
+          <View style={{marginBottom: 20, marginTop: 12}}>
             <TouchableOpacity
               style={styles.drawerIconContainer}
               onPress={() => navigation.openDrawer()}>
@@ -102,6 +103,18 @@ export default function HomeScreen() {
                 style={styles.drawerIcon}
               />
             </TouchableOpacity>
+            <ButtonComponent
+              title="About screen"
+              style={{
+                width: '50%',
+                alignSelf: 'center',
+                borderRadius: 6,
+                marginTop: 10,
+              }}
+              onPress={() =>
+                navigation.navigate(navigationStrings.ABOUT_SCREEN)
+              }
+            />
           </View>
           <FlatList
             data={photos}

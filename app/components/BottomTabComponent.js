@@ -93,7 +93,8 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: getResponsiveHeight(10),
+    // height: getResponsiveHeight(10),
+    height: 80,
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     justifyContent: 'space-between',
