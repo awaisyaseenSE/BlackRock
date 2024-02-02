@@ -8,6 +8,8 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
@@ -24,6 +26,7 @@ import {
   getResponsiveMargin,
 } from '../utils/getResponsiveMarginPadding';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
 const screenWidth = Dimensions.get('window').width;
 
 export default function HomeScreen() {
@@ -31,6 +34,7 @@ export default function HomeScreen() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchPhotos();
@@ -89,6 +93,16 @@ export default function HomeScreen() {
         colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
         style={{flex: 1}}>
         <View style={[styles.container, {paddingTop: insets.top}]}>
+          <View>
+            <TouchableOpacity
+              style={styles.drawerIconContainer}
+              onPress={() => navigation.openDrawer()}>
+              <Image
+                source={require('../assets/drawer_Icon.png')}
+                style={styles.drawerIcon}
+              />
+            </TouchableOpacity>
+          </View>
           <FlatList
             data={photos}
             renderItem={renderItemOne}
@@ -146,5 +160,15 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     resizeMode: 'contain',
+  },
+  drawerIconContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  drawerIcon: {
+    width: 14,
+    height: 14,
+    resizeMode: 'contain',
+    tintColor: colors.black,
   },
 });
