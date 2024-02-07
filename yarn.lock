@@ -1785,6 +1785,11 @@
     "@expo/config-plugins" "^5.0.4"
     plist "^3.0.5"
 
+"@react-native-firebase/database@16.5.0":
+  version "16.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-16.5.0.tgz#9bb541cd61a519b33f31bb29d5bdcb4605e00bc7"
+  integrity sha512-swQeygaKqkkg5j7zkjlzX/yFEtXktBj+Bm3rPAdVEusTgSndZyK3ul8r2ReI97QCNoMZp8G2zsEhfhKYVBt1iA==
+
 "@react-native-firebase/firestore@^16.5.0":
   version "16.7.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-16.7.0.tgz#975fd79ab628aad844ad4da6c01ae4e47ee07508"
