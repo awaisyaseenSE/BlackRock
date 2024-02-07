@@ -9,6 +9,7 @@ import navigationStrings from '../navigation/navigationStrings';
 import firestore from '@react-native-firebase/firestore';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
+import FastImage from 'react-native-fast-image';
 
 function CustomDrawer(props) {
   const navigation = useNavigation();
@@ -48,6 +49,10 @@ function CustomDrawer(props) {
           ]}>
           {auth().currentUser?.displayName}
         </Text>
+        <FastImage
+          source={{uri: auth()?.currentUser?.photoURL}}
+          style={styles.profileImage}
+        />
         <View style={{flex: 1, marginTop: 18}}>
           <DrawerItemListCompo
             image={require('../assets/favorite.png')}
@@ -91,6 +96,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.black,
     fontFamily: fontFamily.rubik_medium,
+  },
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginTop: 12,
   },
 });
 
