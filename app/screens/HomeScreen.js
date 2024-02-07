@@ -132,18 +132,6 @@ export default function HomeScreen() {
                 style={styles.drawerIcon}
               />
             </TouchableOpacity>
-            <ButtonComponent
-              title="About screen"
-              style={{
-                width: '50%',
-                alignSelf: 'center',
-                borderRadius: 6,
-                marginTop: 10,
-              }}
-              onPress={() =>
-                navigation.navigate(navigationStrings.ABOUT_SCREEN)
-              }
-            />
           </View>
           <FlatList
             data={photos}
@@ -151,7 +139,7 @@ export default function HomeScreen() {
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
             horizontal
-            pagingEnabled
+            // pagingEnabled
           />
           <View style={{marginVertical: getResponsiveMargin(6)}} />
           <FlatList

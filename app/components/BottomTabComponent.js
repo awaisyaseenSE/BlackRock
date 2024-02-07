@@ -3,8 +3,10 @@ import React from 'react';
 import {getResponsiveHeight} from '../utils/getResponsiveMarginPadding';
 import fontFamily from '../styles/fontFamily';
 import colors from '../styles/colors';
+import auth from '@react-native-firebase/auth';
 
 const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
+  const userProfileImage = auth()?.currentUser?.photoURL;
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -71,10 +73,22 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
         style={styles.iconContainer}
         onPress={() => setSelectedScreen(3)}>
         <Image
-          source={require('../assets/user.png')}
+          source={
+            userProfileImage !== undefined &&
+            userProfileImage !== null &&
+            userProfileImage !== ''
+              ? {uri: userProfileImage}
+              : require('../assets/user.png')
+          }
           style={[
-            styles.iconStyle,
-            {tintColor: selectedScreen === 3 ? colors.darkBlue : colors.black},
+            !!userProfileImage ? styles.profileImage : styles.iconStyle,
+            {
+              tintColor: !userProfileImage
+                ? selectedScreen === 3
+                  ? colors.darkBlue
+                  : colors.black
+                : null,
+            },
           ]}
         />
         <Text
@@ -107,8 +121,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   iconStyle: {
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
     resizeMode: 'contain',
     tintColor: colors.black,
   },
@@ -122,6 +136,11 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.rubik_regular,
     color: colors.black,
     marginTop: 4,
+  },
+  profileImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
   },
 });
 

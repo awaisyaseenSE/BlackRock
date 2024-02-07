@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -25,6 +26,7 @@ import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ButtonComponent from '../components/ButtonComponent';
+import {useNavigation} from '@react-navigation/native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -34,6 +36,7 @@ export default function ProfileScreen() {
   const [selectedImage, setSelectedImage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [medialUrls, setMediaUrls] = useState([]);
+  const navigation = useNavigation();
 
   const handleAddselectImages = newImage => {
     setSelectedImage(prevImages => [...prevImages, newImage]);
@@ -108,44 +111,6 @@ export default function ProfileScreen() {
     }
   };
 
-  const sendToStorage = async image => {
-    setLoading(true);
-    let uri = image;
-    const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    blob();
-
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        setLoading(false);
-        console.log(e);
-        reject(new TypeError('Network request failed'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
-    });
-
-    const timestamp = Date.now();
-
-    firebase
-      .storage()
-      .ref()
-      .child('testing/' + timestamp)
-      .put(blob)
-      .then(uri => {
-        console.log(uri);
-      })
-      .catch(error => {
-        console.log(error);
-        setLoading(false);
-      });
-  };
-
   const renderItem = ({item, index}) => {
     return (
       <View style={{marginRight: 8}}>
@@ -167,14 +132,21 @@ export default function ProfileScreen() {
       <View style={styles.container}>
         <View style={{backgroundColor: '#AC72C4'}}>
           <ImageBackground
-            source={require('../assets/image.jpg')}
+            source={require('../assets/men.jpg')}
             style={styles.imageContainer}
             imageStyle={{opacity: 0.4}}>
-            <View style={[styles.iconsContainer, {paddingTop: insets.top}]}>
-              <Image
-                source={require('../assets/drawer_Icon.png')}
-                style={styles.icons}
-              />
+            <View
+              style={[
+                styles.iconsContainer,
+                {paddingTop: Platform.OS === 'android' ? 14 : insets.top},
+              ]}>
+              <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Image
+                  source={require('../assets/drawer_Icon.png')}
+                  style={styles.icons}
+                />
+              </TouchableOpacity>
+
               <Text style={styles.profileTxt}>Profile</Text>
               <Image
                 source={require('../assets/tab_search.png')}
@@ -185,7 +157,7 @@ export default function ProfileScreen() {
         </View>
         <View style={{alignItems: 'center'}}>
           <Image
-            source={require('../assets/image.jpg')}
+            source={require('../assets/men.jpg')}
             style={styles.profileImage}
           />
         </View>
@@ -288,6 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingLeft: 12,
     flexDirection: 'row',
+    // backgroundColor: 'red',
   },
   selectedimage: {
     width: getResponsiveWidth(30),

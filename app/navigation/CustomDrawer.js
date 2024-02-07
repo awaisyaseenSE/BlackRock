@@ -14,6 +14,7 @@ import FastImage from 'react-native-fast-image';
 function CustomDrawer(props) {
   const navigation = useNavigation();
   const {logout} = useAuth();
+  const userProfileImage = auth()?.currentUser?.photoURL;
 
   const handleLogout = () => {
     try {
@@ -50,7 +51,11 @@ function CustomDrawer(props) {
           {auth().currentUser?.displayName}
         </Text>
         <FastImage
-          source={{uri: auth()?.currentUser?.photoURL}}
+          source={
+            !!userProfileImage
+              ? {uri: userProfileImage}
+              : require('../assets/avatar.png')
+          }
           style={styles.profileImage}
         />
         <View style={{flex: 1, marginTop: 18}}>

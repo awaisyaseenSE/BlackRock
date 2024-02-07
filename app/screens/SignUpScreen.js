@@ -60,7 +60,9 @@ export default function SignUpScreen() {
     const reference = storage().ref(imageName);
 
     try {
-      const task = reference.putFile(uri);
+      const response = await fetch(uri);
+      const blobImage = await response.blob();
+      const task = reference.put(blobImage);
       await task;
       const downloadURL = await reference.getDownloadURL();
       return downloadURL;
@@ -456,7 +458,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     resizeMode: 'contain',
-    tintColor: colors.white,
+    tintColor: colors.lightBlack,
   },
   cameraIconContainer: {
     width: 26,
