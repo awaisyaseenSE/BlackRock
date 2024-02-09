@@ -27,4 +27,5 @@ export default {
   onbordingTextColor: '#676464',
   primaryGreen: '#39CE6A',
   borderColor: '#D0D5DE',
+  onBoardingBg: '#F9E9B2',
 };

@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import React from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import ButtonComponent from '../components/ButtonComponent';
@@ -13,7 +13,11 @@ import Animated, {
   FadeInRight,
   FadeInUp,
 } from 'react-native-reanimated';
-import {getValue, storeValue} from '../helper/storeAndGetAsyncStorageValue';
+import {
+  getValue,
+  removeItemValue,
+  storeValue,
+} from '../helper/storeAndGetAsyncStorageValue';
 
 export default function NotificationScreen() {
   const navigation = useNavigation();
@@ -37,6 +41,20 @@ export default function NotificationScreen() {
     try {
       let key = 'onBoarding';
       await storeValue(key, 'true');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveOnBoarding = async () => {
+    try {
+      let key = 'onBoarding';
+      const res = await removeItemValue(key);
+      if (!!res) {
+        Alert.alert('Data is Removed Successfully!');
+      } else {
+        Alert.alert('Data is not Removed some thing wrong!');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +85,11 @@ export default function NotificationScreen() {
               style={styles.btn1}
               onPress={handleStoreValue}
             />
+            <ButtonComponent
+              title="Remove onboarding status"
+              style={styles.btn2}
+              onPress={handleRemoveOnBoarding}
+            />
           </View>
         </View>
       </ScreenComponent>
@@ -93,5 +116,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     backgroundColor: colors.primaryGreen,
+  },
+  btn2: {
+    width: '50%',
+    marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: colors.red,
   },
 });

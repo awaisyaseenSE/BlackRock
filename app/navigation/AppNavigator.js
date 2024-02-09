@@ -7,6 +7,8 @@ import AboutScreen from '../screens/AboutScreen';
 import {Dimensions, Platform} from 'react-native';
 import DetailProductScreen from '../screens/DetailProductScreen';
 import RealTimeDatabase from '../screens/RealTimeDatabase';
+import OnboardingScreen from '../screens/OnboardingScreen';
+import constants from '../constants/constants';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -52,7 +54,17 @@ const DrawerNavigator = () => (
 
 function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="MainTabRoutes">
+    // <Stack.Navigator initialRouteName="MainTabRoutes">
+    <Stack.Navigator>
+      {!constants.onBoardingStatus && (
+        <Stack.Screen
+          name="OnboardingScreen"
+          component={OnboardingScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
       <Stack.Screen
         name="MainTabRoutes"
         component={DrawerNavigator}

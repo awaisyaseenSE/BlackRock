@@ -6,4 +6,5 @@ export default {
   MAIN_TAB_ROUTES: 'MainTabRoutes',
   DETAIL_PRODUCT_ROUTES: 'DetailProductScreen',
   REAL_TIME_DATABASE: 'RealTimeDatabase',
+  ONBOARDING_SCREEN: 'OnboardingScreen',
 };

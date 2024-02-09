@@ -18,3 +18,13 @@ export const getValue = async key => {
     console.log('Error while getting value in async storage: ', error);
   }
 };
+
+export const removeItemValue = async key => {
+  try {
+    await AsynStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    console.log('Error while removing item in async storage: ', error);
+    return false;
+  }
+};
