@@ -61,7 +61,10 @@ function CustomDrawer(props) {
         <View style={{flex: 1, marginTop: 18}}>
           <DrawerItemListCompo
             image={require('../assets/favorite.png')}
-            title="Archive"
+            title="Real Time Database"
+            onPress={() =>
+              navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
+            }
           />
           <DrawerItemListCompo
             image={require('../assets/user.png')}

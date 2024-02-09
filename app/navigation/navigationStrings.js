@@ -5,4 +5,5 @@ export default {
   ABOUT_SCREEN: 'AboutScreen',
   MAIN_TAB_ROUTES: 'MainTabRoutes',
   DETAIL_PRODUCT_ROUTES: 'DetailProductScreen',
+  REAL_TIME_DATABASE: 'RealTimeDatabase',
 };

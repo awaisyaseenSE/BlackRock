@@ -6,6 +6,7 @@ import CustomDrawer from './CustomDrawer';
 import AboutScreen from '../screens/AboutScreen';
 import {Dimensions, Platform} from 'react-native';
 import DetailProductScreen from '../screens/DetailProductScreen';
+import RealTimeDatabase from '../screens/RealTimeDatabase';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,6 +71,13 @@ function AppNavigator() {
       <Stack.Screen
         name="DetailProductScreen"
         component={DetailProductScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RealTimeDatabase"
+        component={RealTimeDatabase}
         options={{
           headerShown: false,
         }}
