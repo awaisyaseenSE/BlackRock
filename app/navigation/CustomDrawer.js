@@ -43,13 +43,6 @@ function CustomDrawer(props) {
           paddingHorizontal: 12,
         }}
         showsVerticalScrollIndicator={false}>
-        <Text
-          style={[
-            styles.userNameText,
-            {marginTop: Platform.OS === 'android' ? 10 : 0},
-          ]}>
-          {auth().currentUser?.displayName}
-        </Text>
         <FastImage
           source={
             !!userProfileImage
@@ -58,6 +51,15 @@ function CustomDrawer(props) {
           }
           style={styles.profileImage}
         />
+        <Text
+          style={[
+            styles.userNameText,
+            {marginTop: Platform.OS === 'android' ? 10 : 0},
+          ]}>
+          {!!auth().currentUser?.displayName
+            ? auth()?.currentUser?.displayName
+            : 'Anonymous'}
+        </Text>
         <View style={{flex: 1, marginTop: 18}}>
           <DrawerItemListCompo
             image={require('../assets/favorite.png')}
