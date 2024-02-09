@@ -15,12 +15,10 @@ import fontFamily from '../styles/fontFamily';
 import colors from '../styles/colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
-import ButtonComponent from '../components/ButtonComponent';
 import {getResponsivePadding} from '../utils/getResponsiveMarginPadding';
 import {storeValue} from '../helper/storeAndGetAsyncStorageValue';
 
 const screenWidth = Dimensions.get('screen').width;
-const screenHeight = Dimensions.get('screen').height;
 
 export default function OnboardingScreen() {
   const insets = useSafeAreaInsets();
@@ -132,11 +130,18 @@ export default function OnboardingScreen() {
     );
   };
 
-  const handleSwipe = index => {
+  const handleSwipe = direction => {
+    let newIndex = currentIndex;
+    if (direction === 'next') {
+      newIndex = Math.min(currentIndex + 1, data.length - 1);
+    } else if (direction === 'previous') {
+      newIndex = Math.max(currentIndex - 1, 0);
+    }
     ref?.current?.scrollToOffset({
-      offset: index * screenWidth,
+      offset: newIndex * screenWidth,
       animated: true,
     });
+    setcurrentIndex(newIndex);
   };
 
   const renderItem = ({item}) => {
@@ -185,7 +190,7 @@ export default function OnboardingScreen() {
       <View
         style={[
           styles.container,
-          {paddingTop: Platform.OS === 'android' ? 5 : insets.top},
+          {paddingTop: Platform.OS === 'android' ? 20 : insets.top},
         ]}>
         <View style={{paddingHorizontal: 20, flexDirection: 'row'}}>
           <TouchableOpacity
@@ -219,17 +224,17 @@ export default function OnboardingScreen() {
         </View>
         <View
           style={{
-            marginBottom: Platform.OS === 'android' ? 8 : insets.bottom,
+            marginBottom: Platform.OS === 'android' ? 20 : insets.bottom,
           }}>
           <View style={styles.bottomView}>
             {currentIndex > 0 ? (
               <TouchableOpacity
                 onPress={() => {
-                  if (currentIndex !== 0) handleSwipe(currentIndex - 1);
+                  handleSwipe('previous');
                 }}
                 style={styles.bottomButton}>
                 <Text style={[styles.btnText, {color: colors.black}]}>
-                  Prevoius
+                  Previous
                 </Text>
               </TouchableOpacity>
             ) : (
@@ -240,8 +245,7 @@ export default function OnboardingScreen() {
               style={[styles.bottomButton, {backgroundColor: '#8B8000'}]}
               onPress={() => {
                 if (currentIndex < data.length - 1) {
-                  // next
-                  handleSwipe(currentIndex + 1);
+                  handleSwipe('next');
                 } else {
                   handleFinishOnBoarding();
                 }
