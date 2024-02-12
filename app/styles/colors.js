@@ -28,4 +28,5 @@ export default {
   primaryGreen: '#39CE6A',
   borderColor: '#D0D5DE',
   onBoardingBg: '#F9E9B2',
+  moviesBg: '#212320',
 };

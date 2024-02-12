@@ -1,4 +1,12 @@
-import {View, Text, Button, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import Animated, {
@@ -15,6 +23,9 @@ import FastImage from 'react-native-fast-image';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import colors from '../styles/colors';
 import MyIndicator from '../components/MyIndicator';
+// import Carousel from 'react-native-snap-carousel';
+
+const screenWidth = Dimensions.get('screen').width;
 
 export default function SearchScreen() {
   const [laoding, setLoading] = useState(false);
@@ -88,23 +99,28 @@ export default function SearchScreen() {
     getDataFormMB();
   }, []);
 
+  const renderItem = ({item}) => {
+    return (
+      <View>
+        <FastImage source={{uri: item}} style={styles.posterImage} />
+      </View>
+    );
+  };
+
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.onBoardingBg}}>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
+        <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
         <View style={{flex: 1}}>
-          <FlatList
+          {/* <Carousel
             data={movieImages}
-            renderItem={({item}) => {
-              return (
-                <View>
-                  <FastImage
-                    source={{uri: item}}
-                    style={{width: 200, height: 200}}
-                  />
-                </View>
-              );
-            }}
-          />
+            renderItem={renderItem}
+            sliderWidth={screenWidth}
+            itemWidth={screenWidth * 0.62}
+            slideStyle={{alignItems: 'center'}}
+            firstItem={1}
+            inactiveSlideOpacity={0.6}
+          /> */}
         </View>
         <MyIndicator visible={laoding} />
       </ScreenComponent>
@@ -118,5 +134,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '50%',
     borderRadius: 8,
+  },
+  posterImage: {
+    width: screenWidth * 0.58,
+    height: screenWidth * 0.84,
+    borderRadius: 10,
   },
 });
