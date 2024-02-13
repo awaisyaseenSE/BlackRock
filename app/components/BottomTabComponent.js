@@ -8,7 +8,14 @@ import auth from '@react-native-firebase/auth';
 const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
   const userProfileImage = auth()?.currentUser?.photoURL;
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            selectedScreen === 0 ? colors.whiteOpacity70 : colors.white,
+        },
+      ]}>
       <TouchableOpacity
         style={styles.iconContainer}
         onPress={() => setSelectedScreen(0)}>
@@ -109,7 +116,7 @@ const styles = StyleSheet.create({
   container: {
     // height: getResponsiveHeight(10),
     height: 80,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 22,

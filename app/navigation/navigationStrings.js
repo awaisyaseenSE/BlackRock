@@ -7,4 +7,5 @@ export default {
   DETAIL_PRODUCT_ROUTES: 'DetailProductScreen',
   REAL_TIME_DATABASE: 'RealTimeDatabase',
   ONBOARDING_SCREEN: 'OnboardingScreen',
+  DETAIL_MOVIE_SCREEN: 'DetailMovieScreen',
 };

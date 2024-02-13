@@ -11,9 +11,10 @@ const TopCompoWithHeading = ({
   rightIconStyle,
   rightTitle = '',
   onPressRightTitle,
+  style,
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...style}}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           style={{

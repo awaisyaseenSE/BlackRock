@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import {View} from 'react-native';
+import {View, LogBox} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import MainNavigator from './app/navigation/MainNavigator';
@@ -9,7 +9,7 @@ import constants from './app/constants/constants';
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);
-
+  LogBox.ignoreLogs(['ViewPropTypes']);
   useEffect(() => {
     checkOnBoarding();
     setTimeout(() => {

@@ -29,4 +29,5 @@ export default {
   borderColor: '#D0D5DE',
   onBoardingBg: '#F9E9B2',
   moviesBg: '#212320',
+  yellow: '#FEDD00',
 };

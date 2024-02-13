@@ -1,204 +1,275 @@
 import {
   View,
-  Text,
   StyleSheet,
-  FlatList,
-  ScrollView,
   Dimensions,
-  SafeAreaView,
-  Platform,
   StatusBar,
   TouchableOpacity,
+  FlatList,
   Image,
-  Alert,
+  Text,
+  ScrollView,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
-import LinearGradient from 'react-native-linear-gradient';
-import colors from '../styles/colors';
-import fontFamily from '../styles/fontFamily';
-import ButtonComponent from '../components/ButtonComponent';
-import useAuth from '../auth/useAuth';
+import {getApi} from '../helper/APICalls';
 import constants from '../constants/constants';
-import MyIndicator from '../components/MyIndicator';
 import FastImage from 'react-native-fast-image';
-import {
-  getResponsiveHeight,
-  getResponsiveMargin,
-} from '../utils/getResponsiveMarginPadding';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import colors from '../styles/colors';
+import MyIndicator from '../components/MyIndicator';
+import Carousel from 'react-native-snap-carousel';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
-const screenWidth = Dimensions.get('window').width;
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-} from 'react-native-reanimated';
-import LoadingComponent from '../components/LoadingComponent';
+import TopHomeComponent from '../components/TopHomeComponent';
+import fontFamily from '../styles/fontFamily';
+
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
 
 export default function HomeScreen() {
-  const {logout} = useAuth();
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const insets = useSafeAreaInsets();
+  const [laoding, setLoading] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [movieImages, setMovieImages] = useState([]);
   const navigation = useNavigation();
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
 
-  useEffect(() => {
-    fetchPhotos();
-  }, []);
-  const fetchPhotos = async () => {
+  const getMoviesData = () => {
     try {
-      setLoading(true);
-      const response = await fetch('https://api.pexels.com/v1/curated', {
-        headers: {
-          Authorization: constants.pexelApiKey,
-        },
-      });
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setPhotos(data.photos);
-      setLoading(false);
+      let requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+      let URLwithAPI_key =
+        'https://api.themoviedb.org/3/movie/550?api_key=9f2de56397d6a9ae9d096f42d24bbac7';
+
+      fetch(URLwithAPI_key, requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
     } catch (error) {
-      setLoading(false);
-      console.error('Error fetching photos:', error);
+      console.log('error in getting data of movie: ', error);
     }
   };
 
-  const renderItem = ({item, index}) => {
-    const time = Date.now();
-    return (
-      <Animated.View
-        entering={FadeInDown.delay(index * 100)
-          .duration(2000)
-          .springify()
-          .damping(8)}
-        style={{marginVertical: getResponsiveMargin(6)}}>
-        <View style={{alignItems: 'center'}}>
-          <Text style={styles.heading}>{item?.photographer}</Text>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
-                data: item,
-              })
-            }>
-            <Animated.Image
-              source={{uri: item?.src?.landscape}}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    );
+  const getEnglishMovies = () => {
+    console.log('....................English Movies data....................');
+    setLoading(true);
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZjJkZTU2Mzk3ZDZhOWFlOWQwOTZmNDJkMjRiYmFjNyIsInN1YiI6IjY1YzVmOGJkMWI3MGFlMDEzMGEyMmE0OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.3iba-AfsAroW-AzNhR7GLRGceMGJ9OMiZvydu0h3bXs',
+      },
+    };
+
+    fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+      .then(response => response.json())
+      .then(response => {
+        setLoading(false);
+        console.log(response);
+      })
+      .catch(err => {
+        setLoading(false);
+        console.error(err);
+      });
   };
-  const renderItemOne = ({item}) => {
+
+  const getDataFormMB = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/discover/movie');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setMovies(finalData);
+        const imgURls = finalData.map(
+          data => `${constants.image_poster_url}${data.backdrop_path}`,
+        );
+        setMovieImages(imgURls);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getTopRatedMovies = async () => {
+    try {
+      setLoading(true);
+      // let res = await getApi('/movie/popular');
+      let res = await getApi('/movie/top_rated');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setPopularMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getUpComingMovies = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/movie/upcoming');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setUpcomingMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getDataFormMB();
+    getTopRatedMovies();
+    getUpComingMovies();
+  }, []);
+
+  const navigateToNextScreen = (index, item) => {
+    let movieDetail = movies[index];
+    let imagePoster = item;
+    navigation.navigate(navigationStrings.DETAIL_MOVIE_SCREEN, {
+      data: {movieDetail, imagePoster},
+    });
+  };
+
+  const renderItem = ({item, index}) => {
     return (
-      <View style={{marginVertical: getResponsiveMargin(6)}}>
-        <FastImage
-          source={{uri: item?.src?.landscape}}
-          style={{width: screenWidth, height: getResponsiveHeight(20)}}
-        />
-      </View>
+      <TouchableOpacity onPress={() => navigateToNextScreen(index, item)}>
+        <FastImage source={{uri: item}} style={styles.posterImage} />
+      </TouchableOpacity>
     );
   };
 
-  if (loading) {
-    return <LoadingComponent />;
-  }
+  const PopularMovieCompo = ({data, id}) => {
+    let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
+    let movieDetail = data;
+    let imagePoster = postURL;
+    const handleNaviToDetail = () => {
+      navigation.navigate(navigationStrings.DETAIL_MOVIE_SCREEN, {
+        data: {movieDetail, imagePoster},
+      });
+    };
+
+    return (
+      <TouchableOpacity style={{marginLeft: 12}} onPress={handleNaviToDetail}>
+        <FastImage source={{uri: postURL}} style={styles.posterImageStyle} />
+        <Text numberOfLines={1} style={styles.subHeading}>
+          {data?.title?.length > 18
+            ? data?.title.slice(0, 18) + '...'
+            : data?.title}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
-      <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}
-        colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
-        style={{flex: 1}}>
-        <View style={[styles.container, {paddingTop: insets.top}]}>
-          <View style={{marginBottom: 20, marginTop: 12}}>
-            <TouchableOpacity
-              style={styles.drawerIconContainer}
-              onPress={() => navigation.openDrawer()}>
-              <Image
-                source={require('../assets/drawer_Icon.png')}
-                style={styles.drawerIcon}
-              />
-            </TouchableOpacity>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
+        <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
+        <TopHomeComponent leftOnPress={() => navigation.openDrawer()} />
+        <ScrollView
+          contentContainerStyle={{flex: 1}}
+          style={{flex: 1}}
+          showsVerticalScrollIndicator={false}>
+          <View style={{}}>
+            <Carousel
+              data={movieImages}
+              renderItem={renderItem}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth * 0.62}
+              slideStyle={{alignItems: 'center'}}
+              firstItem={1}
+              inactiveSlideOpacity={0.6}
+            />
+            <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Top Rated</Text>
+              <Text style={[styles.heading, {color: colors.yellow}]}>
+                See All
+              </Text>
+            </View>
+            <FlatList
+              data={popularMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+            <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Upcoming</Text>
+              <Text style={[styles.heading, {color: colors.yellow}]}>
+                See All
+              </Text>
+            </View>
+            <FlatList
+              data={upcomingMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+            <View style={{marginVertical: 30}} />
           </View>
-          <FlatList
-            data={photos}
-            renderItem={renderItemOne}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            // pagingEnabled
-          />
-          <View style={{marginVertical: getResponsiveMargin(6)}} />
-          <FlatList
-            data={photos}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      </LinearGradient>
-      <MyIndicator visible={loading} />
+        </ScrollView>
+        <MyIndicator visible={laoding} />
+      </ScreenComponent>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginBottom: 40,
-
-    // paddingTop: Platform.OS === 'ios' ? 40 : 10,
+  btn: {
+    marginVertical: 12,
+    alignSelf: 'center',
+    width: '50%',
+    borderRadius: 8,
+  },
+  posterImage: {
+    width: screenWidth * 0.58,
+    height: screenWidth * 0.84,
+    borderRadius: 10,
+  },
+  subHeading: {
+    color: colors.gray,
+    fontFamily: fontFamily.rubik_medium,
+    fontSize: 12,
+    marginTop: 4,
+    paddingHorizontal: 4,
+    overflow: 'hidden',
+  },
+  posterImageStyle: {
+    width: screenWidth / 3,
+    height: screenHeight * 0.2,
+    borderRadius: 12,
   },
   heading: {
-    fontSize: 20,
-    // marginVertical: 10,
-    color: colors.blue,
-    fontFamily: fontFamily.lato_bold,
-    // alignSelf: 'center',
+    fontSize: 16,
+    color: colors.LightWhite,
+    fontFamily: fontFamily.rubik_medium,
   },
-  btn: {
-    width: '60%',
-    borderRadius: 12,
-    marginBottom: 30,
-    alignSelf: 'center',
-    marginTop: 8,
-  },
-  image: {
-    width: screenWidth - 50,
-    height: getResponsiveHeight(18),
-    resizeMode: 'contain',
-  },
-  TopImage: {
-    width: '100%',
-    height: getResponsiveHeight(14),
-    resizeMode: 'contain',
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
-  },
-  drawerIconContainer: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  drawerIcon: {
-    width: 14,
-    height: 14,
-    resizeMode: 'contain',
-    tintColor: colors.black,
+  headingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    marginBottom: 14,
   },
 });
