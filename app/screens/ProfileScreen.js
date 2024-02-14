@@ -199,7 +199,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.LightWhite,
+    backgroundColor: colors.moviesBg,
   },
   imageContainer: {
     height: screenHeight * 0.25,

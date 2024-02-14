@@ -11,12 +11,12 @@ export default function SplashScreen() {
         style={{flex: 1}}
         start={{x: 1, y: 0}}
         end={{x: 0, y: 1}}
-        colors={['#F5F5F5', '#E3F7FF', '#E5ECFA']}>
+        colors={['#313131', '#262626', '#131313']}>
         <View style={styles.container}>
           <LottieView
             style={styles.logo}
-            source={require('../assets/animation/heart-animation.json')}
-            loop={false}
+            source={require('../assets/animation/movie.json')}
+            loop={true}
             autoPlay
           />
         </View>
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 130,
-    height: 130,
+    width: 200,
+    height: 200,
   },
 });

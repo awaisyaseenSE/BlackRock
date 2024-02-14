@@ -62,7 +62,7 @@ export default function NotificationScreen() {
 
   return (
     <>
-      <ScreenComponent>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <View style={{flex: 1}}>
           <Animated.Text
             entering={FadeInLeft.delay(200).duration(500)}

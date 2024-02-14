@@ -51,7 +51,7 @@ export default function SimilarMovieDetailScreen({route}) {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={colors.white} barStyle={'light-content'} />
+      <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
       <ImageBackground
         style={styles.imagePoster}
         source={

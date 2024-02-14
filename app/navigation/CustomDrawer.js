@@ -73,13 +73,6 @@ function CustomDrawer(props) {
             title="About"
             onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}
           />
-          <DrawerItemListCompo
-            image={require('../assets/dragon-logo.png')}
-            title="OnBoarding"
-            onPress={() =>
-              navigation.navigate(navigationStrings.ONBOARDING_SCREEN)
-            }
-          />
         </View>
       </DrawerContentScrollView>
       <View

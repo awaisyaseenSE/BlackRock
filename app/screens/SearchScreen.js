@@ -30,6 +30,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -78,9 +79,10 @@ export default function SearchScreen() {
           .duration(2000)
           .springify()
           .damping(8)}
-        style={{marginVertical: getResponsiveMargin(6)}}>
+        // style={{marginVertical: getResponsiveMargin(6)}}
+      >
         <View style={{alignItems: 'center'}}>
-          <Text style={styles.heading}>{item?.photographer}</Text>
+          {/* <Text style={styles.heading}>{item?.photographer}</Text> */}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
@@ -120,28 +122,18 @@ export default function SearchScreen() {
       <LinearGradient
         start={{x: 1, y: 0}}
         end={{x: 0, y: 1}}
-        colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
+        colors={['#313131', '#262626', '#131313']}
         style={{flex: 1}}>
         <View style={[styles.container, {paddingTop: insets.top}]}>
-          <View style={{marginBottom: 20, marginTop: 12}}>
-            <TouchableOpacity
-              style={styles.drawerIconContainer}
-              onPress={() => navigation.openDrawer()}>
-              <Image
-                source={require('../assets/drawer_Icon.png')}
-                style={styles.drawerIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          <FlatList
+          {/* <FlatList
             data={photos}
             renderItem={renderItemOne}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item, index) => index.toString()}
             horizontal
             // pagingEnabled
-          />
-          <View style={{marginVertical: getResponsiveMargin(6)}} />
+          /> */}
+          <View style={{marginBottom: getResponsiveMargin(6)}} />
           <FlatList
             data={photos}
             renderItem={renderItem}
@@ -177,8 +169,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   image: {
-    width: screenWidth - 50,
-    height: getResponsiveHeight(18),
+    width: screenWidth,
+    height: screenHeight / 4,
     resizeMode: 'contain',
   },
   TopImage: {
@@ -199,6 +191,6 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     resizeMode: 'contain',
-    tintColor: colors.black,
+    tintColor: colors.white,
   },
 });

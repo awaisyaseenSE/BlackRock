@@ -69,7 +69,7 @@ export default function DetailMovieScreen({route}) {
 
   useEffect(() => {
     getSimilarMovies();
-  }, []);
+  }, [routeData]);
 
   const PopularMovieCompo = ({data, id}) => {
     let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
@@ -78,7 +78,17 @@ export default function DetailMovieScreen({route}) {
       <TouchableOpacity
         style={{marginLeft: 12}}
         onPress={() => handleSimilarDetailScreenNavi(data, postURL)}>
-        <FastImage source={{uri: postURL}} style={styles.newposterImageStyle} />
+        <FastImage
+          // source={{uri: postURL}}
+          source={
+            postURL.endsWith('null')
+              ? {
+                  uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+                }
+              : {uri: postURL}
+          }
+          style={styles.newposterImageStyle}
+        />
         <Text numberOfLines={1} style={styles.newsubHeading}>
           {data?.title?.length > 18
             ? data?.title.slice(0, 18) + '...'
@@ -103,7 +113,7 @@ export default function DetailMovieScreen({route}) {
         showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <StatusBar
-            backgroundColor={colors.white}
+            backgroundColor={colors.black}
             barStyle={'light-content'}
           />
           <ImageBackground
@@ -157,9 +167,19 @@ export default function DetailMovieScreen({route}) {
             <View style={{marginVertical: 18}} />
             <View style={styles.newheadingContainer}>
               <Text style={styles.newheading}>Similar Movie</Text>
-              <Text style={[styles.newheading, {color: colors.yellow}]}>
-                See All
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.All_Similar_Movies_Screen,
+                    {
+                      data: similarMovies,
+                    },
+                  )
+                }>
+                <Text style={[styles.newheading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
             </View>
             <FlatList
               data={similarMovies}

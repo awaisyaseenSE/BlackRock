@@ -30,4 +30,5 @@ export default function App() {
   };
 
   return <>{splashDone ? <MainNavigator /> : <SplashScreen />}</>;
+  // return <SplashScreen />;
 }

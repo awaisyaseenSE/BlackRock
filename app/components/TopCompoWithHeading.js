@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: 'contain',
-    tintColor: colors.black,
+    tintColor: colors.white,
   },
   container: {
     paddingHorizontal: 10,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fontFamily.rubik_medium,
     marginLeft: 12,
-    color: colors.black,
+    color: colors.white,
   },
   righttext: {
     fontSize: 14,

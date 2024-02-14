@@ -74,7 +74,7 @@ export default function AboutScreen() {
 
   return (
     <>
-      <ScreenComponent>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <View style={styles.container}>
           <TopCompoWithHeading
             title="About"

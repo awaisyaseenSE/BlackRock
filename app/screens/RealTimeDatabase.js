@@ -163,7 +163,7 @@ export default function RealTimeDatabase() {
 
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.LightWhite}}>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <TopCompoWithHeading
           title="Real Time"
           onPress={() => navigation.goBack()}

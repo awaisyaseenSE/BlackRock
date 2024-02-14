@@ -79,12 +79,12 @@ const MovieDetailComponent = ({movieId}) => {
               marginTop: 20,
               justifyContent: 'center',
             }}>
-            <ActivityIndicator size={'large'} color={colors.blue} />
+            <ActivityIndicator size={'small'} color={colors.blue} />
             <Text
               style={{
                 color: colors.darkBlue,
                 marginHorizontal: 20,
-                fontSize: 20,
+                fontSize: 12,
               }}>
               Loading...
             </Text>
