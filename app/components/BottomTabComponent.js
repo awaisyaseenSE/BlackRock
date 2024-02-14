@@ -12,8 +12,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
       style={[
         styles.container,
         {
-          backgroundColor:
-            selectedScreen === 0 ? colors.whiteOpacity70 : colors.white,
+          backgroundColor: selectedScreen === 0 ? colors.grey : colors.white,
         },
       ]}>
       <TouchableOpacity

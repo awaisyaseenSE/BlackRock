@@ -32,6 +32,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [popularMovies, setPopularMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [latestMovies, setLatestMovies] = useState([]);
 
   const getMoviesData = () => {
     try {
@@ -131,10 +132,31 @@ export default function HomeScreen() {
     }
   };
 
+  // movie/latest
+
+  const getLatestMovies = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/movie/latest');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        console.log('latest movies is: ', res);
+        setLatestMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getDataFormMB();
     getTopRatedMovies();
     getUpComingMovies();
+    getLatestMovies();
   }, []);
 
   const navigateToNextScreen = (index, item) => {
@@ -181,10 +203,10 @@ export default function HomeScreen() {
         <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
         <TopHomeComponent leftOnPress={() => navigation.openDrawer()} />
         <ScrollView
-          contentContainerStyle={{flex: 1}}
+          // contentContainerStyle={{flex: 1}}
           style={{flex: 1}}
           showsVerticalScrollIndicator={false}>
-          <View style={{}}>
+          <View style={{marginBottom: 80}}>
             <Carousel
               data={movieImages}
               renderItem={renderItem}
@@ -226,7 +248,23 @@ export default function HomeScreen() {
               keyExtractor={(item, index) => index.toString()}
               horizontal
             />
-            <View style={{marginVertical: 30}} />
+
+            {/* <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Latest</Text>
+              <Text style={[styles.heading, {color: colors.yellow}]}>
+                See All
+              </Text>
+            </View>
+            <FlatList
+              data={latestMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            /> */}
           </View>
         </ScrollView>
         <MyIndicator visible={laoding} />

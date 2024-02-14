@@ -13,7 +13,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -25,6 +25,9 @@ import {
   getFontSize,
   getResponsiveMargin,
 } from '../utils/getResponsiveMarginPadding';
+import {getApi} from '../helper/APICalls';
+import constants from '../constants/constants';
+import FastImage from 'react-native-fast-image';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -40,6 +43,73 @@ export default function DetailMovieScreen({route}) {
   const routeData = route?.params?.data;
   const insets = useSafeAreaInsets();
   let movieDetails = routeData?.movieDetail;
+  const [laoding, setLoading] = useState(false);
+  const [listMovies, setListMovies] = useState([]);
+  const [moviesIds, setMoviesIDs] = useState([]);
+
+  // const getDetailByID = ids => {
+  //   const getData = async url => {
+  //     try {
+  //       let res = await getApi(url);
+  //       if (!!res) {
+  //         console.log('res: ', res);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   ids.forEach(id => {
+  //     let url = '/movie/' + id;
+  //     getData(url);
+  //   });
+  // };
+
+  const getListOFMovies = async () => {
+    // let url = '866398'
+    // https://api.themoviedb.org/3/movie/866398/lists?api_key=9f2de56397d6a9ae9d096f42d24bbac7
+    try {
+      setLoading(true);
+      let url = '/movie/' + movieDetails.id + '/lists';
+      let res = await getApi(url);
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setListMovies(finalData);
+        let temArr = [];
+        finalData.map(ele => temArr.push(ele.id));
+        if (temArr.length > 0) {
+          getDetailByID(temArr);
+        }
+      } else {
+        setLoading(false);
+        console.log('no data');
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getListOFMovies();
+  }, []);
+
+  const PopularMovieCompo = ({data, id}) => {
+    let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
+
+    return (
+      <TouchableOpacity style={{marginLeft: 12}}>
+        <FastImage source={{uri: postURL}} style={styles.newposterImageStyle} />
+        <Text numberOfLines={1} style={styles.newsubHeading}>
+          {data?.title?.length > 18
+            ? data?.title.slice(0, 18) + '...'
+            : data?.title}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -81,6 +151,23 @@ export default function DetailMovieScreen({route}) {
           </Text>
           <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
         </View>
+
+        <View style={{marginVertical: 18}} />
+        <View style={styles.newheadingContainer}>
+          <Text style={styles.newheading}>List</Text>
+          <Text style={[styles.newheading, {color: colors.yellow}]}>
+            See All
+          </Text>
+        </View>
+        <FlatList
+          data={listMovies}
+          renderItem={({item, index}) => (
+            <PopularMovieCompo data={item} id={index} />
+          )}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+        />
       </LinearGradient>
     </View>
   );
@@ -133,5 +220,30 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.rubik_medium,
     color: colors.onbordingTextColor,
     marginVertical: 10,
+  },
+  newheading: {
+    fontSize: 16,
+    color: colors.LightWhite,
+    fontFamily: fontFamily.rubik_medium,
+  },
+  newheadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    marginBottom: 14,
+  },
+  newsubHeading: {
+    color: colors.gray,
+    fontFamily: fontFamily.rubik_medium,
+    fontSize: 12,
+    marginTop: 4,
+    paddingHorizontal: 4,
+    overflow: 'hidden',
+  },
+  newposterImageStyle: {
+    width: screenWidth / 3,
+    height: screenHeight * 0.2,
+    borderRadius: 12,
   },
 });
