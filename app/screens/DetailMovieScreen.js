@@ -13,6 +13,7 @@ import {
   Platform,
   ActivityIndicator,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -29,6 +30,8 @@ import {
 import {getApi} from '../helper/APICalls';
 import constants from '../constants/constants';
 import FastImage from 'react-native-fast-image';
+import MyIndicator from '../components/MyIndicator';
+import navigationStrings from '../navigation/navigationStrings';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -45,62 +48,16 @@ export default function DetailMovieScreen({route}) {
   const insets = useSafeAreaInsets();
   let movieDetails = routeData?.movieDetail;
   const [laoding, setLoading] = useState(false);
-  const [listMovies, setListMovies] = useState([]);
-  const [moviesIds, setMoviesIDs] = useState([]);
-  const [latestMovie, setLatestMovie] = useState(null);
+  const [similarMovies, setSimilarMovies] = useState([]);
 
-  const getDetailByID = ids => {
-    const getData = async url => {
-      try {
-        let res = await getApi(url);
-        if (!!res && !!res?.adult) {
-          // console.log('res: ', res);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    ids.forEach(id => {
-      let url = '/movie/' + id;
-      getData(url);
-    });
-  };
-
-  const getListOFMovies = async () => {
-    // let url = '866398'
-    // https://api.themoviedb.org/3/movie/866398/lists?api_key=9f2de56397d6a9ae9d096f42d24bbac7
+  const getSimilarMovies = async () => {
     try {
       setLoading(true);
-      let url = '/movie/' + movieDetails.id + '/lists';
-      let res = await getApi(url);
+      let res = await getApi(`/movie/${movieDetails?.id}/similar`);
       if (!!res) {
         setLoading(false);
         let finalData = res?.results;
-        setListMovies(finalData);
-        let temArr = [];
-        finalData.map(ele => temArr.push(ele.id));
-        if (temArr.length > 0) {
-          getDetailByID(temArr);
-        }
-      } else {
-        setLoading(false);
-        console.log('no data');
-      }
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const getLatestMovies = async () => {
-    try {
-      setLoading(true);
-      let res = await getApi('/movie/latest');
-      if (!!res) {
-        setLoading(false);
-        setLatestMovie(res);
-        let url = `${constants.image_poster_url}${res?.production_companies[0]?.logo_path}`;
+        setSimilarMovies(finalData);
       } else {
         setLoading(false);
       }
@@ -111,15 +68,16 @@ export default function DetailMovieScreen({route}) {
   };
 
   useEffect(() => {
-    getListOFMovies();
-    getLatestMovies();
+    getSimilarMovies();
   }, []);
 
   const PopularMovieCompo = ({data, id}) => {
     let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
 
     return (
-      <TouchableOpacity style={{marginLeft: 12}}>
+      <TouchableOpacity
+        style={{marginLeft: 12}}
+        onPress={() => handleSimilarDetailScreenNavi(data, postURL)}>
         <FastImage source={{uri: postURL}} style={styles.newposterImageStyle} />
         <Text numberOfLines={1} style={styles.newsubHeading}>
           {data?.title?.length > 18
@@ -130,81 +88,94 @@ export default function DetailMovieScreen({route}) {
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={colors.white} barStyle={'light-content'} />
-      <ImageBackground
-        style={styles.imagePoster}
-        source={
-          routeData?.imagePoster.endsWith('null')
-            ? {
-                uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
-              }
-            : {uri: routeData?.imagePoster}
-        }
-        onLoad={() => <ActivityIndicator size={'large'} color={colors.red} />}>
-        <View
-          style={[
-            styles.topCompo,
-            {marginTop: Platform.OS === 'android' ? 10 : insets.top - 6},
-          ]}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../assets/backward.png')}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-      <LinearGradient
-        colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
-        start={{x: 0.5, y: 0}}
-        end={{x: 0.5, y: 1}}
-        style={{
-          width: screenWidth,
-          flex: 1,
-        }}>
-        <Text style={styles.heading}>{movieDetails?.title}</Text>
-        <View style={styles.contentContainer}>
-          <Text style={[styles.grayText, {textAlign: 'center'}]}>
-            Year {getYear(movieDetails?.release_date)}
-            {' - '}
-            {movieDetails?.adult ? '18+' : '16+'}
-          </Text>
-          <Text style={[styles.grayText, {textAlign: 'center'}]}>
-            Language {movieDetails?.original_language}
-          </Text>
-          <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
-        </View>
+  const handleSimilarDetailScreenNavi = (data, postURL) => {
+    let movieDetail = data;
+    let imagePoster = postURL;
+    navigation.navigate(navigationStrings.Similar_Movie_Detail_Screen, {
+      data: {movieDetail, imagePoster},
+    });
+  };
 
-        <View style={{marginVertical: 18}} />
-        <View style={styles.newheadingContainer}>
-          <Text style={styles.newheading}>Latest Movie</Text>
-          <Text style={[styles.newheading, {color: colors.yellow}]}>
-            See All
-          </Text>
-        </View>
-        {/* <FlatList
-          data={listMovies}
-          renderItem={({item, index}) => (
-            <PopularMovieCompo data={item} id={index} />
-          )}
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-        /> */}
-        {/* <View>
-          <FastImage
-            source={{
-              uri: `${constants.image_poster_url}${latestMovie?.backdrop_path}`,
-            }}
-            style={{width: 100, height: 100}}
+  return (
+    <>
+      <ScrollView
+        style={{flex: 1, backgroundColor: colors.moviesBg}}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <StatusBar
+            backgroundColor={colors.white}
+            barStyle={'light-content'}
           />
-        </View> */}
-      </LinearGradient>
-    </View>
+          <ImageBackground
+            style={styles.imagePoster}
+            source={
+              routeData?.imagePoster.endsWith('null')
+                ? {
+                    uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+                  }
+                : {uri: routeData?.imagePoster}
+            }
+            onLoad={() => (
+              <ActivityIndicator size={'large'} color={colors.red} />
+            )}>
+            <View
+              style={[
+                styles.topCompo,
+                {marginTop: Platform.OS === 'android' ? 10 : insets.top - 6},
+              ]}>
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={() => navigation.goBack()}>
+                <Image
+                  source={require('../assets/backward.png')}
+                  style={styles.icon}
+                />
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
+          <LinearGradient
+            colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
+            start={{x: 0.5, y: 0}}
+            end={{x: 0.5, y: 1}}
+            style={{
+              width: screenWidth,
+              flex: 1,
+            }}>
+            <Text style={styles.heading}>{movieDetails?.title}</Text>
+            <View style={styles.contentContainer}>
+              <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                Year {getYear(movieDetails?.release_date)}
+                {' - '}
+                {movieDetails?.adult ? '18+' : '16+'}
+              </Text>
+              <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                Language {movieDetails?.original_language}
+              </Text>
+              <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
+            </View>
+
+            <View style={{marginVertical: 18}} />
+            <View style={styles.newheadingContainer}>
+              <Text style={styles.newheading}>Similar Movie</Text>
+              <Text style={[styles.newheading, {color: colors.yellow}]}>
+                See All
+              </Text>
+            </View>
+            <FlatList
+              data={similarMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+            {similarMovies.length > 1 && <View style={{height: 80}} />}
+          </LinearGradient>
+        </View>
+      </ScrollView>
+      <MyIndicator visible={laoding} />
+    </>
   );
 }
 

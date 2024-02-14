@@ -9,4 +9,5 @@ export default {
   ONBOARDING_SCREEN: 'OnboardingScreen',
   DETAIL_MOVIE_SCREEN: 'DetailMovieScreen',
   All_Movies_List: 'AllMoviesList',
+  Similar_Movie_Detail_Screen: 'SimilarMovieDetailScreen',
 };
