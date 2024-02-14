@@ -8,4 +8,5 @@ export default {
   REAL_TIME_DATABASE: 'RealTimeDatabase',
   ONBOARDING_SCREEN: 'OnboardingScreen',
   DETAIL_MOVIE_SCREEN: 'DetailMovieScreen',
+  All_Movies_List: 'AllMoviesList',
 };

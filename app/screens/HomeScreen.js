@@ -21,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 import TopHomeComponent from '../components/TopHomeComponent';
 import fontFamily from '../styles/fontFamily';
+import MovieDetailComponent from '../components/MovieDetailComponent';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -32,7 +33,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [popularMovies, setPopularMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [latestMovies, setLatestMovies] = useState([]);
+  const [allChangedMovieIDS, setAllChangedMovieIDS] = useState([]);
 
   const getMoviesData = () => {
     try {
@@ -132,17 +133,18 @@ export default function HomeScreen() {
     }
   };
 
-  // movie/latest
+  // movie/changes
 
-  const getLatestMovies = async () => {
+  const getChangedMovies = async () => {
     try {
       setLoading(true);
-      let res = await getApi('/movie/latest');
+      let res = await getApi('/movie/changes');
       if (!!res) {
         setLoading(false);
         let finalData = res?.results;
-        console.log('latest movies is: ', res);
-        setLatestMovies(finalData);
+        let myFinalIDs = res?.results;
+        setAllChangedMovieIDS(myFinalIDs);
+        // setUpcomingMovies(res);
       } else {
         setLoading(false);
       }
@@ -156,7 +158,7 @@ export default function HomeScreen() {
     getDataFormMB();
     getTopRatedMovies();
     getUpComingMovies();
-    getLatestMovies();
+    getChangedMovies();
   }, []);
 
   const navigateToNextScreen = (index, item) => {
@@ -179,6 +181,7 @@ export default function HomeScreen() {
     let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
     let movieDetail = data;
     let imagePoster = postURL;
+
     const handleNaviToDetail = () => {
       navigation.navigate(navigationStrings.DETAIL_MOVIE_SCREEN, {
         data: {movieDetail, imagePoster},
@@ -249,22 +252,35 @@ export default function HomeScreen() {
               horizontal
             />
 
-            {/* <View style={{marginVertical: 18}} />
+            <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Latest</Text>
-              <Text style={[styles.heading, {color: colors.yellow}]}>
-                See All
-              </Text>
+              <Text style={styles.heading}>Changed Movies</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(navigationStrings.All_Movies_List, {
+                    moviesIds: allChangedMovieIDS,
+                  })
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
             </View>
-            <FlatList
-              data={latestMovies}
-              renderItem={({item, index}) => (
-                <PopularMovieCompo data={item} id={index} />
-              )}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-            /> */}
+            <View style={{paddingLeft: 12}}>
+              <FlatList
+                data={
+                  allChangedMovieIDS.length > 20
+                    ? allChangedMovieIDS.slice(2, 20)
+                    : allChangedMovieIDS
+                }
+                renderItem={({item, index}) => (
+                  <MovieDetailComponent movieId={item?.id} />
+                )}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal
+              />
+            </View>
           </View>
         </ScrollView>
         <MyIndicator visible={laoding} />

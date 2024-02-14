@@ -10,6 +10,7 @@ import RealTimeDatabase from '../screens/RealTimeDatabase';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import constants from '../constants/constants';
 import DetailMovieScreen from '../screens/DetailMovieScreen';
+import AllMoviesList from '../screens/AllMoviesList';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -98,6 +99,13 @@ function AppNavigator() {
       <Stack.Screen
         name="DetailMovieScreen"
         component={DetailMovieScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AllMoviesList"
+        component={AllMoviesList}
         options={{
           headerShown: false,
         }}

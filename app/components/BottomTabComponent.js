@@ -12,7 +12,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
       style={[
         styles.container,
         {
-          backgroundColor: selectedScreen === 0 ? colors.grey : colors.white,
+          backgroundColor: selectedScreen === 0 ? colors.grey : colors.grey,
         },
       ]}>
       <TouchableOpacity
@@ -22,14 +22,17 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           source={require('../assets/tab_home.png')}
           style={[
             styles.iconStyle,
-            {tintColor: selectedScreen === 0 ? colors.darkBlue : colors.black},
+            {
+              tintColor:
+                selectedScreen === 0 ? colors.black : colors.lightBlack,
+            },
           ]}
         />
         <Text
           style={[
             styles.text,
             {
-              color: selectedScreen === 0 ? colors.darkBlue : colors.black,
+              color: selectedScreen === 0 ? colors.black : colors.black,
             },
           ]}>
           Home
@@ -42,14 +45,17 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           source={require('../assets/tab_search.png')}
           style={[
             styles.iconStyle,
-            {tintColor: selectedScreen === 1 ? colors.darkBlue : colors.black},
+            {
+              tintColor:
+                selectedScreen === 1 ? colors.black : colors.lightBlack,
+            },
           ]}
         />
         <Text
           style={[
             styles.text,
             {
-              color: selectedScreen === 1 ? colors.darkBlue : colors.black,
+              color: selectedScreen === 1 ? colors.black : colors.lightBlack,
             },
           ]}>
           Search
@@ -62,14 +68,17 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           source={require('../assets/bell.png')}
           style={[
             styles.iconStyle,
-            {tintColor: selectedScreen === 2 ? colors.darkBlue : colors.black},
+            {
+              tintColor:
+                selectedScreen === 2 ? colors.black : colors.lightBlack,
+            },
           ]}
         />
         <Text
           style={[
             styles.text,
             {
-              color: selectedScreen === 2 ? colors.darkBlue : colors.black,
+              color: selectedScreen === 2 ? colors.black : colors.lightBlack,
             },
           ]}>
           Notification
@@ -101,7 +110,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.text,
             {
-              color: selectedScreen === 3 ? colors.darkBlue : colors.black,
+              color: selectedScreen === 3 ? colors.black : colors.lightBlack,
             },
           ]}>
           Profile

@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   Platform,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -46,24 +47,25 @@ export default function DetailMovieScreen({route}) {
   const [laoding, setLoading] = useState(false);
   const [listMovies, setListMovies] = useState([]);
   const [moviesIds, setMoviesIDs] = useState([]);
+  const [latestMovie, setLatestMovie] = useState(null);
 
-  // const getDetailByID = ids => {
-  //   const getData = async url => {
-  //     try {
-  //       let res = await getApi(url);
-  //       if (!!res) {
-  //         console.log('res: ', res);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
+  const getDetailByID = ids => {
+    const getData = async url => {
+      try {
+        let res = await getApi(url);
+        if (!!res && !!res?.adult) {
+          // console.log('res: ', res);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  //   ids.forEach(id => {
-  //     let url = '/movie/' + id;
-  //     getData(url);
-  //   });
-  // };
+    ids.forEach(id => {
+      let url = '/movie/' + id;
+      getData(url);
+    });
+  };
 
   const getListOFMovies = async () => {
     // let url = '866398'
@@ -91,8 +93,26 @@ export default function DetailMovieScreen({route}) {
     }
   };
 
+  const getLatestMovies = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/movie/latest');
+      if (!!res) {
+        setLoading(false);
+        setLatestMovie(res);
+        let url = `${constants.image_poster_url}${res?.production_companies[0]?.logo_path}`;
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getListOFMovies();
+    getLatestMovies();
   }, []);
 
   const PopularMovieCompo = ({data, id}) => {
@@ -112,9 +132,16 @@ export default function DetailMovieScreen({route}) {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={colors.white} barStyle={'light-content'} />
       <ImageBackground
         style={styles.imagePoster}
-        source={{uri: routeData?.imagePoster}}
+        source={
+          routeData?.imagePoster.endsWith('null')
+            ? {
+                uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+              }
+            : {uri: routeData?.imagePoster}
+        }
         onLoad={() => <ActivityIndicator size={'large'} color={colors.red} />}>
         <View
           style={[
@@ -154,12 +181,12 @@ export default function DetailMovieScreen({route}) {
 
         <View style={{marginVertical: 18}} />
         <View style={styles.newheadingContainer}>
-          <Text style={styles.newheading}>List</Text>
+          <Text style={styles.newheading}>Latest Movie</Text>
           <Text style={[styles.newheading, {color: colors.yellow}]}>
             See All
           </Text>
         </View>
-        <FlatList
+        {/* <FlatList
           data={listMovies}
           renderItem={({item, index}) => (
             <PopularMovieCompo data={item} id={index} />
@@ -167,7 +194,15 @@ export default function DetailMovieScreen({route}) {
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           horizontal
-        />
+        /> */}
+        {/* <View>
+          <FastImage
+            source={{
+              uri: `${constants.image_poster_url}${latestMovie?.backdrop_path}`,
+            }}
+            style={{width: 100, height: 100}}
+          />
+        </View> */}
       </LinearGradient>
     </View>
   );

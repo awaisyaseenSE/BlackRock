@@ -38,7 +38,7 @@ function CustomDrawer(props) {
     <>
       <DrawerContentScrollView
         style={{
-          backgroundColor: colors.whiteOpacity70,
+          backgroundColor: colors.lightBlackTwo,
           width: '100%',
           paddingHorizontal: 12,
         }}
@@ -86,7 +86,8 @@ function CustomDrawer(props) {
         style={{
           paddingVertical: 24,
           paddingHorizontal: 12,
-          backgroundColor: '#FFFFFF',
+          // backgroundColor: '#FFFFFF',
+          backgroundColor: colors.lightBlack,
           shadowColor: '#000',
           shadowOffset: {
             width: 0,

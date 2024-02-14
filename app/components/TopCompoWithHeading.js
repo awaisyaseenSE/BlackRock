@@ -12,6 +12,8 @@ const TopCompoWithHeading = ({
   rightTitle = '',
   onPressRightTitle,
   style,
+  titleStyle,
+  backIconStyle,
 }) => {
   return (
     <View style={{...styles.container, ...style}}>
@@ -24,10 +26,10 @@ const TopCompoWithHeading = ({
           onPress={onPress}>
           <Image
             source={require('../assets/back.png')}
-            style={styles.backIcon}
+            style={{...styles.backIcon, ...backIconStyle}}
           />
         </TouchableOpacity>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={{...styles.text, ...titleStyle}}>{title}</Text>
       </View>
       {rightIcon !== '' && (
         <TouchableOpacity
