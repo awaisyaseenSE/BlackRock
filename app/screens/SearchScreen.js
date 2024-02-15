@@ -97,7 +97,7 @@ export default function SearchScreen() {
             style={styles.posterStyle}
           />
         </TouchableOpacity>
-        <Text style={styles.heading}>
+        <Text style={styles.heading} numberOfLines={1}>
           {item?.title?.length > 18
             ? item?.title.slice(0, 18) + '...'
             : item?.title}
@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     color: colors.whiteOpacity70,
     fontFamily: fontFamily.rubik_regular,
     marginTop: 6,
+    width: screenWidth / 2 - 12,
   },
   inputStyle: {
     backgroundColor: colors.moviesBg,

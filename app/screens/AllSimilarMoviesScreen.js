@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingHorizontal: 4,
     overflow: 'hidden',
+    width: screenWidth / 3 - 14,
   },
   newposterImageStyle: {
     width: screenWidth / 3 - 14,

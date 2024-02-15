@@ -18,7 +18,7 @@ import LottieView from 'lottie-react-native';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const MovieDetailComponent = ({movieId, imageStyle, style}) => {
+const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
   const [movieData, setMovieData] = useState(null);
   const navigation = useNavigation();
 
@@ -65,7 +65,7 @@ const MovieDetailComponent = ({movieId, imageStyle, style}) => {
               }
               style={{...styles.imageStyle, ...imageStyle}}
             />
-            <Text style={styles.title}>
+            <Text style={{...styles.title, ...textStyle}} numberOfLines={1}>
               Title:{' '}
               {movieData?.title?.length > 10
                 ? movieData?.title.slice(0, 10) + '...'
@@ -103,6 +103,8 @@ const styles = StyleSheet.create({
     color: colors.grey,
     fontFamily: fontFamily.rubik_regular,
     marginTop: 4,
+    width: screenWidth / 3,
+    overflow: 'hidden',
   },
   imageStyle: {
     // width: screenWidth / 3.5,

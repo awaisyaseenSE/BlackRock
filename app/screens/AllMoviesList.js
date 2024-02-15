@@ -40,6 +40,7 @@ export default function AllMoviesList({route}) {
                 movieId={item?.id}
                 imageStyle={styles.imageStyle}
                 style={{marginLeft: 0, paddingHorizontal: 4}}
+                textStyle={{width: screenWidth / 3 - 14}}
               />
             )}
             numColumns={3}
