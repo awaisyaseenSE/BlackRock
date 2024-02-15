@@ -14,7 +14,7 @@ import React, {useRef, useState} from 'react';
 import fontFamily from '../styles/fontFamily';
 import colors from '../styles/colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {getResponsivePadding} from '../utils/getResponsiveMarginPadding';
 import {storeValue} from '../helper/storeAndGetAsyncStorageValue';
 
@@ -175,7 +175,8 @@ export default function OnboardingScreen() {
       console.log('Finish on boarding func is called!');
       let key = 'onBoarding';
       await storeValue(key, 'true');
-      navigation.navigate('MainTabRoutes');
+      // navigation.navigate('MainTabRoutes');
+      navigation.dispatch(StackActions.replace('MainTabRoutes'));
     } catch (error) {
       console.log('Error in finish on boarding screen function: ', error);
     }

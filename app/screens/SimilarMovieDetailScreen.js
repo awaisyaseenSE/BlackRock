@@ -52,7 +52,7 @@ export default function SimilarMovieDetailScreen({route}) {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
-      <ImageBackground
+      {/* <ImageBackground
         style={styles.imagePoster}
         source={
           routeData?.imagePoster.endsWith('null')
@@ -76,7 +76,25 @@ export default function SimilarMovieDetailScreen({route}) {
             />
           </TouchableOpacity>
         </View>
-      </ImageBackground>
+      </ImageBackground> */}
+      <FastImage
+        style={styles.imagePoster}
+        source={
+          routeData?.imagePoster.endsWith('null')
+            ? {
+                uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+              }
+            : {uri: routeData?.imagePoster}
+        }
+      />
+      <TouchableOpacity
+        style={[
+          styles.iconContainer,
+          {top: Platform.OS === 'android' ? 12 : insets.top - 6},
+        ]}
+        onPress={() => navigation.goBack()}>
+        <Image source={require('../assets/backward.png')} style={styles.icon} />
+      </TouchableOpacity>
       <LinearGradient
         colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
         start={{x: 0.5, y: 0}}
@@ -112,6 +130,7 @@ const styles = StyleSheet.create({
   imagePoster: {
     width: screenWidth,
     height: screenHeight / 2.2,
+    opacity: 0.8,
   },
   topCompo: {
     paddingHorizontal: 20,
@@ -129,6 +148,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.LightWhite,
+    position: 'absolute',
+    left: 16,
+    top: 10,
   },
   heading: {
     fontSize: getFontSize(18),

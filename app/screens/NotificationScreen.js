@@ -1,126 +1,130 @@
-import {View, Text, StyleSheet, Alert} from 'react-native';
-import React from 'react';
-import ScreenComponent from '../components/ScreenComponent';
-import ButtonComponent from '../components/ButtonComponent';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  StatusBar,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-} from 'react-native-reanimated';
-import {
-  getValue,
-  removeItemValue,
-  storeValue,
-} from '../helper/storeAndGetAsyncStorageValue';
+import Animated, {FadeInDown, FadeInLeft} from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import LoadingComponent from '../components/LoadingComponent';
+import LinearGradient from 'react-native-linear-gradient';
+import {getResponsiveMargin} from '../utils/getResponsiveMarginPadding';
+import MyIndicator from '../components/MyIndicator';
+import constants from '../constants/constants';
+import FastImage from 'react-native-fast-image';
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 export default function NotificationScreen() {
   const navigation = useNavigation();
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const insets = useSafeAreaInsets();
 
-  const handleNavigate = () => {
-    navigation.navigate(navigationStrings.MAIN_TAB_ROUTES, {screenNo: 3});
-  };
-
-  const handleGetValue = async () => {
+  useEffect(() => {
+    fetchPhotos();
+  }, []);
+  const fetchPhotos = async () => {
     try {
-      let key = 'onBoarding';
-      let value = await getValue(key);
-      console.log('value is ', value);
-      console.log('Type of value is ', typeof value);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleStoreValue = async () => {
-    try {
-      let key = 'onBoarding';
-      await storeValue(key, 'true');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleRemoveOnBoarding = async () => {
-    try {
-      let key = 'onBoarding';
-      const res = await removeItemValue(key);
-      if (!!res) {
-        Alert.alert('Data is Removed Successfully!');
-      } else {
-        Alert.alert('Data is not Removed some thing wrong!');
+      setLoading(true);
+      const response = await fetch('https://api.pexels.com/v1/curated', {
+        headers: {
+          Authorization: constants.pexelApiKey,
+        },
+      });
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+      const data = await response.json();
+      setPhotos(data.photos);
+      setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      console.error('Error fetching photos:', error);
     }
+  };
+
+  if (loading) {
+    return <LoadingComponent />;
+  }
+
+  const renderItem = ({item, index}) => {
+    const time = Date.now();
+    return (
+      <Animated.View
+        entering={FadeInDown.delay(index * 100)
+          .duration(2000)
+          .springify()
+          .damping(8)}>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
+                data: item,
+              })
+            }>
+            <FastImage
+              source={{uri: item?.src?.landscape}}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+    );
   };
 
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
-        <View style={{flex: 1}}>
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+      <LinearGradient
+        start={{x: 1, y: 0}}
+        end={{x: 0, y: 1}}
+        colors={['#313131', '#262626', '#131313']}
+        style={{flex: 1}}>
+        <View
+          style={[
+            styles.container,
+            {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
+          ]}>
           <Animated.Text
             entering={FadeInLeft.delay(200).duration(500)}
             style={styles.text}>
-            NotificationScreen
+            Pictures fetched from Pexels API
           </Animated.Text>
-          <Animated.Text
-            entering={FadeInRight.delay(100).duration(1200)}
-            style={styles.text}>
-            Hello everone
-          </Animated.Text>
-          <View style={{alignItems: 'center'}}>
-            <ButtonComponent
-              title="Get Value"
-              style={styles.btn}
-              onPress={handleGetValue}
-            />
-            <ButtonComponent
-              title="Store Value"
-              style={styles.btn1}
-              onPress={handleStoreValue}
-            />
-            <ButtonComponent
-              title="Remove onboarding status"
-              style={styles.btn2}
-              onPress={handleRemoveOnBoarding}
-            />
-          </View>
+          <View style={{marginBottom: getResponsiveMargin(6)}} />
+          <FlatList
+            data={photos}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
-      </ScreenComponent>
+      </LinearGradient>
+      <MyIndicator visible={loading} />
     </>
   );
 }
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 20,
-    color: colors.purple,
+    fontSize: 16,
+    color: colors.lineColor,
     fontFamily: fontFamily.lato_bold,
-    marginVertical: 14,
+    marginVertical: 8,
     alignSelf: 'center',
   },
-  btn: {
-    width: '50%',
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: colors.gray,
-  },
-  btn1: {
-    width: '50%',
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: colors.primaryGreen,
-  },
-  btn2: {
-    width: '50%',
-    marginBottom: 10,
-    borderRadius: 8,
-    backgroundColor: colors.red,
+  image: {
+    width: screenWidth,
+    height: screenHeight / 4,
+    resizeMode: 'contain',
   },
 });

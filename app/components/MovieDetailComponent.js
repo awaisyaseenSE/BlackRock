@@ -13,11 +13,12 @@ import FastImage from 'react-native-fast-image';
 import fontFamily from '../styles/fontFamily';
 import navigationStrings from '../navigation/navigationStrings';
 import {useNavigation} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const MovieDetailComponent = ({movieId}) => {
+const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
   const [movieData, setMovieData] = useState(null);
   const navigation = useNavigation();
 
@@ -48,7 +49,7 @@ const MovieDetailComponent = ({movieId}) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={{...styles.container, ...style}}>
         {movieData ? (
           <TouchableOpacity onPress={handleNextScreen}>
             <FastImage
@@ -62,32 +63,29 @@ const MovieDetailComponent = ({movieId}) => {
                       uri: `${constants.image_poster_url}${movieData?.backdrop_path}`,
                     }
               }
-              style={styles.imageStyle}
+              style={{...styles.imageStyle, ...imageStyle}}
             />
-            <Text style={styles.title}>
+            <Text style={{...styles.title, ...textStyle}} numberOfLines={1}>
               Title:{' '}
-              {movieData?.title?.length > 12
-                ? movieData?.title.slice(0, 12) + '...'
+              {movieData?.title?.length > 10
+                ? movieData?.title.slice(0, 10) + '...'
                 : movieData?.title}
             </Text>
-            {/* Add more movie details here */}
           </TouchableOpacity>
         ) : (
           <View
             style={{
-              flexDirection: 'row',
-              marginTop: 20,
               justifyContent: 'center',
+              width: screenWidth / 3 - 16,
+              height: screenHeight * 0.2,
+              alignItems: 'center',
             }}>
-            <ActivityIndicator size={'small'} color={colors.blue} />
-            <Text
-              style={{
-                color: colors.darkBlue,
-                marginHorizontal: 20,
-                fontSize: 12,
-              }}>
-              Loading...
-            </Text>
+            <LottieView
+              style={{width: 60, height: 60}}
+              source={require('../assets/animation/movie-loading-animation.json')}
+              loop={true}
+              autoPlay
+            />
           </View>
         )}
       </View>
@@ -97,18 +95,25 @@ const MovieDetailComponent = ({movieId}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginRight: 6,
+    // marginRight: 6,
+    marginLeft: 12,
   },
   title: {
     fontSize: 12,
     color: colors.grey,
     fontFamily: fontFamily.rubik_regular,
     marginTop: 4,
+    width: screenWidth / 3,
+    overflow: 'hidden',
   },
   imageStyle: {
-    width: screenWidth / 3.5,
+    // width: screenWidth / 3.5,
+    // height: screenHeight * 0.2,
+    // borderRadius: 10,
+
+    width: screenWidth / 3,
     height: screenHeight * 0.2,
-    borderRadius: 10,
+    borderRadius: 12,
   },
 });
 

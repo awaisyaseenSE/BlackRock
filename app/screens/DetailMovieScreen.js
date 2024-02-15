@@ -116,7 +116,7 @@ export default function DetailMovieScreen({route}) {
             backgroundColor={colors.black}
             barStyle={'light-content'}
           />
-          <ImageBackground
+          <FastImage
             style={styles.imagePoster}
             source={
               routeData?.imagePoster.endsWith('null')
@@ -125,33 +125,20 @@ export default function DetailMovieScreen({route}) {
                   }
                 : {uri: routeData?.imagePoster}
             }
-            onLoad={() => (
-              <ActivityIndicator size={'large'} color={colors.red} />
-            )}>
-            <View
-              style={[
-                styles.topCompo,
-                {marginTop: Platform.OS === 'android' ? 10 : insets.top - 6},
-              ]}>
-              <TouchableOpacity
-                style={styles.iconContainer}
-                onPress={() => navigation.goBack()}>
-                <Image
-                  source={require('../assets/backward.png')}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-          <LinearGradient
-            colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
-            start={{x: 0.5, y: 0}}
-            end={{x: 0.5, y: 1}}
-            style={{
-              width: screenWidth,
-              flex: 1,
-            }}>
-            <Text style={styles.heading}>{movieDetails?.title}</Text>
+          />
+          <TouchableOpacity
+            style={[
+              styles.iconContainer,
+              {top: Platform.OS === 'ios' ? insets.top : 12},
+            ]}
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/backward.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+          <View style={{backgroundColor: colors.moviesBg}}>
+            <Text style={styles.heading}>{movieDetails?.title} </Text>
             <View style={styles.contentContainer}>
               <Text style={[styles.grayText, {textAlign: 'center'}]}>
                 Year {getYear(movieDetails?.release_date)}
@@ -165,22 +152,25 @@ export default function DetailMovieScreen({route}) {
             </View>
 
             <View style={{marginVertical: 18}} />
-            <View style={styles.newheadingContainer}>
-              <Text style={styles.newheading}>Similar Movie</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate(
-                    navigationStrings.All_Similar_Movies_Screen,
-                    {
-                      data: similarMovies,
-                    },
-                  )
-                }>
-                <Text style={[styles.newheading, {color: colors.yellow}]}>
-                  See All
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {similarMovies.length > 1 && (
+              <View style={styles.newheadingContainer}>
+                <Text style={styles.newheading}>Similar Movie</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate(
+                      navigationStrings.All_Similar_Movies_Screen,
+                      {
+                        data: similarMovies,
+                      },
+                    )
+                  }>
+                  <Text style={[styles.newheading, {color: colors.yellow}]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <FlatList
               data={similarMovies}
               renderItem={({item, index}) => (
@@ -191,7 +181,7 @@ export default function DetailMovieScreen({route}) {
               horizontal
             />
             {similarMovies.length > 1 && <View style={{height: 80}} />}
-          </LinearGradient>
+          </View>
         </View>
       </ScrollView>
       <MyIndicator visible={laoding} />
@@ -202,11 +192,12 @@ export default function DetailMovieScreen({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.moviesBg,
+    // backgroundColor: colors.moviesBg,
   },
   imagePoster: {
     width: screenWidth,
     height: screenHeight / 2.2,
+    opacity: 0.8,
   },
   topCompo: {
     paddingHorizontal: 20,
@@ -224,6 +215,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.LightWhite,
+    position: 'absolute',
+    top: 10,
+    left: 16,
   },
   heading: {
     fontSize: getFontSize(18),
@@ -231,6 +225,7 @@ const styles = StyleSheet.create({
     color: colors.LightWhite,
     textAlign: 'center',
     marginVertical: getResponsiveMargin(12),
+    paddingHorizontal: 14,
   },
   grayText: {
     fontSize: getFontSize(12),
@@ -266,6 +261,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingHorizontal: 4,
     overflow: 'hidden',
+    width: screenWidth / 3,
   },
   newposterImageStyle: {
     width: screenWidth / 3,

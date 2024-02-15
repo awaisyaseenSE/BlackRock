@@ -11,138 +11,165 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import ScreenComponent from '../components/ScreenComponent';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
-import ButtonComponent from '../components/ButtonComponent';
 import useAuth from '../auth/useAuth';
 import constants from '../constants/constants';
 import MyIndicator from '../components/MyIndicator';
 import FastImage from 'react-native-fast-image';
-import {
-  getResponsiveHeight,
-  getResponsiveMargin,
-} from '../utils/getResponsiveMarginPadding';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
+import LoadingComponent from '../components/LoadingComponent';
+import TextInputCompo from '../components/TextInputCompo';
+import ScreenComponent from '../components/ScreenComponent';
+import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
+import LottieView from 'lottie-react-native';
+
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  FadeInUp,
-} from 'react-native-reanimated';
-import LoadingComponent from '../components/LoadingComponent';
 
 export default function SearchScreen() {
-  const {logout} = useAuth();
-  const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const [searchText, setSearchText] = useState('');
+  const [searchMovieData, setSearchMovieData] = useState([]);
 
-  useEffect(() => {
-    fetchPhotos();
-  }, []);
-  const fetchPhotos = async () => {
+  const handleSearchMovies = async () => {
+    let url = `/search/movie?query=${encodeURIComponent(searchText)}`;
+    let API_URL = `${constants.theMovieDb_BASE_URL}${url}&api_key=${constants.theMovieDb_API_KEY}`;
     try {
       setLoading(true);
-      const response = await fetch('https://api.pexels.com/v1/curated', {
-        headers: {
-          Authorization: constants.pexelApiKey,
-        },
-      });
+      let response = await fetch(API_URL);
+
       if (!response.ok) {
         setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      setPhotos(data.photos);
+
+      let responseData = await response.json();
+      let allMoviesData = responseData?.results;
+      console.log('Response data:', allMoviesData?.length);
+      if (responseData?.results?.length > 0) {
+        setSearchMovieData(allMoviesData);
+      }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error('Error fetching photos:', error);
+      console.error('Error in getting movies for user search:', error);
     }
   };
 
-  const renderItem = ({item, index}) => {
-    const time = Date.now();
-    return (
-      <Animated.View
-        entering={FadeInDown.delay(index * 100)
-          .duration(2000)
-          .springify()
-          .damping(8)}
-        // style={{marginVertical: getResponsiveMargin(6)}}
-      >
-        <View style={{alignItems: 'center'}}>
-          {/* <Text style={styles.heading}>{item?.photographer}</Text> */}
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
-                data: item,
-              })
-            }>
-            <Animated.Image
-              source={{uri: item?.src?.landscape}}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    );
+  useEffect(() => {
+    if (searchText !== '') {
+      handleSearchMovies();
+    } else {
+      setSearchMovieData([]);
+    }
+  }, [searchText]);
+
+  const handleNaviToDetail = (movieDetail, imagePoster) => {
+    navigation.navigate(navigationStrings.DETAIL_MOVIE_SCREEN, {
+      data: {movieDetail, imagePoster},
+    });
   };
-  const renderItemOne = ({item}) => {
+
+  const renderItem = ({item, index}) => {
+    let postURL = `${constants.image_poster_url}${item.backdrop_path}`;
     return (
-      <View style={{marginVertical: getResponsiveMargin(6)}}>
-        <FastImage
-          source={{uri: item?.src?.landscape}}
-          style={{width: screenWidth, height: getResponsiveHeight(20)}}
-        />
+      <View style={{alignItems: 'center', paddingHorizontal: 4}}>
+        <TouchableOpacity onPress={() => handleNaviToDetail(item, postURL)}>
+          <FastImage
+            source={
+              postURL?.endsWith('null')
+                ? {
+                    uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+                  }
+                : {uri: postURL}
+            }
+            style={styles.posterStyle}
+          />
+        </TouchableOpacity>
+        <Text style={styles.heading} numberOfLines={1}>
+          {item?.title?.length > 18
+            ? item?.title.slice(0, 18) + '...'
+            : item?.title}
+        </Text>
       </View>
     );
   };
 
-  if (loading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <LinearGradient
         start={{x: 1, y: 0}}
         end={{x: 0, y: 1}}
         colors={['#313131', '#262626', '#131313']}
         style={{flex: 1}}>
-        <View style={[styles.container, {paddingTop: insets.top}]}>
-          {/* <FlatList
-            data={photos}
-            renderItem={renderItemOne}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            // pagingEnabled
-          /> */}
-          <View style={{marginBottom: getResponsiveMargin(6)}} />
-          <FlatList
-            data={photos}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
+        <ScreenComponent>
+          <TouchableWithoutFeedback
+            style={{flex: 1}}
+            onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: Platform.OS === 'android' ? 10 : 0,
+                }}>
+                <TextInputWithLeftIconCompo
+                  value={searchText}
+                  onChangeText={text => {
+                    if (text.trim().length) {
+                      setSearchText(text);
+                    } else {
+                      setSearchText('');
+                    }
+                  }}
+                  maxLength={40}
+                  inputStyle={styles.inputStyle}
+                  clearIcon={searchText.length > 0 ? 'Clear' : ''}
+                  onPressClear={() => setSearchText('')}
+                />
+              </View>
+              {loading && (
+                <View style={{marginBottom: 8, alignItems: 'center'}}>
+                  <LottieView
+                    style={styles.laodingStyle}
+                    source={require('../assets/animation/movie-loading-animation.json')}
+                    loop={true}
+                    autoPlay
+                  />
+                </View>
+              )}
+              {searchMovieData.length > 0 && (
+                <View style={{paddingHorizontal: 6}}>
+                  <FlatList
+                    data={searchMovieData}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={2}
+                    ItemSeparatorComponent={
+                      <View style={{marginVertical: 10}} />
+                    }
+                    showsVerticalScrollIndicator={false}
+                    ListFooterComponent={() => (
+                      <View style={{marginVertical: 50}} />
+                    )}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </ScreenComponent>
       </LinearGradient>
-      <MyIndicator visible={loading} />
     </>
   );
 }
@@ -150,47 +177,27 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 40,
-
-    // paddingTop: Platform.OS === 'ios' ? 40 : 10,
+    marginBottom: 70,
   },
   heading: {
-    fontSize: 20,
-    // marginVertical: 10,
-    color: colors.blue,
-    fontFamily: fontFamily.lato_bold,
-    // alignSelf: 'center',
+    fontSize: 14,
+    color: colors.whiteOpacity70,
+    fontFamily: fontFamily.rubik_regular,
+    marginTop: 6,
+    width: screenWidth / 2 - 12,
   },
-  btn: {
-    width: '60%',
-    borderRadius: 12,
-    marginBottom: 30,
-    alignSelf: 'center',
-    marginTop: 8,
+  inputStyle: {
+    backgroundColor: colors.moviesBg,
+    borderColor: colors.moviesBg,
+    borderRadius: 24,
   },
-  image: {
-    width: screenWidth,
-    height: screenHeight / 4,
-    resizeMode: 'contain',
+  posterStyle: {
+    width: screenWidth / 2 - 12,
+    height: 200,
+    borderRadius: 8,
   },
-  TopImage: {
-    width: '100%',
-    height: getResponsiveHeight(14),
-    resizeMode: 'contain',
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
-  },
-  drawerIconContainer: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  drawerIcon: {
-    width: 14,
-    height: 14,
-    resizeMode: 'contain',
-    tintColor: colors.white,
+  laodingStyle: {
+    width: 40,
+    height: 40,
   },
 });

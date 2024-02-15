@@ -27,6 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ButtonComponent from '../components/ButtonComponent';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -37,6 +38,7 @@ export default function ProfileScreen() {
   const [loading, setLoading] = useState(false);
   const [medialUrls, setMediaUrls] = useState([]);
   const navigation = useNavigation();
+  const userImage = auth()?.currentUser?.photoURL;
 
   const handleAddselectImages = newImage => {
     setSelectedImage(prevImages => [...prevImages, newImage]);
@@ -130,9 +132,11 @@ export default function ProfileScreen() {
   return (
     <>
       <View style={styles.container}>
-        <View style={{backgroundColor: '#AC72C4'}}>
+        <View style={{backgroundColor: '#12212F'}}>
           <ImageBackground
-            source={require('../assets/men.jpg')}
+            source={
+              !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+            }
             style={styles.imageContainer}
             imageStyle={{opacity: 0.4}}>
             <View
@@ -142,8 +146,8 @@ export default function ProfileScreen() {
               ]}>
               <TouchableOpacity onPress={() => navigation.openDrawer()}>
                 <Image
-                  source={require('../assets/drawer_Icon.png')}
-                  style={styles.icons}
+                  source={require('../assets/menus.png')}
+                  style={[styles.icons, {width: 22, height: 22}]}
                 />
               </TouchableOpacity>
 
@@ -156,8 +160,10 @@ export default function ProfileScreen() {
           </ImageBackground>
         </View>
         <View style={{alignItems: 'center'}}>
-          <Image
-            source={require('../assets/men.jpg')}
+          <FastImage
+            source={
+              !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+            }
             style={styles.profileImage}
           />
         </View>

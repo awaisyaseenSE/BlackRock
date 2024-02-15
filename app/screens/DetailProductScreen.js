@@ -124,7 +124,7 @@ export default function DetailProductScreen({route}) {
 
   return (
     <>
-      <ScreenComponent>
+      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <TopCompoWithHeading
           title="Detail Product"
           onPress={() => navigation.goBack()}

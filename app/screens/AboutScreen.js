@@ -17,9 +17,6 @@ export default function AboutScreen() {
   const [loading, setLoading] = useState(false);
   const [imagesData, setImagesData] = useState([]);
 
-  const handleNavigate = () => {
-    navigation.navigate(navigationStrings.MAIN_TAB_ROUTES, {screenNo: 3});
-  };
   let isMounted = false;
 
   useEffect(() => {
@@ -59,10 +56,9 @@ export default function AboutScreen() {
       <View style={{marginVertical: 10}}>
         <FlatList
           data={item?.imagesUrls}
-          renderItem={
-            ({item}) => <FastImage source={{uri: item}} style={styles.image} />
-            // console.log('data is: ', item)
-          }
+          renderItem={({item}) => (
+            <FastImage source={{uri: item}} style={styles.image} />
+          )}
           horizontal
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={<View style={{marginVertical: 10}} />}
@@ -80,16 +76,12 @@ export default function AboutScreen() {
             title="About"
             onPress={() => navigation.goBack()}
           />
-          <ButtonComponent
-            title="Profile"
-            style={styles.btn}
-            onPress={handleNavigate}
-          />
-          <View style={{marginTop: 20}} />
+          <View style={{marginTop: 4}} />
           <FlatList
             data={imagesData}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </ScreenComponent>

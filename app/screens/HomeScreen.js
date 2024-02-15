@@ -5,7 +5,6 @@ import {
   StatusBar,
   TouchableOpacity,
   FlatList,
-  Image,
   Text,
   ScrollView,
 } from 'react-native';
@@ -205,10 +204,7 @@ export default function HomeScreen() {
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
         <TopHomeComponent leftOnPress={() => navigation.openDrawer()} />
-        <ScrollView
-          // contentContainerStyle={{flex: 1}}
-          style={{flex: 1}}
-          showsVerticalScrollIndicator={false}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: 80}}>
             <Carousel
               data={movieImages}
@@ -254,7 +250,7 @@ export default function HomeScreen() {
 
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Changed Movies</Text>
+              <Text style={styles.heading}>All Time</Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(navigationStrings.All_Movies_List, {
@@ -266,7 +262,7 @@ export default function HomeScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{paddingLeft: 12}}>
+            <View style={{}}>
               <FlatList
                 data={
                   allChangedMovieIDS.length > 20
@@ -308,6 +304,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingHorizontal: 4,
     overflow: 'hidden',
+    width: screenWidth / 3,
   },
   posterImageStyle: {
     width: screenWidth / 3,
