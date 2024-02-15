@@ -17,7 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-const MovieDetailComponent = ({movieId}) => {
+const MovieDetailComponent = ({movieId, imageStyle, style}) => {
   const [movieData, setMovieData] = useState(null);
   const navigation = useNavigation();
 
@@ -48,7 +48,7 @@ const MovieDetailComponent = ({movieId}) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <View style={{...styles.container, ...style}}>
         {movieData ? (
           <TouchableOpacity onPress={handleNextScreen}>
             <FastImage
@@ -62,12 +62,12 @@ const MovieDetailComponent = ({movieId}) => {
                       uri: `${constants.image_poster_url}${movieData?.backdrop_path}`,
                     }
               }
-              style={styles.imageStyle}
+              style={{...styles.imageStyle, ...imageStyle}}
             />
             <Text style={styles.title}>
               Title:{' '}
-              {movieData?.title?.length > 12
-                ? movieData?.title.slice(0, 12) + '...'
+              {movieData?.title?.length > 10
+                ? movieData?.title.slice(0, 10) + '...'
                 : movieData?.title}
             </Text>
             {/* Add more movie details here */}

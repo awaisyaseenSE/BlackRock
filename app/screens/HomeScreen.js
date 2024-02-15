@@ -250,7 +250,7 @@ export default function HomeScreen() {
 
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
-              <Text style={styles.heading}>Changed Movies</Text>
+              <Text style={styles.heading}>All Time</Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate(navigationStrings.All_Movies_List, {

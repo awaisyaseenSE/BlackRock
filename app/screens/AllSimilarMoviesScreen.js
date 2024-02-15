@@ -29,10 +29,9 @@ export default function AllSimilarMoviesScreen({route}) {
     //   console.log(postURL);
     return (
       <TouchableOpacity
-        style={{marginLeft: 6}}
+        style={{paddingHorizontal: 4}}
         onPress={() => handleSimilarDetailScreenNavi(data, postURL)}>
         <FastImage
-          //   source={{uri: postURL}}
           source={
             postURL.endsWith('null')
               ? {
@@ -43,8 +42,8 @@ export default function AllSimilarMoviesScreen({route}) {
           style={styles.newposterImageStyle}
         />
         <Text numberOfLines={1} style={styles.newsubHeading}>
-          {data?.title?.length > 14
-            ? data?.title.slice(0, 14) + '...'
+          {data?.title?.length > 10
+            ? data?.title.slice(0, 10) + '...'
             : data?.title}
         </Text>
       </TouchableOpacity>
@@ -87,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.moviesBg,
+    paddingHorizontal: 12,
   },
   newsubHeading: {
     color: colors.gray,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   newposterImageStyle: {
-    width: screenWidth / 3.5,
+    width: screenWidth / 3 - 14,
     height: screenHeight * 0.2,
     borderRadius: 12,
   },

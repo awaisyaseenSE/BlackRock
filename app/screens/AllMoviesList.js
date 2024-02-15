@@ -35,7 +35,13 @@ export default function AllMoviesList({route}) {
           />
           <FlatList
             data={moviesIds}
-            renderItem={({item}) => <MovieDetailComponent movieId={item?.id} />}
+            renderItem={({item}) => (
+              <MovieDetailComponent
+                movieId={item?.id}
+                imageStyle={styles.imageStyle}
+                style={{marginLeft: 0, paddingHorizontal: 4}}
+              />
+            )}
             numColumns={3}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={<View style={{marginVertical: 6}} />}
@@ -49,6 +55,11 @@ export default function AllMoviesList({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
+  },
+  imageStyle: {
+    width: screenWidth / 3 - 14,
+    height: screenHeight * 0.2,
+    borderRadius: 12,
   },
 });
