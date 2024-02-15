@@ -1,6 +1,6 @@
 export default {
   white: '#FFFFFF',
-  skyBlue: '#3797EF',
+  skyBlue: '#E3F7FF',
   lightBlack: '#4C5668',
   gray: '#9E9E9E',
   black: '#060606',
@@ -27,4 +27,7 @@ export default {
   onbordingTextColor: '#676464',
   primaryGreen: '#39CE6A',
   borderColor: '#D0D5DE',
+  onBoardingBg: '#F9E9B2',
+  moviesBg: '#212320',
+  yellow: '#FEDD00',
 };

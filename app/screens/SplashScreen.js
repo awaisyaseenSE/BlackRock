@@ -1,6 +1,7 @@
-import {View, Text, StyleSheet, StatusBar, Image} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import LottieView from 'lottie-react-native';
 
 export default function SplashScreen() {
   return (
@@ -8,13 +9,15 @@ export default function SplashScreen() {
       <StatusBar hidden />
       <LinearGradient
         style={{flex: 1}}
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}
-        colors={['#F5F5F5', '#E3F7FF', '#E5ECFA']}>
+        start={{x: 0.5, y: 0}}
+        end={{x: 0.8, y: 1}}
+        colors={['#12212F', '#1C2A34', '#12212F']}>
         <View style={styles.container}>
-          <Image
-            source={require('../assets/dragon-logo.png')}
+          <LottieView
             style={styles.logo}
+            source={require('../assets/animation/movie.json')}
+            loop={true}
+            autoPlay
           />
         </View>
       </LinearGradient>
@@ -29,8 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 140,
-    height: 140,
-    resizeMode: 'contain',
+    width: 200,
+    height: 200,
   },
 });

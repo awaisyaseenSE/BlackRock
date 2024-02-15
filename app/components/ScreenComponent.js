@@ -10,10 +10,7 @@ import React from 'react';
 export default function ScreenComponent({style, children}) {
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       {Platform.OS === 'ios' ? (
         <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>
       ) : (
@@ -26,6 +23,6 @@ export default function ScreenComponent({style, children}) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginVertical: Platform.OS === 'android' ? 5 : 0,
+    paddingVertical: Platform.OS === 'android' ? 5 : 0,
   },
 });
