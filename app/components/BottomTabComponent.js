@@ -8,13 +8,7 @@ import auth from '@react-native-firebase/auth';
 const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
   const userProfileImage = auth()?.currentUser?.photoURL;
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: selectedScreen === 0 ? colors.grey : colors.grey,
-        },
-      ]}>
+    <View style={[styles.container]}>
       <TouchableOpacity
         style={styles.iconContainer}
         onPress={() => setSelectedScreen(0)}>
@@ -23,8 +17,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.iconStyle,
             {
-              tintColor:
-                selectedScreen === 0 ? colors.black : colors.lightBlack,
+              tintColor: selectedScreen === 0 ? colors.lineColor : colors.gray,
             },
           ]}
         />
@@ -32,7 +25,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.text,
             {
-              color: selectedScreen === 0 ? colors.black : colors.black,
+              color: selectedScreen === 0 ? colors.lineColor : colors.gray,
             },
           ]}>
           Home
@@ -46,8 +39,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.iconStyle,
             {
-              tintColor:
-                selectedScreen === 1 ? colors.black : colors.lightBlack,
+              tintColor: selectedScreen === 1 ? colors.lineColor : colors.gray,
             },
           ]}
         />
@@ -55,7 +47,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.text,
             {
-              color: selectedScreen === 1 ? colors.black : colors.lightBlack,
+              color: selectedScreen === 1 ? colors.lineColor : colors.gray,
             },
           ]}>
           Search
@@ -69,8 +61,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.iconStyle,
             {
-              tintColor:
-                selectedScreen === 2 ? colors.black : colors.lightBlack,
+              tintColor: selectedScreen === 2 ? colors.lineColor : colors.gray,
             },
           ]}
         />
@@ -78,7 +69,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.text,
             {
-              color: selectedScreen === 2 ? colors.black : colors.lightBlack,
+              color: selectedScreen === 2 ? colors.lineColor : colors.gray,
             },
           ]}>
           Notification
@@ -110,7 +101,7 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
           style={[
             styles.text,
             {
-              color: selectedScreen === 3 ? colors.black : colors.lightBlack,
+              color: selectedScreen === 3 ? colors.lineColor : colors.gray,
             },
           ]}>
           Profile
@@ -122,9 +113,8 @@ const BottomTabComponent = ({selectedScreen, setSelectedScreen}) => {
 
 const styles = StyleSheet.create({
   container: {
-    // height: getResponsiveHeight(10),
     height: 80,
-    backgroundColor: colors.white,
+    backgroundColor: colors.bottomTabBg,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 22,
@@ -136,8 +126,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   iconStyle: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
     resizeMode: 'contain',
     tintColor: colors.black,
   },
@@ -153,8 +143,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   profileImage: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
     borderRadius: 13,
   },
 });

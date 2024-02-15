@@ -3,14 +3,21 @@ import React from 'react';
 import fontFamily from '../styles/fontFamily';
 import colors from '../styles/colors';
 
-const DrawerItemListCompo = ({image, title = '', onPress, style}) => {
+const DrawerItemListCompo = ({
+  image,
+  title = '',
+  onPress,
+  style,
+  txtStyle,
+  iconStyle,
+}) => {
   return (
     <TouchableOpacity
       style={{...styles.itemContainer, ...style}}
       activeOpacity={0.5}
       onPress={onPress}>
-      <Image source={image} style={styles.iconStyle} />
-      <Text style={styles.textStyle}>{title}</Text>
+      <Image source={image} style={{...styles.iconStyle, ...iconStyle}} />
+      <Text style={{...styles.textStyle, ...txtStyle}}>{title}</Text>
     </TouchableOpacity>
   );
 };

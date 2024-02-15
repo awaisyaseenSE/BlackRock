@@ -30,4 +30,5 @@ export default {
   onBoardingBg: '#F9E9B2',
   moviesBg: '#212320',
   yellow: '#FEDD00',
+  bottomTabBg: '#121212',
 };

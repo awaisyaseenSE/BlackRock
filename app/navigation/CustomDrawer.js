@@ -38,7 +38,7 @@ function CustomDrawer(props) {
     <>
       <DrawerContentScrollView
         style={{
-          backgroundColor: colors.lightBlackTwo,
+          backgroundColor: colors.bottomTabBg,
           width: '100%',
           paddingHorizontal: 12,
         }}
@@ -67,11 +67,15 @@ function CustomDrawer(props) {
             onPress={() =>
               navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
             }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
             image={require('../assets/user.png')}
             title="About"
             onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
           />
         </View>
       </DrawerContentScrollView>
@@ -79,8 +83,7 @@ function CustomDrawer(props) {
         style={{
           paddingVertical: 24,
           paddingHorizontal: 12,
-          // backgroundColor: '#FFFFFF',
-          backgroundColor: colors.lightBlack,
+          backgroundColor: colors.black,
           shadowColor: '#000',
           shadowOffset: {
             width: 0,
@@ -92,10 +95,12 @@ function CustomDrawer(props) {
           elevation: 11,
         }}>
         <DrawerItemListCompo
-          image={require('../assets/back.png')}
+          image={require('../assets/exit.png')}
           title="Logout"
           style={{marginBottom: Platform.OS === 'ios' ? 8 : 2}}
           onPress={handleLogout}
+          txtStyle={{color: colors.lineColor}}
+          iconStyle={{tintColor: colors.lineColor}}
         />
       </View>
     </>
@@ -105,8 +110,9 @@ function CustomDrawer(props) {
 const styles = StyleSheet.create({
   userNameText: {
     fontSize: 14,
-    color: colors.black,
+    color: colors.lineColor,
     fontFamily: fontFamily.rubik_medium,
+    marginTop: 20,
   },
   profileImage: {
     width: 60,
