@@ -73,20 +73,20 @@ const styles = StyleSheet.create({
     fontSize: getFontSize(14),
     fontFamily: fontFamily.rubik_medium,
     flex: 1,
-    color: colors.lightBlack,
+    color: colors.LightWhite,
     marginRight: 12,
   },
   showHideIcon: {
     width: 20,
     height: 20,
     resizeMode: 'contain',
-    tintColor: colors.lightBlack,
+    tintColor: colors.lightGrey,
   },
   closeIcon: {
     width: 12,
     height: 12,
     resizeMode: 'contain',
-    tintColor: colors.lightBlack,
+    tintColor: colors.lightGrey,
   },
 });
 

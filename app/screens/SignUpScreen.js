@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -166,6 +167,13 @@ export default function SignUpScreen() {
               );
               setEmailError('Password is weak, try again!');
             }
+            if (error.code === 'auth/network-request-failed') {
+              setLoading(false);
+              console.log(
+                'auth/network-request-failed. Please check your network connection!',
+              );
+              Alert.alert('Please check your network connection!');
+            }
             setLoading(false);
             console.log('getting ERROR while Sign up with Eamil: ', error);
           });
@@ -180,9 +188,9 @@ export default function SignUpScreen() {
   return (
     <>
       <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}
-        colors={['#F5F5F5', '#F9F9F9', '#E3F7FF']}
+        start={{x: 0.5, y: 0}}
+        end={{x: 0.8, y: 1}}
+        colors={['#12212F', '#1C2A34', '#12212F']}
         style={{flex: 1}}>
         <ScreenComponent style={{}}>
           <TouchableWithoutFeedback
@@ -190,7 +198,6 @@ export default function SignUpScreen() {
             onPress={Keyboard.dismiss}>
             <View style={styles.container}>
               <View style={styles.headingContainer}>
-                {/* <Text style={styles.heading}>Create an account</Text> */}
                 <Text style={styles.heading}>Create an account</Text>
               </View>
               <View
@@ -308,7 +315,7 @@ export default function SignUpScreen() {
                       <Text style={styles.subHeading}>
                         By continuing, you agree to our{' '}
                         <Text
-                          style={[styles.subHeading, {color: colors.darkBlue}]}>
+                          style={[styles.subHeading, {color: colors.blue2}]}>
                           terms of service.
                         </Text>
                       </Text>
@@ -352,7 +359,7 @@ export default function SignUpScreen() {
                       style={[
                         styles.subHeading,
                         {
-                          color: colors.darkBlue,
+                          color: colors.blue2,
                           fontFamily: fontFamily.rubik_semi_bold,
                         },
                       ]}>
@@ -377,7 +384,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: getFontSize(26),
-    color: colors.black,
+    color: colors.lineColor,
     fontFamily: fontFamily.rubik_bold,
     textAlign: 'left',
   },
@@ -387,7 +394,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontSize: 14,
-    color: colors.black,
+    color: colors.lineColor,
     fontFamily: fontFamily.rubik_medium,
     marginBottom: 8,
     paddingLeft: 2,

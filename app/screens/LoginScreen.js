@@ -25,6 +25,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import useAuths from '../auth/useAuth';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -87,6 +88,8 @@ export default function LoginScreen() {
               Alert.alert('Please enter valid email and password!');
             } else if (error.code === 'auth/invalid-credential') {
               Alert.alert('Please enter valid email and password!');
+            } else if (error.code === 'auth/network-request-failed') {
+              Alert.alert('Please check your network connection!');
             } else {
               console.log('Error while login: ', error);
             }
@@ -100,173 +103,184 @@ export default function LoginScreen() {
 
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.white}}>
-        <TouchableWithoutFeedback style={{flex: 1}} onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            <Text style={styles.heading}>Login</Text>
-            <Text style={styles.subHeading}>Welcome back to the app</Text>
-            <View style={styles.emailPhoneTxtContainer}>
-              <TouchableOpacity
-                onPress={() => setIsPhoneSelected(false)}
-                style={[
-                  styles.emailContainer,
-                  {
-                    borderBottomWidth: !isPhoneSelected ? 1 : 0,
-                    borderBottomColor: !isPhoneSelected ? colors.darkBlue : '',
-                  },
-                ]}>
-                <Text
+      <LinearGradient
+        start={{x: 0.5, y: 0}}
+        end={{x: 0.8, y: 1}}
+        // colors={['#313131', '#262626', '#131313']}
+        // colors={['#12212F', '#1C2A34', '#060606']}
+        colors={['#12212F', '#1C2A34', '#12212F']}
+        style={{flex: 1}}>
+        <ScreenComponent>
+          <TouchableWithoutFeedback
+            style={{flex: 1}}
+            onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+              <Text style={styles.heading}>Login</Text>
+              <Text style={styles.subHeading}>Welcome back to the app</Text>
+              <View style={styles.emailPhoneTxtContainer}>
+                <TouchableOpacity
+                  onPress={() => setIsPhoneSelected(false)}
                   style={[
-                    styles.emailText,
+                    styles.emailContainer,
                     {
-                      color: isPhoneSelected ? colors.gray : colors.darkBlue,
+                      borderBottomWidth: !isPhoneSelected ? 1 : 0,
+                      borderBottomColor: !isPhoneSelected ? colors.blue2 : '',
                     },
                   ]}>
-                  Email
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setIsPhoneSelected(true)}
-                style={{
-                  paddingVertical: 6,
-                  borderBottomWidth: isPhoneSelected ? 1 : 0,
-                  borderBottomColor: isPhoneSelected ? colors.darkBlue : '',
-                }}>
+                  <Text
+                    style={[
+                      styles.emailText,
+                      {
+                        color: isPhoneSelected ? colors.gray : colors.blue2,
+                      },
+                    ]}>
+                    Email
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setIsPhoneSelected(true)}
+                  style={{
+                    paddingVertical: 6,
+                    borderBottomWidth: isPhoneSelected ? 1 : 0,
+                    borderBottomColor: isPhoneSelected ? colors.blue2 : '',
+                  }}>
+                  <Text
+                    style={[
+                      styles.emailText,
+                      {
+                        color: !isPhoneSelected ? colors.gray : colors.blue2,
+                      },
+                    ]}>
+                    Phone Number
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputFieldsContainer}>
                 <Text
                   style={[
-                    styles.emailText,
-                    {
-                      color: !isPhoneSelected ? colors.gray : colors.darkBlue,
-                    },
+                    styles.heading2,
+                    {marginBottom: getResponsiveMargin(8)},
                   ]}>
-                  Phone Number
+                  {isPhoneSelected ? 'Phone number' : 'Email Address'}
                 </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.inputFieldsContainer}>
-              <Text
-                style={[
-                  styles.heading2,
-                  {marginBottom: getResponsiveMargin(8)},
-                ]}>
-                {isPhoneSelected ? 'Phone number' : 'Email Address'}
-              </Text>
-              {isPhoneSelected ? (
+                {isPhoneSelected ? (
+                  <TextInputCompo
+                    placeholder="Phone number"
+                    onChangeText={text => setPhone(text)}
+                    value={phone}
+                    clearIcon={phone.length > 0 ? 'Clear' : ''}
+                    onPressClear={() => setPhone('')}
+                    keyboardType="phone-pad"
+                  />
+                ) : (
+                  <TextInputCompo
+                    placeholder="hello@example.com"
+                    onChangeText={text => setEmail(text)}
+                    value={email}
+                    clearIcon={email.length > 0 ? 'Clear' : ''}
+                    onPressClear={() => setEmail('')}
+                    keyboardType="email-address"
+                    inputStyle={{
+                      marginBottom:
+                        emailError !== ''
+                          ? getResponsiveMargin(6)
+                          : getResponsiveMargin(14),
+                      borderColor:
+                        emailError !== '' ? colors.red : colors.borderColor,
+                    }}
+                    autoCapitalize="none"
+                  />
+                )}
+                {emailError !== '' && (
+                  <Text style={styles.errorText}>{emailError}</Text>
+                )}
+                <View style={styles.passwordTextContainer}>
+                  <Text style={styles.heading2}>Password</Text>
+                  <TouchableOpacity>
+                    <Text style={styles.forgotTxt}>Forgot Password?</Text>
+                  </TouchableOpacity>
+                </View>
                 <TextInputCompo
-                  placeholder="Phone number"
-                  onChangeText={text => setPhone(text)}
-                  value={phone}
-                  clearIcon={phone.length > 0 ? 'Clear' : ''}
-                  onPressClear={() => setPhone('')}
-                  keyboardType="phone-pad"
-                />
-              ) : (
-                <TextInputCompo
-                  placeholder="hello@example.com"
-                  onChangeText={text => setEmail(text)}
-                  value={email}
-                  clearIcon={email.length > 0 ? 'Clear' : ''}
-                  onPressClear={() => setEmail('')}
-                  keyboardType="email-address"
+                  placeholder={'Enter Password'}
+                  value={password}
+                  onChangeText={text => setPassword(text)}
+                  secureTextEntry={secureTextEntry}
+                  onPressSecure={() => setSecureTextEntry(!secureTextEntry)}
+                  secureText={
+                    secureTextEntry
+                      ? require('../assets/view.png')
+                      : require('../assets/hide.png')
+                  }
                   inputStyle={{
                     marginBottom:
-                      emailError !== ''
+                      passwordError !== ''
                         ? getResponsiveMargin(6)
                         : getResponsiveMargin(14),
                     borderColor:
-                      emailError !== '' ? colors.red : colors.borderColor,
+                      passwordError !== '' ? colors.red : colors.borderColor,
                   }}
-                  autoCapitalize="none"
                 />
-              )}
-              {emailError !== '' && (
-                <Text style={styles.errorText}>{emailError}</Text>
-              )}
-              <View style={styles.passwordTextContainer}>
-                <Text style={styles.heading2}>Password</Text>
-                <TouchableOpacity>
-                  <Text style={styles.forgotTxt}>Forgot Password?</Text>
+                {passwordError !== '' && (
+                  <Text style={styles.errorText}>{passwordError}</Text>
+                )}
+              </View>
+              <View style={styles.keepMeSignINContainer}>
+                <TouchableOpacity
+                  onPress={() => setIsSignIn(!isSignIn)}
+                  style={isSignIn ? styles.fillBox : styles.emptyBox}>
+                  {isSignIn && (
+                    <Image
+                      source={require('../assets/check.png')}
+                      style={styles.checkIcon}
+                    />
+                  )}
+                </TouchableOpacity>
+                <Text
+                  style={[styles.subHeading, {marginTop: 0, marginLeft: 14}]}>
+                  Keep me signed in
+                </Text>
+              </View>
+              <ButtonComponent
+                title="Login"
+                style={{marginTop: getResponsiveMargin(18)}}
+                onPress={handleLogin}
+                loading={loading}
+              />
+              <View style={styles.signINWithContainer}>
+                <View style={styles.lineStyle} />
+                <Text
+                  style={[
+                    styles.subHeading,
+                    {marginTop: 0, marginHorizontal: 10},
+                  ]}>
+                  or sign in with
+                </Text>
+                <View style={styles.lineStyle} />
+              </View>
+              <View>
+                <TouchableOpacity style={styles.googleBtn} activeOpacity={0.6}>
+                  <View style={styles.googleBtnContentContainer}>
+                    <Image
+                      source={require('../assets/google.png')}
+                      style={styles.googleIcon}
+                    />
+                    <Text style={styles.googleTxt}>Continue with Google</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
-              <TextInputCompo
-                placeholder={'Enter Password'}
-                value={password}
-                onChangeText={text => setPassword(text)}
-                secureTextEntry={secureTextEntry}
-                onPressSecure={() => setSecureTextEntry(!secureTextEntry)}
-                secureText={
-                  secureTextEntry
-                    ? require('../assets/view.png')
-                    : require('../assets/hide.png')
-                }
-                inputStyle={{
-                  marginBottom:
-                    passwordError !== ''
-                      ? getResponsiveMargin(6)
-                      : getResponsiveMargin(14),
-                  borderColor:
-                    passwordError !== '' ? colors.red : colors.borderColor,
-                }}
-              />
-              {passwordError !== '' && (
-                <Text style={styles.errorText}>{passwordError}</Text>
-              )}
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  style={{padding: 10}}
+                  onPress={() =>
+                    navigation.navigate(navigationStrings.SIGN_UP_SCREEN)
+                  }>
+                  <Text style={styles.createAccoutTxt}>Create an account</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.keepMeSignINContainer}>
-              <TouchableOpacity
-                onPress={() => setIsSignIn(!isSignIn)}
-                style={isSignIn ? styles.fillBox : styles.emptyBox}>
-                {isSignIn && (
-                  <Image
-                    source={require('../assets/check.png')}
-                    style={styles.checkIcon}
-                  />
-                )}
-              </TouchableOpacity>
-              <Text style={[styles.subHeading, {marginTop: 0, marginLeft: 14}]}>
-                Keep me signed in
-              </Text>
-            </View>
-            <ButtonComponent
-              title="Login"
-              style={{marginTop: getResponsiveMargin(18)}}
-              onPress={handleLogin}
-              loading={loading}
-            />
-            <View style={styles.signINWithContainer}>
-              <View style={styles.lineStyle} />
-              <Text
-                style={[
-                  styles.subHeading,
-                  {marginTop: 0, marginHorizontal: 10},
-                ]}>
-                or sign in with
-              </Text>
-              <View style={styles.lineStyle} />
-            </View>
-            <View>
-              <TouchableOpacity style={styles.googleBtn} activeOpacity={0.6}>
-                <View style={styles.googleBtnContentContainer}>
-                  <Image
-                    source={require('../assets/google.png')}
-                    style={styles.googleIcon}
-                  />
-                  <Text style={styles.googleTxt}>Continue with Google</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.footer}>
-              <TouchableOpacity
-                style={{padding: 10}}
-                onPress={() =>
-                  navigation.navigate(navigationStrings.SIGN_UP_SCREEN)
-                }>
-                <Text style={styles.createAccoutTxt}>Create an account</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </ScreenComponent>
+          </TouchableWithoutFeedback>
+        </ScreenComponent>
+      </LinearGradient>
     </>
   );
 }
@@ -274,14 +288,13 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
     paddingHorizontal: 20,
     marginTop: '6%',
   },
   heading: {
     fontSize: getFontSize(22),
     fontFamily: fontFamily.rubik_bold,
-    color: colors.black,
+    color: colors.lineColor,
   },
   subHeading: {
     fontSize: getFontSize(14),
@@ -308,13 +321,13 @@ const styles = StyleSheet.create({
   },
   heading2: {
     fontSize: getFontSize(16),
-    color: colors.lightBlack,
+    color: colors.lineColor,
     fontFamily: fontFamily.rubik_medium,
   },
   forgotTxt: {
     fontSize: 12,
     fontFamily: fontFamily.rubik_regular,
-    color: colors.darkBlue,
+    color: colors.blue2,
   },
   passwordTextContainer: {
     marginBottom: getResponsiveMargin(8),
@@ -385,7 +398,7 @@ const styles = StyleSheet.create({
   createAccoutTxt: {
     fontSize: 14,
     fontFamily: fontFamily.rubik_semi_bold,
-    color: colors.darkBlue,
+    color: colors.blue2,
   },
   footer: {
     flex: 1,
