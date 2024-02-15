@@ -13,6 +13,7 @@ import FastImage from 'react-native-fast-image';
 import fontFamily from '../styles/fontFamily';
 import navigationStrings from '../navigation/navigationStrings';
 import {useNavigation} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -70,24 +71,21 @@ const MovieDetailComponent = ({movieId, imageStyle, style}) => {
                 ? movieData?.title.slice(0, 10) + '...'
                 : movieData?.title}
             </Text>
-            {/* Add more movie details here */}
           </TouchableOpacity>
         ) : (
           <View
             style={{
-              flexDirection: 'row',
-              marginTop: 20,
               justifyContent: 'center',
+              width: screenWidth / 3 - 16,
+              height: screenHeight * 0.2,
+              alignItems: 'center',
             }}>
-            <ActivityIndicator size={'small'} color={colors.blue} />
-            <Text
-              style={{
-                color: colors.darkBlue,
-                marginHorizontal: 20,
-                fontSize: 12,
-              }}>
-              Loading...
-            </Text>
+            <LottieView
+              style={{width: 60, height: 60}}
+              source={require('../assets/animation/movie-loading-animation.json')}
+              loop={true}
+              autoPlay
+            />
           </View>
         )}
       </View>

@@ -12,6 +12,8 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -28,6 +30,7 @@ import LoadingComponent from '../components/LoadingComponent';
 import TextInputCompo from '../components/TextInputCompo';
 import ScreenComponent from '../components/ScreenComponent';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
+import LottieView from 'lottie-react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -112,41 +115,59 @@ export default function SearchScreen() {
         colors={['#313131', '#262626', '#131313']}
         style={{flex: 1}}>
         <ScreenComponent>
-          <View style={styles.container}>
-            <View style={{paddingHorizontal: 20}}>
-              <TextInputWithLeftIconCompo
-                value={searchText}
-                onChangeText={text => {
-                  if (text.trim().length) {
-                    setSearchText(text);
-                  } else {
-                    setSearchText('');
-                  }
-                }}
-                maxLength={40}
-                inputStyle={styles.inputStyle}
-                clearIcon={searchText.length > 0 ? 'Clear' : ''}
-                onPressClear={() => setSearchText('')}
-              />
-            </View>
-            {loading && (
-              <View style={{marginVertical: 8, alignItems: 'center'}}>
-                <ActivityIndicator size={20} color={colors.blue} />
-              </View>
-            )}
-            {searchMovieData.length > 0 && (
-              <View style={{paddingHorizontal: 6}}>
-                <FlatList
-                  data={searchMovieData}
-                  renderItem={renderItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  numColumns={2}
-                  ItemSeparatorComponent={<View style={{marginVertical: 10}} />}
-                  showsVerticalScrollIndicator={false}
+          <TouchableWithoutFeedback
+            style={{flex: 1}}
+            onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: Platform.OS === 'android' ? 10 : 0,
+                }}>
+                <TextInputWithLeftIconCompo
+                  value={searchText}
+                  onChangeText={text => {
+                    if (text.trim().length) {
+                      setSearchText(text);
+                    } else {
+                      setSearchText('');
+                    }
+                  }}
+                  maxLength={40}
+                  inputStyle={styles.inputStyle}
+                  clearIcon={searchText.length > 0 ? 'Clear' : ''}
+                  onPressClear={() => setSearchText('')}
                 />
               </View>
-            )}
-          </View>
+              {loading && (
+                <View style={{marginBottom: 8, alignItems: 'center'}}>
+                  <LottieView
+                    style={styles.laodingStyle}
+                    source={require('../assets/animation/movie-loading-animation.json')}
+                    loop={true}
+                    autoPlay
+                  />
+                </View>
+              )}
+              {searchMovieData.length > 0 && (
+                <View style={{paddingHorizontal: 6}}>
+                  <FlatList
+                    data={searchMovieData}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={2}
+                    ItemSeparatorComponent={
+                      <View style={{marginVertical: 10}} />
+                    }
+                    showsVerticalScrollIndicator={false}
+                    ListFooterComponent={() => (
+                      <View style={{marginVertical: 50}} />
+                    )}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
         </ScreenComponent>
       </LinearGradient>
     </>
@@ -173,5 +194,9 @@ const styles = StyleSheet.create({
     width: screenWidth / 2 - 12,
     height: 200,
     borderRadius: 8,
+  },
+  laodingStyle: {
+    width: 40,
+    height: 40,
   },
 });

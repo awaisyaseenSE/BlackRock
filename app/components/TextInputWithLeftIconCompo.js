@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.LightWhite,
     marginRight: 12,
+    height: '100%',
   },
   showHideIcon: {
     width: 20,
