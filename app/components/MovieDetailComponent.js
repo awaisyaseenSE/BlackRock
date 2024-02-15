@@ -97,7 +97,8 @@ const MovieDetailComponent = ({movieId}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginRight: 6,
+    // marginRight: 6,
+    marginLeft: 12,
   },
   title: {
     fontSize: 12,
@@ -106,9 +107,13 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   imageStyle: {
-    width: screenWidth / 3.5,
+    // width: screenWidth / 3.5,
+    // height: screenHeight * 0.2,
+    // borderRadius: 10,
+
+    width: screenWidth / 3,
     height: screenHeight * 0.2,
-    borderRadius: 10,
+    borderRadius: 12,
   },
 });
 

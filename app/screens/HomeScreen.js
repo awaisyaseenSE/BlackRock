@@ -5,7 +5,6 @@ import {
   StatusBar,
   TouchableOpacity,
   FlatList,
-  Image,
   Text,
   ScrollView,
 } from 'react-native';
@@ -205,10 +204,7 @@ export default function HomeScreen() {
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
         <TopHomeComponent leftOnPress={() => navigation.openDrawer()} />
-        <ScrollView
-          // contentContainerStyle={{flex: 1}}
-          style={{flex: 1}}
-          showsVerticalScrollIndicator={false}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: 80}}>
             <Carousel
               data={movieImages}
@@ -266,7 +262,7 @@ export default function HomeScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{paddingLeft: 12}}>
+            <View style={{}}>
               <FlatList
                 data={
                   allChangedMovieIDS.length > 20
