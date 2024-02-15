@@ -98,16 +98,6 @@ export default function SearchScreen() {
       </Animated.View>
     );
   };
-  const renderItemOne = ({item}) => {
-    return (
-      <View style={{marginVertical: getResponsiveMargin(6)}}>
-        <FastImage
-          source={{uri: item?.src?.landscape}}
-          style={{width: screenWidth, height: getResponsiveHeight(20)}}
-        />
-      </View>
-    );
-  };
 
   if (loading) {
     return <LoadingComponent />;
