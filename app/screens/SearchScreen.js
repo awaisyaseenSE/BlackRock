@@ -89,7 +89,7 @@ export default function SearchScreen() {
                 data: item,
               })
             }>
-            <Animated.Image
+            <FastImage
               source={{uri: item?.src?.landscape}}
               style={styles.image}
             />
@@ -115,24 +115,17 @@ export default function SearchScreen() {
 
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <LinearGradient
         start={{x: 1, y: 0}}
         end={{x: 0, y: 1}}
         colors={['#313131', '#262626', '#131313']}
         style={{flex: 1}}>
-        <View style={[styles.container, {paddingTop: insets.top}]}>
-          {/* <FlatList
-            data={photos}
-            renderItem={renderItemOne}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            // pagingEnabled
-          /> */}
+        <View
+          style={[
+            styles.container,
+            {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
+          ]}>
           <View style={{marginBottom: getResponsiveMargin(6)}} />
           <FlatList
             data={photos}
@@ -151,15 +144,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 40,
-
-    // paddingTop: Platform.OS === 'ios' ? 40 : 10,
   },
   heading: {
     fontSize: 20,
-    // marginVertical: 10,
     color: colors.blue,
     fontFamily: fontFamily.lato_bold,
-    // alignSelf: 'center',
   },
   btn: {
     width: '60%',

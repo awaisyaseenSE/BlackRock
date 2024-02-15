@@ -116,7 +116,7 @@ export default function DetailMovieScreen({route}) {
             backgroundColor={colors.black}
             barStyle={'light-content'}
           />
-          <ImageBackground
+          {/* <ImageBackground
             style={styles.imagePoster}
             source={
               routeData?.imagePoster.endsWith('null')
@@ -142,7 +142,28 @@ export default function DetailMovieScreen({route}) {
                 />
               </TouchableOpacity>
             </View>
-          </ImageBackground>
+          </ImageBackground> */}
+          <FastImage
+            style={styles.imagePoster}
+            source={
+              routeData?.imagePoster.endsWith('null')
+                ? {
+                    uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+                  }
+                : {uri: routeData?.imagePoster}
+            }
+          />
+          <TouchableOpacity
+            style={[
+              styles.iconContainer,
+              {top: Platform.OS === 'ios' ? insets.top : 12},
+            ]}
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/backward.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <LinearGradient
             colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
             start={{x: 0.5, y: 0}}
@@ -224,6 +245,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.LightWhite,
+    position: 'absolute',
+    top: 10,
+    left: 16,
   },
   heading: {
     fontSize: getFontSize(18),

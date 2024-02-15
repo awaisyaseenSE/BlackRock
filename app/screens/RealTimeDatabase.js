@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: colors.black,
+    color: colors.lineColor,
     fontFamily: fontFamily.rubik_medium,
     marginVertical: 8,
   },
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 14,
-    color: colors.black,
+    color: colors.gray,
     fontFamily: fontFamily.lato_regular,
     marginVertical: 2,
   },
@@ -287,5 +287,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: 'contain',
+    tintColor: colors.gray,
   },
 });
