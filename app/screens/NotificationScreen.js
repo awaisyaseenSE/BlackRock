@@ -98,7 +98,7 @@ export default function NotificationScreen() {
           <Animated.Text
             entering={FadeInLeft.delay(200).duration(500)}
             style={styles.text}>
-            Notification Screen
+            Pictures fetched from Pexels API
           </Animated.Text>
           <View style={{marginBottom: getResponsiveMargin(6)}} />
           <FlatList
@@ -116,7 +116,7 @@ export default function NotificationScreen() {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 20,
+    fontSize: 16,
     color: colors.lineColor,
     fontFamily: fontFamily.lato_bold,
     marginVertical: 8,
