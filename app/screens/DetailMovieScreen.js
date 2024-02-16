@@ -32,6 +32,7 @@ import constants from '../constants/constants';
 import FastImage from 'react-native-fast-image';
 import MyIndicator from '../components/MyIndicator';
 import navigationStrings from '../navigation/navigationStrings';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -49,6 +50,7 @@ export default function DetailMovieScreen({route}) {
   let movieDetails = routeData?.movieDetail;
   const [laoding, setLoading] = useState(false);
   const [similarMovies, setSimilarMovies] = useState([]);
+  const [youtubeVideoID, setYoutubeVideoID] = useState('');
 
   const getSimilarMovies = async () => {
     try {
@@ -67,8 +69,37 @@ export default function DetailMovieScreen({route}) {
     }
   };
 
+  const getYoutubeVideoLink = async () => {
+    // getApi('/movie/157336/videos');
+    try {
+      setLoading(true);
+      let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+
+      if (data?.results && data?.results?.length > 0) {
+        // Find the trailer video key
+        const trailer = data?.results?.find(video =>
+          video.type.toLowerCase().includes('trailer'),
+        );
+
+        if (trailer) {
+          // Construct YouTube URL
+          setYoutubeVideoID(trailer?.key);
+          // const youtubeUrl = `https://www.youtube.com/watch?v=${trailer.key}`;
+          // console.log(youtubeUrl);
+        }
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getSimilarMovies();
+    getYoutubeVideoLink();
   }, [routeData]);
 
   const PopularMovieCompo = ({data, id}) => {
@@ -151,8 +182,17 @@ export default function DetailMovieScreen({route}) {
               </Text>
               <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
             </View>
-
-            <View style={{marginVertical: 18}} />
+            {youtubeVideoID !== '' && (
+              <View style={{alignItems: 'center'}}>
+                <YoutubePlayer
+                  height={220}
+                  play={false}
+                  videoId={youtubeVideoID}
+                  width={'90%'}
+                />
+              </View>
+            )}
+            <View style={{marginVertical: 10}} />
             {similarMovies?.length > 1 && (
               <View style={styles.newheadingContainer}>
                 <Text style={styles.newheading}>Similar Movie</Text>
