@@ -18,6 +18,7 @@ import database, {firebase} from '@react-native-firebase/database';
 import ButtonComponent from '../components/ButtonComponent';
 import TextInputCompo from '../components/TextInputCompo';
 import fontFamily from '../styles/fontFamily';
+import MyIndicator from '../components/MyIndicator';
 
 export default function RealTimeDatabase() {
   const navigation = useNavigation();
@@ -39,28 +40,9 @@ export default function RealTimeDatabase() {
     getData();
   }, []);
 
-  //   const getData = async () => {
-  //     try {
-  //       //   const data = await databaseInit.ref('users').once('value');
-  //       //   const userDataArray = Object.values(data.val() || {}); // Convert object values to array
-  //       //   setUsersData(userDataArray);
-
-  //       let temArr = [];
-  //       databaseInit.ref('users').on('value', snapshot => {
-  //         snapshot.forEach(snap => {
-  //           let data = snap.val();
-  //           temArr.push(data);
-  //         });
-  //         console.log('final data is: .... ', temArr);
-  //         setUsersData(temArr);
-  //       });
-  //     } catch (error) {
-  //       console.log('error in fetching real time data from database: ', error);
-  //     }
-  //   };
-
   const getData = async () => {
     try {
+      setLoading(true);
       let temArr = []; // Initialize temArr as an empty array before fetching new data
       databaseInit.ref('users').on('value', snapshot => {
         temArr = []; // Clear temArr before fetching new data
@@ -70,8 +52,13 @@ export default function RealTimeDatabase() {
         });
         temArr.sort((a, b) => b.time - a.time);
         setUsersData(temArr);
+        setLoading(false);
       });
+      if (temArr.length == 0) {
+        setLoading(false);
+      }
     } catch (error) {
+      setLoading(false);
       console.log('error in fetching real time data from database: ', error);
     }
   };
@@ -241,6 +228,7 @@ export default function RealTimeDatabase() {
             )}
           </View>
         </View>
+        <MyIndicator visible={loading} />
       </ScreenComponent>
     </>
   );

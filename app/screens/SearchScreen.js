@@ -56,7 +56,7 @@ export default function SearchScreen() {
 
       let responseData = await response.json();
       let allMoviesData = responseData?.results;
-      console.log('Response data:', allMoviesData?.length);
+      // console.log('Response data:', allMoviesData?.length);
       if (responseData?.results?.length > 0) {
         setSearchMovieData(allMoviesData);
       }
@@ -137,6 +137,8 @@ export default function SearchScreen() {
                   inputStyle={styles.inputStyle}
                   clearIcon={searchText.length > 0 ? 'Clear' : ''}
                   onPressClear={() => setSearchText('')}
+                  placeholder="Search movies"
+                  placeholderTextColor="gray"
                 />
               </View>
               {loading && (

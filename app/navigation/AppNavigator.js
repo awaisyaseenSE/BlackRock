@@ -79,7 +79,7 @@ function AppNavigator() {
         component={AboutScreen}
         options={{
           headerShown: false,
-          presentation: 'modal',
+          // presentation: 'modal',
           // animationTypeForReplace: 'push',
           // animation: 'slide_from_right',
         }}
