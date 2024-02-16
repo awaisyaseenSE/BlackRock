@@ -168,6 +168,9 @@ export default function SearchScreen() {
                   />
                 </View>
               )}
+              {/* {searchText === '' && (
+                <Text style={{color: colors.white}}>Hello EverOne</Text>
+              )} */}
             </View>
           </TouchableWithoutFeedback>
         </ScreenComponent>

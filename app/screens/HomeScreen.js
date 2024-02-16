@@ -218,9 +218,16 @@ export default function HomeScreen() {
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
               <Text style={styles.heading}>Top Rated</Text>
-              <Text style={[styles.heading, {color: colors.yellow}]}>
-                See All
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.All_Catogory_Movie_Screen,
+                  )
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
             </View>
             <FlatList
               data={popularMovies}
@@ -234,9 +241,16 @@ export default function HomeScreen() {
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
               <Text style={styles.heading}>Upcoming</Text>
-              <Text style={[styles.heading, {color: colors.yellow}]}>
-                See All
-              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.All_Catogory_Movie_Screen,
+                  )
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
             </View>
             <FlatList
               data={upcomingMovies}

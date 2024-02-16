@@ -141,8 +141,9 @@ export default function DetailMovieScreen({route}) {
             <Text style={styles.heading}>{movieDetails?.title} </Text>
             <View style={styles.contentContainer}>
               <Text style={[styles.grayText, {textAlign: 'center'}]}>
-                Year {getYear(movieDetails?.release_date)}
-                {' - '}
+                {movieDetails?.release_date
+                  ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
+                  : ''}
                 {movieDetails?.adult ? '18+' : '16+'}
               </Text>
               <Text style={[styles.grayText, {textAlign: 'center'}]}>
@@ -152,7 +153,7 @@ export default function DetailMovieScreen({route}) {
             </View>
 
             <View style={{marginVertical: 18}} />
-            {similarMovies.length > 1 && (
+            {similarMovies?.length > 1 && (
               <View style={styles.newheadingContainer}>
                 <Text style={styles.newheading}>Similar Movie</Text>
                 <TouchableOpacity
@@ -180,7 +181,7 @@ export default function DetailMovieScreen({route}) {
               keyExtractor={(item, index) => index.toString()}
               horizontal
             />
-            {similarMovies.length > 1 && <View style={{height: 80}} />}
+            {similarMovies?.length > 1 && <View style={{height: 80}} />}
           </View>
         </View>
       </ScrollView>

@@ -66,7 +66,6 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
               style={{...styles.imageStyle, ...imageStyle}}
             />
             <Text style={{...styles.title, ...textStyle}} numberOfLines={1}>
-              Title:{' '}
               {movieData?.title?.length > 10
                 ? movieData?.title.slice(0, 10) + '...'
                 : movieData?.title}
