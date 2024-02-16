@@ -45,13 +45,16 @@ export default function SearchScreen() {
   const [searchMovieData, setSearchMovieData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isMovieSelected, setIsMovieSelected] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [endReached, setEndReached] = useState(false);
 
   const handleSearchMovies = async () => {
     let url = `/search/movie?query=${encodeURIComponent(searchText)}`;
     let tv_url = `/search/tv?query=${encodeURIComponent(searchText)}`;
     let API_URL = `${constants.theMovieDb_BASE_URL}${
       isMovieSelected ? url : tv_url
-    }&api_key=${constants.theMovieDb_API_KEY}`;
+    }&api_key=${constants.theMovieDb_API_KEY}&page=${currentPage}`;
     try {
       setLoading(true);
       let response = await fetch(API_URL);
@@ -65,13 +68,22 @@ export default function SearchScreen() {
       let allMoviesData = responseData?.results;
       // console.log('Response data:', allMoviesData?.length);
       if (responseData?.results?.length > 0) {
-        setSearchMovieData(allMoviesData);
-        console.log(responseData);
+        // setSearchMovieData(allMoviesData);
+        setSearchMovieData(prevData => [...prevData, ...allMoviesData]);
+        setTotalPages(responseData?.total_pages);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
       console.error('Error in getting movies for user search:', error);
+    }
+  };
+
+  const handleEndReached = () => {
+    if (currentPage < totalPages && !loading) {
+      // Fetch next page of data
+      setCurrentPage(prevPage => prevPage + 1);
+      handleSearchMovies();
     }
   };
 
@@ -171,7 +183,7 @@ export default function SearchScreen() {
                 </View>
               </View>
               {loading && (
-                <View style={{marginBottom: 8, alignItems: 'center'}}>
+                <View style={{marginBottom: 2, alignItems: 'center'}}>
                   <LottieView
                     style={styles.laodingStyle}
                     source={require('../assets/animation/movie-loading-animation.json')}
@@ -191,9 +203,32 @@ export default function SearchScreen() {
                       <View style={{marginVertical: 10}} />
                     }
                     showsVerticalScrollIndicator={false}
-                    ListFooterComponent={() => (
-                      <View style={{marginVertical: 50}} />
-                    )}
+                    // ListFooterComponent={() => (
+                    //   <View style={{marginVertical: 50}} />
+                    // )}
+                    onEndReached={handleEndReached}
+                    onEndReachedThreshold={0.5}
+                    ListFooterComponent={() => {
+                      if (endReached) {
+                        return null; // No activity indicator if end is reached
+                      }
+
+                      return loading ? (
+                        <View style={{marginBottom: 50, alignItems: 'center'}}>
+                          <LottieView
+                            style={styles.laodingStyle}
+                            source={require('../assets/animation/movie-loading-animation.json')}
+                            loop={true}
+                            autoPlay
+                          />
+                        </View>
+                      ) : null;
+                    }}
+                    onMomentumScrollEnd={() => {
+                      if (!endReached) {
+                        setEndReached(true);
+                      }
+                    }}
                   />
                 </View>
               )}
@@ -284,7 +319,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   laodingStyle: {
-    width: 40,
+    width: 60,
     height: 40,
   },
   menuIcon: {
