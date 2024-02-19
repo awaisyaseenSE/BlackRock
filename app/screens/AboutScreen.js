@@ -87,7 +87,12 @@ export default function AboutScreen() {
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={{marginTop: 4}} />
-
+            <ButtonComponent
+              title="Profile"
+              onPress={() =>
+                navigation.navigate(navigationStrings.PROFILE_SCREEN)
+              }
+            />
             <YoutubePlayer height={300} play={false} videoId={'84WIaK3bl_s'} />
             <FlatList
               data={imagesData}

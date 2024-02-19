@@ -12,4 +12,6 @@ export default {
   Similar_Movie_Detail_Screen: 'SimilarMovieDetailScreen',
   All_Similar_Movies_Screen: 'AllSimilarMoviesScreen',
   All_Catogory_Movie_Screen: 'AllCatogoryMovieScreen',
+  PROFILE_SCREEN: 'ProfileScreen',
+  Notification_SCREEN: 'NotificationScreen',
 };

@@ -14,6 +14,8 @@ import AllMoviesList from '../screens/AllMoviesList';
 import SimilarMovieDetailScreen from '../screens/SimilarMovieDetailScreen';
 import AllSimilarMoviesScreen from '../screens/AllSimilarMoviesScreen';
 import AllCatogoryMovieScreen from '../screens/AllCatogoryMovieScreen';
+import BottomTabComponent from '../components/BottomTabComponent';
+import BottomTabNavigator from './BottomTabNavigator';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -48,9 +50,14 @@ const DrawerNavigator = () => (
         overlayColor: 'transparent',
       }}
       drawerContent={props => <CustomDrawer {...props} />}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="TabRoutes"
         component={TabRoutes}
+        options={{headerShown: false}}
+      /> */}
+      <Drawer.Screen
+        name="BottomTabNavigator"
+        component={BottomTabNavigator}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>
@@ -75,6 +82,11 @@ function AppNavigator() {
         component={DrawerNavigator}
         options={{headerShown: false}}
       />
+      {/* <Stack.Screen
+        name="BottomTabNavigator"
+        component={BottomTabNavigator}
+        options={{headerShown: false}}
+      /> */}
       <Stack.Screen
         name="AboutScreen"
         component={AboutScreen}
