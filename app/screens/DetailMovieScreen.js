@@ -4,26 +4,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert,
-  Button,
   FlatList,
   Dimensions,
-  ImageBackground,
-  SafeAreaView,
   Platform,
-  ActivityIndicator,
   StatusBar,
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import colors from '../styles/colors';
-import LinearGradient from 'react-native-linear-gradient';
 import fontFamily from '../styles/fontFamily';
 import {
-  getResponsiveHeight,
   getFontSize,
   getResponsiveMargin,
 } from '../utils/getResponsiveMarginPadding';
@@ -33,7 +25,6 @@ import FastImage from 'react-native-fast-image';
 import MyIndicator from '../components/MyIndicator';
 import navigationStrings from '../navigation/navigationStrings';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import ButtonComponent from '../components/ButtonComponent';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -225,13 +216,6 @@ export default function DetailMovieScreen({route}) {
             {similarMovies?.length > 1 && <View style={{height: 80}} />}
           </View>
         </View>
-        <ButtonComponent
-          title="Notification"
-          onPress={() =>
-            navigation.navigate(navigationStrings.Notification_SCREEN)
-          }
-        />
-        <View style={{marginTop: 30}} />
       </ScrollView>
       <MyIndicator visible={laoding} />
     </>

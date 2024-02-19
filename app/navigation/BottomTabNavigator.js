@@ -1,16 +1,6 @@
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Platform,
-  Dimensions,
-} from 'react-native';
+import {Image, StyleSheet, Platform} from 'react-native';
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  BottomTabBar,
-} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import colors from '../styles/colors';
@@ -18,13 +8,14 @@ import auth from '@react-native-firebase/auth';
 import SearchScreen from '../screens/SearchScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Animated, {Value3D} from 'react-native-reanimated';
 
 const BottomTab = createBottomTabNavigator();
-const {width, height} = Dimensions.get('window');
 
 const BottomTabNavigator = () => {
   const insets = useSafeAreaInsets();
   const isIOS = Platform.OS === 'ios';
+
   return (
     <BottomTab.Navigator
       screenOptions={{

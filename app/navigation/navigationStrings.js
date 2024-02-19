@@ -14,4 +14,5 @@ export default {
   All_Catogory_Movie_Screen: 'AllCatogoryMovieScreen',
   PROFILE_SCREEN: 'ProfileScreen',
   Notification_SCREEN: 'NotificationScreen',
+  SEARCH_SCREEN: 'SearchScreen',
 };
