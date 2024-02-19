@@ -15,4 +15,6 @@ export default {
   PROFILE_SCREEN: 'ProfileScreen',
   Notification_SCREEN: 'NotificationScreen',
   SEARCH_SCREEN: 'SearchScreen',
+  Movie_Collection_Screen: 'MovieCollectionScreen',
+  Show_Movie_Collection_Screen: 'ShowMovieCollectionScreen',
 };

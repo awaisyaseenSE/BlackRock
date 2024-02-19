@@ -16,6 +16,8 @@ import AllSimilarMoviesScreen from '../screens/AllSimilarMoviesScreen';
 import AllCatogoryMovieScreen from '../screens/AllCatogoryMovieScreen';
 import BottomTabComponent from '../components/BottomTabComponent';
 import BottomTabNavigator from './BottomTabNavigator';
+import MovieCollectionScreen from '../screens/MovieCollectionScreen';
+import ShowMovieCollectionScreen from '../screens/ShowMovieCollectionScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -142,6 +144,20 @@ function AppNavigator() {
       <Stack.Screen
         name="AllCatogoryMovieScreen"
         component={AllCatogoryMovieScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MovieCollectionScreen"
+        component={MovieCollectionScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ShowMovieCollectionScreen"
+        component={ShowMovieCollectionScreen}
         options={{
           headerShown: false,
         }}

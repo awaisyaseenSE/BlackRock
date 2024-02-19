@@ -50,7 +50,13 @@ const TextInputWithLeftIconCompo = ({
         </TouchableOpacity>
       ) : null}
       {clearIcon.length > 0 ? (
-        <TouchableOpacity onPress={onPressClear} style={{paddingVertical: 6}}>
+        <TouchableOpacity
+          onPress={onPressClear}
+          style={{
+            paddingVertical: 6,
+            // backgroundColor: 'pink',
+            paddingHorizontal: 4,
+          }}>
           <Image
             source={require('../assets/close.png')}
             style={styles.closeIcon}
