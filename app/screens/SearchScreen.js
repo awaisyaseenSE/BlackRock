@@ -92,7 +92,6 @@ export default function SearchScreen() {
 
   const renderItem = ({item, index}) => {
     let postURL = `${constants.image_poster_url}${item.backdrop_path}`;
-    console.log(item);
     return (
       <View style={{alignItems: 'center', paddingHorizontal: 4}}>
         <TouchableOpacity onPress={() => handleNaviToDetail(item, postURL)}>
