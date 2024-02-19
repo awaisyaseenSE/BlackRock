@@ -161,11 +161,18 @@ export default function DetailMovieScreen({route}) {
             />
           </TouchableOpacity>
           <View style={{backgroundColor: colors.moviesBg}}>
-            <Text style={styles.heading}>{movieDetails?.title} </Text>
+            <Text style={styles.heading}>
+              {movieDetails?.title} {movieDetails?.name}
+            </Text>
             <View style={styles.contentContainer}>
               <Text style={[styles.grayText, {textAlign: 'center'}]}>
                 {movieDetails?.release_date
                   ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
+                  : ''}
+                {movieDetails?.first_air_date
+                  ? 'First air date ' +
+                    getYear(movieDetails?.first_air_date) +
+                    ' - '
                   : ''}
                 {movieDetails?.adult ? '18+' : '16+'}
               </Text>
@@ -181,6 +188,7 @@ export default function DetailMovieScreen({route}) {
                   play={false}
                   videoId={youtubeVideoID}
                   width={'90%'}
+                  allowWebViewZoom
                 />
               </View>
             )}

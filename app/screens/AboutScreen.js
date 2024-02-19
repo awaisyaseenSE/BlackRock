@@ -88,10 +88,16 @@ export default function AboutScreen() {
           <View style={styles.container}>
             <View style={{marginTop: 4}} />
             <ButtonComponent
-              title="Profile"
+              title="Go to Profile"
               onPress={() =>
                 navigation.navigate(navigationStrings.PROFILE_SCREEN)
               }
+              style={{
+                marginBottom: 20,
+                width: '60%',
+                borderRadius: 12,
+                alignSelf: 'center',
+              }}
             />
             <YoutubePlayer height={300} play={false} videoId={'84WIaK3bl_s'} />
             <FlatList

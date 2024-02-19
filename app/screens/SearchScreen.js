@@ -92,6 +92,7 @@ export default function SearchScreen() {
 
   const renderItem = ({item, index}) => {
     let postURL = `${constants.image_poster_url}${item.backdrop_path}`;
+    console.log(item);
     return (
       <View style={{alignItems: 'center', paddingHorizontal: 4}}>
         <TouchableOpacity onPress={() => handleNaviToDetail(item, postURL)}>
@@ -110,6 +111,9 @@ export default function SearchScreen() {
           {item?.title?.length > 18
             ? item?.title.slice(0, 18) + '...'
             : item?.title}
+          {item?.name?.length > 18
+            ? item?.name.slice(0, 18) + '...'
+            : item?.name}
         </Text>
       </View>
     );
