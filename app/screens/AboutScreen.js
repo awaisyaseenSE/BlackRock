@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import {useNavigation} from '@react-navigation/native';
@@ -11,6 +18,8 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
 import LoadingComponent from '../components/LoadingComponent';
+import YoutubePlayer from 'react-native-youtube-iframe';
+import MyIndicator from '../components/MyIndicator';
 
 export default function AboutScreen() {
   const navigation = useNavigation();
@@ -48,7 +57,7 @@ export default function AboutScreen() {
   };
 
   if (loading) {
-    return <LoadingComponent />;
+    return <MyIndicator />;
   }
 
   const renderItem = ({item}) => {
@@ -71,19 +80,24 @@ export default function AboutScreen() {
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
-        <View style={styles.container}>
-          <TopCompoWithHeading
-            title="About"
-            onPress={() => navigation.goBack()}
-          />
-          <View style={{marginTop: 4}} />
-          <FlatList
-            data={imagesData}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <TopCompoWithHeading
+          title="About"
+          onPress={() => navigation.goBack()}
+        />
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <View style={{marginTop: 4}} />
+
+            <YoutubePlayer height={300} play={false} videoId={'84WIaK3bl_s'} />
+            <FlatList
+              data={imagesData}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+            />
+          </View>
+        </ScrollView>
       </ScreenComponent>
     </>
   );

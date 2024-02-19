@@ -11,4 +11,5 @@ export default {
   All_Movies_List: 'AllMoviesList',
   Similar_Movie_Detail_Screen: 'SimilarMovieDetailScreen',
   All_Similar_Movies_Screen: 'AllSimilarMoviesScreen',
+  All_Catogory_Movie_Screen: 'AllCatogoryMovieScreen',
 };
