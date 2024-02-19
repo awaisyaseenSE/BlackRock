@@ -5,6 +5,7 @@ import {
   StatusBar,
   Dimensions,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -90,24 +91,27 @@ export default function NotificationScreen() {
         end={{x: 0, y: 1}}
         colors={['#313131', '#262626', '#131313']}
         style={{flex: 1}}>
-        <View
-          style={[
-            styles.container,
-            {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
-          ]}>
-          <Animated.Text
-            entering={FadeInLeft.delay(200).duration(500)}
-            style={styles.text}>
-            Pictures fetched from Pexels API
-          </Animated.Text>
-          <View style={{marginBottom: getResponsiveMargin(6)}} />
-          <FlatList
-            data={photos}
-            renderItem={renderItem}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+          <View
+            style={[
+              styles.container,
+              {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
+            ]}>
+            <Animated.Text
+              entering={FadeInLeft.delay(200).duration(500)}
+              style={styles.text}>
+              Pictures fetched from Pexels API
+            </Animated.Text>
+            <View style={{marginBottom: getResponsiveMargin(6)}} />
+            <FlatList
+              data={photos}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              scrollEnabled={false}
+            />
+          </View>
+        </ScrollView>
       </LinearGradient>
       <MyIndicator visible={loading} />
     </>
