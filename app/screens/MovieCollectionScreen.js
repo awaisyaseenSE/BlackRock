@@ -136,7 +136,7 @@ export default function MovieCollectionScreen() {
             placeholderTextColor="gray"
           />
           {searchMovieCollectionData.length > 0 && (
-            <View style={{paddingHorizontal: 4}}>
+            <View style={{paddingHorizontal: 4, flex: 1}}>
               <FlatList
                 data={searchMovieCollectionData}
                 renderItem={renderItem}

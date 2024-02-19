@@ -6,6 +6,7 @@ import MainNavigator from './app/navigation/MainNavigator';
 import SplashScreen from './app/screens/SplashScreen';
 import {getValue} from './app/helper/storeAndGetAsyncStorageValue';
 import constants from './app/constants/constants';
+import OnboardingScreen from './app/screens/OnboardingScreen';
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);

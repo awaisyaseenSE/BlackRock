@@ -2,11 +2,12 @@ import {View, StyleSheet, StatusBar} from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import LottieView from 'lottie-react-native';
+import colors from '../styles/colors';
 
 export default function SplashScreen() {
   return (
     <>
-      <StatusBar hidden />
+      <StatusBar hidden backgroundColor={'#12212F'} />
       <LinearGradient
         style={{flex: 1}}
         start={{x: 0.5, y: 0}}
