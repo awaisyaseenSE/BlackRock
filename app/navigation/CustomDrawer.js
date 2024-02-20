@@ -86,6 +86,13 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/checklist.png')}
+            title="Todo Screen"
+            onPress={() => navigation.navigate(navigationStrings.TODO_SCREEN)}
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

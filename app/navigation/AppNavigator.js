@@ -19,6 +19,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import MovieCollectionScreen from '../screens/MovieCollectionScreen';
 import ShowMovieCollectionScreen from '../screens/ShowMovieCollectionScreen';
 import TodoScreen from '../screens/Todo/screens/TodoScreen';
+import CreateTodoScreen from '../screens/Todo/screens/CreateTodoScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -166,6 +167,13 @@ function AppNavigator() {
       <Stack.Screen
         name="TodoScreen"
         component={TodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CreateTodoScreen"
+        component={CreateTodoScreen}
         options={{
           headerShown: false,
         }}
