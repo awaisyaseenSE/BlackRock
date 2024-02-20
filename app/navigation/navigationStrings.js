@@ -17,4 +17,5 @@ export default {
   SEARCH_SCREEN: 'SearchScreen',
   Movie_Collection_Screen: 'MovieCollectionScreen',
   Show_Movie_Collection_Screen: 'ShowMovieCollectionScreen',
+  TODO_SCREEN: 'TodoScreen',
 };
