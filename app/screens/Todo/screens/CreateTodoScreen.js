@@ -86,6 +86,7 @@ export default function CreateTodoScreen() {
           text: todoText,
           date: todoDate.toDateString(),
           priority: todoPriority,
+          done: JSON.stringify(false),
         };
         await storeTodoItem(todoItem);
         Alert.alert('Item is added successfully!');

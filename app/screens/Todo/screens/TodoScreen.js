@@ -94,7 +94,10 @@ export default function TodoScreen() {
         />
         <View style={styles.container}>
           {selectedTab === 0 ? (
-            <ShowTodayItemsCompo todayTodoItems={todayTodoItems} />
+            <ShowTodayItemsCompo
+              todayTodoItems={todayTodoItems}
+              getTodoItems={getTodoItems}
+            />
           ) : selectedTab === 1 ? (
             <ShowFutureItemsCompo futureTodoItems={futureTodoItems} />
           ) : selectedTab === 2 ? (
@@ -103,20 +106,37 @@ export default function TodoScreen() {
         </View>
         <View style={styles.footer}>
           <TouchableOpacity
-            style={styles.footerTxtContainer}
+            style={[
+              styles.footerTxtContainer,
+              {
+                backgroundColor:
+                  selectedTab === 0 ? colors.todoGray : colors.todoPink,
+              },
+            ]}
             onPress={() => setSelectedTab(0)}>
             <Text style={styles.footerTxt}>Today</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.footerTxtContainer,
-              {borderLeftWidth: 1, borderRightWidth: 1},
+              {
+                borderLeftWidth: 1,
+                borderRightWidth: 1,
+                backgroundColor:
+                  selectedTab === 1 ? colors.todoGray : colors.todoPink,
+              },
             ]}
             onPress={() => setSelectedTab(1)}>
             <Text style={styles.footerTxt}>Future</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.footerTxtContainer}
+            style={[
+              styles.footerTxtContainer,
+              {
+                backgroundColor:
+                  selectedTab === 2 ? colors.todoGray : colors.todoPink,
+              },
+            ]}
             onPress={() => setSelectedTab(2)}>
             <Text style={styles.footerTxt}>Past</Text>
           </TouchableOpacity>

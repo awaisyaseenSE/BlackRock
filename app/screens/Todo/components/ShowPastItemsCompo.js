@@ -4,6 +4,19 @@ import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
 
 const ShowPastItemsCompo = ({pastTodoItems}) => {
+  const handleCheckboxToggle = async item => {
+    // Toggle the 'done' property
+    console.log('before: ', item.done);
+    item.done = !JSON.parse(item.done);
+    console.log('after ', item.done);
+
+    // Update AsyncStorage with the modified todo item
+    // await AsyncStorage.setItem("todoItems", JSON.stringify(pastTodoItems));
+
+    // // Update the UI by calling the parent component's function
+    // updateTodoItem(pastTodoItems);
+  };
+
   const formatDate = dateString => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString('en-US', {
@@ -17,6 +30,8 @@ const ShowPastItemsCompo = ({pastTodoItems}) => {
 
   const renderItem = ({item, index}) => {
     const formattedDate = formatDate(item?.date);
+    console.log(item.done);
+    // console.log(item?.done !== undefined && JSON.parse(item?.done));
     return (
       <View
         style={[
