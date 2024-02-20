@@ -77,24 +77,27 @@ const ShowTodayItemsCompo = ({todayTodoItems, getTodoItems}) => {
         <Text style={styles.heading}>{item?.text}</Text>
         <Text style={styles.dateText}>{formattedDate}</Text>
         <View style={{alignItems: 'flex-end'}}>
-          <TouchableOpacity
-            style={styles.checkBox}
-            onPress={() => toggleTodoItemDone(item.id)}>
-            {/* {itemStatus && (
+          <View style={styles.checkBoxContainer}>
+            <Text style={styles.subHeading}>Mark as completed</Text>
+            <TouchableOpacity
+              style={styles.checkBox}
+              onPress={() => toggleTodoItemDone(item.id)}>
+              {/* {itemStatus && (
               <Image
                 source={require('../../../assets/check.png')}
                 style={styles.checkBoxIcon}
               />
             )} */}
-            {loading ? (
-              <ActivityIndicator size={14} color={colors.black} />
-            ) : itemStatus ? (
-              <Image
-                source={require('../../../assets/check.png')}
-                style={styles.checkBoxIcon}
-              />
-            ) : null}
-          </TouchableOpacity>
+              {loading ? (
+                <ActivityIndicator size={14} color={colors.black} />
+              ) : itemStatus ? (
+                <Image
+                  source={require('../../../assets/check.png')}
+                  style={styles.checkBoxIcon}
+                />
+              ) : null}
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -146,6 +149,16 @@ const styles = StyleSheet.create({
     height: 18,
     resizeMode: 'contain',
     tintColor: colors.white,
+  },
+  checkBoxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  subHeading: {
+    fontSize: 12,
+    color: colors.LightWhite,
+    fontFamily: fontFamily.rubik_medium,
+    marginRight: 12,
   },
 });
 

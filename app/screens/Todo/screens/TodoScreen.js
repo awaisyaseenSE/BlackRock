@@ -26,24 +26,63 @@ export default function TodoScreen() {
     }
   }, [isFocused]);
 
+  //   const separateTodoItems = alltodoItems => {
+  //     const currentDate = new Date();
+
+  //     const todayItems = alltodoItems.filter(item => {
+  //       const itemDate = new Date(item.date);
+  //       return isSameDay(currentDate, itemDate);
+  //     });
+
+  //     const futureItems = alltodoItems.filter(item => {
+  //       const itemDate = new Date(item.date);
+  //       return itemDate > currentDate;
+  //     });
+
+  //     const historyItems = alltodoItems.filter(item => {
+  //       const today = new Date();
+  //       today.setHours(0, 0, 0, 0);
+  //       const itemDate = new Date(item.date);
+  //       return itemDate < today;
+  //     });
+  //     let allToday = todayItems;
+  //     console.log('today items: ', allToday.length);
+  //     // console.log('today items: ', allToday);
+  //     setTodayTodoItems(allToday);
+
+  //     let allFuture = futureItems;
+  //     setFutureTodoItems(allFuture);
+  //     console.log('future items: ', allFuture.length);
+  //     // console.log('future items: ', allFuture);
+
+  //     let allHistory = historyItems;
+  //     setPastTodoItems(allHistory);
+  //     console.log('History items: ', allHistory.length);
+  //     // console.log('History items: ', allHistory);
+  //   };
+
   const separateTodoItems = alltodoItems => {
     const currentDate = new Date();
 
     const todayItems = alltodoItems.filter(item => {
-      const itemDate = new Date(item.date);
-      return isSameDay(currentDate, itemDate);
+      if (!JSON.parse(item.done)) {
+        const itemDate = new Date(item.date);
+        return isSameDay(currentDate, itemDate);
+      }
     });
 
     const futureItems = alltodoItems.filter(item => {
-      const itemDate = new Date(item.date);
-      return itemDate > currentDate;
+      if (!JSON.parse(item.done)) {
+        const itemDate = new Date(item.date);
+        return itemDate > currentDate;
+      }
     });
 
     const historyItems = alltodoItems.filter(item => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const itemDate = new Date(item.date);
-      return itemDate < today;
+      return itemDate < today || JSON.parse(item.done);
     });
     let allToday = todayItems;
     console.log('today items: ', allToday.length);
