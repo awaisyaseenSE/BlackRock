@@ -37,4 +37,5 @@ export default {
   todoRed: '#E42B5F',
   todoYellow: '#ECB802',
   todoGray: '#D9D9D9',
+  todoGreen: '#32B791',
 };
