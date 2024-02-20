@@ -196,10 +196,7 @@ export default function OnboardingScreen() {
 
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <View
         style={[
           styles.container,
