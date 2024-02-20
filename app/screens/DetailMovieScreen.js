@@ -4,26 +4,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert,
-  Button,
   FlatList,
   Dimensions,
-  ImageBackground,
-  SafeAreaView,
   Platform,
-  ActivityIndicator,
   StatusBar,
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import colors from '../styles/colors';
-import LinearGradient from 'react-native-linear-gradient';
 import fontFamily from '../styles/fontFamily';
 import {
-  getResponsiveHeight,
   getFontSize,
   getResponsiveMargin,
 } from '../utils/getResponsiveMarginPadding';
@@ -169,11 +161,18 @@ export default function DetailMovieScreen({route}) {
             />
           </TouchableOpacity>
           <View style={{backgroundColor: colors.moviesBg}}>
-            <Text style={styles.heading}>{movieDetails?.title} </Text>
+            <Text style={styles.heading}>
+              {movieDetails?.title} {movieDetails?.name}
+            </Text>
             <View style={styles.contentContainer}>
               <Text style={[styles.grayText, {textAlign: 'center'}]}>
                 {movieDetails?.release_date
                   ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
+                  : ''}
+                {movieDetails?.first_air_date
+                  ? 'First air date ' +
+                    getYear(movieDetails?.first_air_date) +
+                    ' - '
                   : ''}
                 {movieDetails?.adult ? '18+' : '16+'}
               </Text>
@@ -189,6 +188,7 @@ export default function DetailMovieScreen({route}) {
                   play={false}
                   videoId={youtubeVideoID}
                   width={'90%'}
+                  allowWebViewZoom
                 />
               </View>
             )}

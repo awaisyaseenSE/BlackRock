@@ -43,7 +43,7 @@ const ShowTvSeriesCompo = ({data}) => {
         style={styles.imagePoster}
       />
       <Text numberOfLines={1} style={styles.text}>
-        {data?.name}
+        {data?.title}
       </Text>
     </TouchableOpacity>
   );

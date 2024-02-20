@@ -27,6 +27,11 @@ export default function AllCatogoryMovieScreen() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [endReached, setEndReached] = useState(false);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [allMoviesData, setAllMoviesData] = useState([]);
+  const [allMoviecurrentPage, setAlllMoviecurrentPage] = useState(1);
+  const [allMovieTotalPage, setAlllMovietotalPage] = useState(1);
+  const [allMoviesendReached, setAllMovieEndReached] = useState(false);
 
   //   const getMovieTralierYoutube = async () => {
   //     try {
@@ -239,7 +244,70 @@ export default function AllCatogoryMovieScreen() {
     setSelectedGenere(genreID);
     setCurrentPage(1); // Reset current page to 1 when selecting a new genre
     setMovieDataBasedOnGenere([]); // Clear previous movie data
+    setIsAllSelected(false);
     await handleGetDataBasedOnGenere(genreID); // Fetch data for the selected genre
+  };
+
+  const handleAllClick = () => {
+    setIsAllSelected(true);
+    setMovieDataBasedOnGenere([]);
+    setSelectedGenere(null);
+  };
+
+  const handleFlatlistHeaderCompo = () => {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.catogryNameContainer,
+          {
+            height: 30,
+            backgroundColor: isAllSelected ? colors.black : colors.lightBlack,
+          },
+        ]}
+        onPress={handleAllClick}>
+        <Text style={styles.catogryNameText}>All</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const getAllMovies = async () => {
+    try {
+      setIsAllSelected(true);
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/discover/movie?api_key=${constants.theMovieDb_API_KEY}&page=${allMoviecurrentPage}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!!data) {
+        setLoading(false);
+        setAlllMovietotalPage(data?.total_pages);
+        setAllMoviesData(prevData => [...prevData, ...data.results]);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllMovies();
+  }, []);
+
+  const handleEndReachedAllMovies = () => {
+    if (allMoviecurrentPage < allMovieTotalPage && !laoding) {
+      // Fetch next page of data
+      setAlllMoviecurrentPage(prevPage => prevPage + 1);
+      getAllMovies();
+    }
   };
 
   return (
@@ -273,6 +341,7 @@ export default function AllCatogoryMovieScreen() {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
+                ListHeaderComponent={handleFlatlistHeaderCompo}
               />
             </View>
           )}
@@ -299,6 +368,34 @@ export default function AllCatogoryMovieScreen() {
               onMomentumScrollEnd={() => {
                 if (!endReached) {
                   setEndReached(true);
+                }
+              }}
+            />
+          )}
+
+          {isAllSelected && (
+            // <Text style={styles.catogryNameText}>All movies</Text>
+            <FlatList
+              data={allMoviesData}
+              renderItem={({item}) => <ShowTvSeriesCompo data={item} />}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
+              ItemSeparatorComponent={<View style={{marginVertical: 4}} />}
+              onEndReached={handleEndReachedAllMovies}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={() => {
+                if (allMoviesendReached) {
+                  return null; // No activity indicator if end is reached
+                }
+
+                return laoding ? (
+                  <ActivityIndicator size="large" color={colors.blue} />
+                ) : null;
+              }}
+              onMomentumScrollEnd={() => {
+                if (!allMoviesendReached) {
+                  setAllMovieEndReached(true);
                 }
               }}
             />

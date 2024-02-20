@@ -15,6 +15,8 @@ import ScreenComponent from '../components/ScreenComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import {useNavigation} from '@react-navigation/native';
 import MovieDetailComponent from '../components/MovieDetailComponent';
+import {getApi} from '../helper/APICalls';
+import LottieView from 'lottie-react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -22,6 +24,49 @@ const screenHeight = Dimensions.get('window').height;
 export default function AllMoviesList({route}) {
   const navigation = useNavigation();
   const moviesIds = route?.params?.moviesIds;
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [endReached, setEndReached] = useState(false);
+  const [allmoviesIDs, setAllMovieIDs] = useState([]);
+
+  const getChangedMovies = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/changes?api_key=${constants.theMovieDb_API_KEY}&page=${currentPage}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        setTotalPages(res?.total_pages);
+        setAllMovieIDs(prevData => [...prevData, ...res.results]);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getChangedMovies();
+  }, []);
+
+  const handleEndReached = () => {
+    if (currentPage < totalPages && !loading) {
+      // Fetch next page of data
+      setCurrentPage(prevPage => prevPage + 1);
+      getChangedMovies();
+    }
+  };
 
   return (
     <>
@@ -33,20 +78,54 @@ export default function AllMoviesList({route}) {
             titleStyle={{color: colors.LightWhite}}
             backIconStyle={{tintColor: colors.white}}
           />
-          <FlatList
-            data={moviesIds}
-            renderItem={({item}) => (
-              <MovieDetailComponent
-                movieId={item?.id}
-                imageStyle={styles.imageStyle}
-                style={{marginLeft: 0, paddingHorizontal: 4}}
-                textStyle={{width: screenWidth / 3 - 14}}
+          {allmoviesIDs.length > 0 ? (
+            <FlatList
+              data={allmoviesIDs}
+              renderItem={({item}) => (
+                <MovieDetailComponent
+                  movieId={item?.id}
+                  imageStyle={styles.imageStyle}
+                  style={{marginLeft: 0, paddingHorizontal: 4}}
+                  textStyle={{width: screenWidth / 3 - 14}}
+                />
+              )}
+              numColumns={3}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={<View style={{marginVertical: 6}} />}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={() => {
+                if (endReached) {
+                  return null; // No activity indicator if end is reached
+                }
+
+                return loading ? (
+                  <View style={{marginBottom: 50, alignItems: 'center'}}>
+                    <LottieView
+                      style={styles.laodingStyle}
+                      source={require('../assets/animation/movie-loading-animation.json')}
+                      loop={true}
+                      autoPlay
+                    />
+                  </View>
+                ) : null;
+              }}
+              onMomentumScrollEnd={() => {
+                if (!endReached) {
+                  setEndReached(true);
+                }
+              }}
+            />
+          ) : (
+            <View style={{marginBottom: 50, alignItems: 'center'}}>
+              <LottieView
+                style={styles.laodingStyle}
+                source={require('../assets/animation/movie-loading-animation.json')}
+                loop={true}
+                autoPlay
               />
-            )}
-            numColumns={3}
-            showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={<View style={{marginVertical: 6}} />}
-          />
+            </View>
+          )}
         </View>
       </ScreenComponent>
     </>
@@ -62,5 +141,9 @@ const styles = StyleSheet.create({
     width: screenWidth / 3 - 14,
     height: screenHeight * 0.2,
     borderRadius: 12,
+  },
+  laodingStyle: {
+    width: 60,
+    height: 40,
   },
 });

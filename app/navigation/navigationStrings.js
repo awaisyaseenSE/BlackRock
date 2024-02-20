@@ -12,4 +12,9 @@ export default {
   Similar_Movie_Detail_Screen: 'SimilarMovieDetailScreen',
   All_Similar_Movies_Screen: 'AllSimilarMoviesScreen',
   All_Catogory_Movie_Screen: 'AllCatogoryMovieScreen',
+  PROFILE_SCREEN: 'ProfileScreen',
+  Notification_SCREEN: 'NotificationScreen',
+  SEARCH_SCREEN: 'SearchScreen',
+  Movie_Collection_Screen: 'MovieCollectionScreen',
+  Show_Movie_Collection_Screen: 'ShowMovieCollectionScreen',
 };

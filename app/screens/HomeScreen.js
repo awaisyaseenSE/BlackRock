@@ -203,7 +203,12 @@ export default function HomeScreen() {
     <>
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
-        <TopHomeComponent leftOnPress={() => navigation.openDrawer()} />
+        <TopHomeComponent
+          leftOnPress={() => navigation.openDrawer()}
+          rightOnPress={() =>
+            navigation.navigate(navigationStrings.SEARCH_SCREEN)
+          }
+        />
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: 80}}>
             <Carousel

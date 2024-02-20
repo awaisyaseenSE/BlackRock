@@ -9,6 +9,7 @@ import {
   FlatList,
   Animated,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import fontFamily from '../styles/fontFamily';
@@ -17,6 +18,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {getResponsivePadding} from '../utils/getResponsiveMarginPadding';
 import {storeValue} from '../helper/storeAndGetAsyncStorageValue';
+import FastImage from 'react-native-fast-image';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -29,8 +31,10 @@ export default function OnboardingScreen() {
 
   const data = [
     {
-      img: require('../assets/image1.png'),
-      title: 'Level of locations 1',
+      img: require('../assets/poster-1.jpeg'),
+      imgURL:
+        'https://www.joblo.com/wp-content/uploads/2017/10/Black-Panther-poster-main-xl-1.jpg',
+      title: 'If you looking for latest movies',
       subtitle: [
         'No border and no crown completely free to view!',
         'No border with gold crown only address and name hidden from non-premium members',
@@ -38,10 +42,11 @@ export default function OnboardingScreen() {
       ],
     },
     {
-      img: require('../assets/image2.png'),
-      title: 'Home page 2',
+      img: require('../assets/poster-2.jpg'),
+      imgURL: 'https://wallpapercave.com/wp/wp11149567.jpg',
+      title: 'Welcome To Best Movies',
       subtitle: [
-        'Top tab is a selection of random featured locations.',
+        'Welcome To Best Movies',
         '“Near me” are the locations closest to you, ordered by their distance from your current location!',
         '“ As seen on social media” are the locations we have recently posted on any of our social medias so they are easy to find!',
         '“Featured: Category” is the featured category for that month and is selected based on the season or what has gained popularity on our app in recent times.',
@@ -50,8 +55,10 @@ export default function OnboardingScreen() {
       ],
     },
     {
-      img: require('../assets/image3.png'),
-      title: 'Categories 3',
+      img: require('../assets/poster-3.jpg'),
+      imgURL:
+        'https://m.media-amazon.com/images/M/MV5BNzZmOTU1ZTEtYzVhNi00NzQxLWI5ZjAtNWNhNjEwY2E3YmZjXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_.jpg',
+      title: 'Only With Us Only For You',
       subtitle: [
         'Search for location titles using the search bar',
         'View all locations or select one you would like to browse!',
@@ -59,20 +66,14 @@ export default function OnboardingScreen() {
       ],
     },
     {
-      img: require('../assets/image1.png'),
-      title: 'Map 4',
+      img: require('../assets/poster-4.jpg'),
+      imgURL:
+        'https://cdnb.artstation.com/p/assets/images/images/034/972/411/large/khushal-sharma-avatar-movie-poster.jpg?1613744215',
+      title: 'Real Time',
       subtitle: [
         'This is where you can view all the locations on our app, spread across the entire country!',
         'Filter locations by selecting any specific category',
         'Click on any location marker to see a preview of the location before clicking it to read more about it.',
-      ],
-    },
-    {
-      img: require('../assets/image2.png'),
-      title: 'Profile 5',
-      subtitle: [
-        'View and edit your profile username, photo and bio',
-        'View your favourited, visited, planned to visit and uploaded locations linked to your profile',
       ],
     },
   ];
@@ -147,7 +148,18 @@ export default function OnboardingScreen() {
   const renderItem = ({item}) => {
     return (
       <Animated.View style={styles.mainContainer}>
-        <Image resizeMode="contain" style={styles.image} source={item.img} />
+        {/* <Image resizeMode="contain" style={styles.image} source={item.img} /> */}
+        <ImageBackground
+          style={styles.image}
+          source={item.img}
+          borderRadius={12}>
+          {/* <FastImage
+            source={{
+              uri: item?.imgURL,
+            }}
+            style={styles.image}
+          /> */}
+        </ImageBackground>
         <Text style={styles.title}>{item.title}</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -184,10 +196,7 @@ export default function OnboardingScreen() {
 
   return (
     <>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-        backgroundColor={'black'}
-      />
+      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
       <View
         style={[
           styles.container,
@@ -265,7 +274,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.onBoardingBg,
+    backgroundColor: colors.bottomTabBg,
   },
   mainContainer: {
     flex: 1,
@@ -276,7 +285,16 @@ const styles = StyleSheet.create({
   image: {
     width: screenWidth * 0.8,
     height: screenWidth * 0.8,
-    resizeMode: 'cover',
+    borderRadius: 12,
+    resizeMode: 'contain',
+    shadowColor: colors.lineColor,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 14,
   },
   img: {
     maxHeight: '80%',
@@ -285,8 +303,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontFamily: fontFamily.lato_bold,
-    color: colors.black,
+    fontFamily: fontFamily.rubik_bold,
+    color: colors.lineColor,
+    marginVertical: 12,
   },
   subtitle: {
     marginLeft: 10,
@@ -332,7 +351,7 @@ const styles = StyleSheet.create({
     width: '30%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.lineColor,
+    backgroundColor: colors.gray,
     borderRadius: 5,
     shadowColor: colors.gray,
     shadowOffset: {
@@ -357,9 +376,9 @@ const styles = StyleSheet.create({
   skipBtn: {
     paddingHorizontal: 28,
     paddingVertical: 12,
-    backgroundColor: colors.lightOffWhite,
+    backgroundColor: colors.gray,
     borderRadius: 6,
-    shadowColor: colors.gray,
+    shadowColor: colors.lineColor,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -368,5 +387,26 @@ const styles = StyleSheet.create({
     shadowRadius: 2.84,
 
     elevation: 5,
+  },
+  imageContainer: {
+    shadowColor: colors.lightBlackTwo,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+
+    elevation: 14,
+  },
+  myimage: {
+    shadowColor: colors.lightBlackTwo,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 14,
   },
 });

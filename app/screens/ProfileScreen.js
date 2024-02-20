@@ -28,6 +28,7 @@ import auth from '@react-native-firebase/auth';
 import ButtonComponent from '../components/ButtonComponent';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -129,6 +130,17 @@ export default function ProfileScreen() {
     );
   };
 
+  const handleFinishOnBoarding = async () => {
+    try {
+      console.log('Finish on boarding func is called!');
+      let key = 'onBoarding';
+      await removeItemValue(key);
+      // navigation.navigate('MainTabRoutes');
+    } catch (error) {
+      console.log('Error in finish on boarding screen function: ', error);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -194,8 +206,14 @@ export default function ProfileScreen() {
               title="Uplaod Images"
               onPress={() => uploadImages(selectedImage)}
               loading={loading}
+              style={{marginBottom: 12}}
             />
           )}
+          <ButtonComponent
+            title="Remove Onboading"
+            onPress={handleFinishOnBoarding}
+            style={{backgroundColor: colors.lightBlack}}
+          />
         </View>
       </View>
     </>

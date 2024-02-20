@@ -3,15 +3,11 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  ScrollView,
   Dimensions,
-  SafeAreaView,
   Platform,
   StatusBar,
   TouchableOpacity,
   Image,
-  Alert,
-  ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
@@ -20,26 +16,19 @@ import React, {useState, useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
-import useAuth from '../auth/useAuth';
 import constants from '../constants/constants';
-import MyIndicator from '../components/MyIndicator';
 import FastImage from 'react-native-fast-image';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
-import LoadingComponent from '../components/LoadingComponent';
-import TextInputCompo from '../components/TextInputCompo';
 import ScreenComponent from '../components/ScreenComponent';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
 import LottieView from 'lottie-react-native';
-import {getResponsiveHeight} from '../utils/getResponsiveMarginPadding';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function SearchScreen() {
   const [loading, setLoading] = useState(false);
-  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [searchMovieData, setSearchMovieData] = useState([]);
@@ -121,6 +110,9 @@ export default function SearchScreen() {
           {item?.title?.length > 18
             ? item?.title.slice(0, 18) + '...'
             : item?.title}
+          {item?.name?.length > 18
+            ? item?.name.slice(0, 18) + '...'
+            : item?.name}
         </Text>
       </View>
     );
