@@ -84,7 +84,7 @@ export default function CreateTodoScreen() {
         const todoItem = {
           id: id,
           text: todoText,
-          date: todoDate.toISOString(),
+          date: todoDate.toDateString(),
           priority: todoPriority,
         };
         await storeTodoItem(todoItem);

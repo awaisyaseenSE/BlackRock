@@ -129,6 +129,7 @@ export default function TodoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 20,
   },
   footer: {
     flexDirection: 'row',

@@ -133,7 +133,7 @@ export default function ProfileScreen() {
   const handleFinishOnBoarding = async () => {
     try {
       console.log('Finish on boarding func is called!');
-      let key = 'onBoarding';
+      let key = 'todoItems';
       await removeItemValue(key);
       // navigation.navigate('MainTabRoutes');
     } catch (error) {

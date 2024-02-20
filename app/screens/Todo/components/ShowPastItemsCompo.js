@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 
-const ShowPastItemsCompo = () => {
+const ShowPastItemsCompo = ({pastTodoItems}) => {
   return (
     <View>
       <Text>ShowPastItemsCompo</Text>
