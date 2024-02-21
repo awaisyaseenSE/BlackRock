@@ -5,14 +5,52 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Animated,
+  Dimensions,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+const screenWidth = Dimensions.get('window').width;
+
 const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
   const insets = useSafeAreaInsets();
+  const indicatorPosition = new Animated.Value(
+    selectedTab === 0
+      ? 2
+      : selectedTab === 1
+      ? screenWidth / 3
+      : screenWidth / 3 + screenWidth / 3 - 2,
+  );
+
+  useEffect(() => {
+    Animated.timing(indicatorPosition, {
+      toValue:
+        selectedTab === 0
+          ? 2
+          : selectedTab === 1
+          ? screenWidth / 3
+          : screenWidth / 3 + screenWidth / 3 - 2,
+      duration: 2000,
+      useNativeDriver: false,
+      delay: 2000,
+    }).start();
+  }, [selectedTab, indicatorPosition]);
+
+  const renderBorderIndicator = () => {
+    return (
+      <Animated.View
+        style={[
+          styles.borderIndicator,
+          {
+            left: indicatorPosition,
+          },
+        ]}
+      />
+    );
+  };
 
   const mystyle = {
     footerTxtContainer: {
@@ -21,7 +59,7 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
       alignItems: 'center',
       justifyContent: 'center',
       paddingBottom: Platform.OS == 'ios' ? insets.bottom : 8,
-      paddingTop: 20,
+      paddingTop: Platform.OS === 'ios' ? 20 : 14,
     },
   };
 
@@ -31,19 +69,18 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
         style={[
           styles.footer,
           {
-            // paddingBottom: Platform.OS == 'ios' ? insets.bottom : 8,
             height: Platform.OS === 'ios' ? 46 + insets.bottom : 60 + 8,
-            // paddingTop: 20,
           },
         ]}>
+        {renderBorderIndicator()}
         <TouchableOpacity
           style={[
             mystyle.footerTxtContainer,
-            {
-              borderTopWidth: selectedTab === 0 ? 1.5 : 0,
-              borderTopColor:
-                selectedTab === 0 ? colors.black : colors.todoWhite,
-            },
+            // {
+            //   borderTopWidth: selectedTab === 0 ? 1.5 : 0,
+            //   borderTopColor:
+            //     selectedTab === 0 ? colors.black : colors.todoWhite,
+            // },
           ]}
           onPress={() => setSelectedTab(0)}>
           <Image
@@ -69,11 +106,11 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
         <TouchableOpacity
           style={[
             mystyle.footerTxtContainer,
-            {
-              borderTopWidth: selectedTab === 1 ? 1.5 : 0,
-              borderTopColor:
-                selectedTab === 1 ? colors.black : colors.todoWhite,
-            },
+            // {
+            //   borderTopWidth: selectedTab === 1 ? 1.5 : 0,
+            //   borderTopColor:
+            //     selectedTab === 1 ? colors.black : colors.todoWhite,
+            // },
           ]}
           onPress={() => setSelectedTab(1)}>
           <Image
@@ -99,11 +136,11 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
         <TouchableOpacity
           style={[
             mystyle.footerTxtContainer,
-            {
-              borderTopWidth: selectedTab === 2 ? 1.5 : 0,
-              borderTopColor:
-                selectedTab === 2 ? colors.black : colors.todoWhite,
-            },
+            // {
+            //   borderTopWidth: selectedTab === 2 ? 1.5 : 0,
+            //   borderTopColor:
+            //     selectedTab === 2 ? colors.black : colors.todoWhite,
+            // },
           ]}
           onPress={() => setSelectedTab(2)}>
           <Image
@@ -137,15 +174,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
     height: 50,
-    backgroundColor: colors.todoWhite,
+    backgroundColor: colors.lineColor,
     paddingHorizontal: 4,
   },
-  //   footerTxtContainer: {
-  //     flex: 1,
-  //     height: '100%',
-  //     alignItems: 'center',
-  //     justifyContent: 'center',
-  //   },
   footerTxt: {
     fontSize: 10,
     fontFamily: fontFamily.rubik_medium,
@@ -157,6 +188,13 @@ const styles = StyleSheet.create({
     height: 24,
     resizeMode: 'contain',
     tintColor: colors.lightBlackTwo,
+  },
+  borderIndicator: {
+    position: 'absolute',
+    top: 0,
+    height: 1.5,
+    width: screenWidth / 3,
+    backgroundColor: colors.black,
   },
 });
 
