@@ -11,6 +11,7 @@ import ShowTodayItemsCompo from '../components/ShowTodayItemsCompo';
 import ShowPastItemsCompo from '../components/ShowPastItemsCompo';
 import ShowFutureItemsCompo from '../components/ShowFutureItemsCompo';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {StatusBar} from 'react-native';
 
 export default function TodoScreen() {
   const navigation = useNavigation();
@@ -129,6 +130,7 @@ export default function TodoScreen() {
     <>
       <GestureHandlerRootView style={{flex: 1}}>
         <ScreenComponent style={{backgroundColor: colors.todoPink}}>
+          <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
           <TodoHeaderCompo
             onPress={() =>
               navigation.navigate(navigationStrings.CREATE_TODO_SCREEN)

@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../../components/ScreenComponent';
@@ -131,6 +132,7 @@ export default function CreateTodoScreen() {
           backIconStyle={styles.backICon}
           onPress={() => navigation.goBack()}
         />
+        <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
         <KeyboardAvoidingView
           style={{
             flex: 1,
