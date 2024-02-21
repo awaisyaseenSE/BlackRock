@@ -129,6 +129,7 @@ const ShowTodayItemsCompo = ({
               : item?.priority == 'low'
               ? colors.todoGreen
               : colors.todoYellow,
+            marginBottom: isActive ? 12 : 0,
           },
         ]}
         activeOpacity={0.8}>
@@ -163,7 +164,7 @@ const ShowTodayItemsCompo = ({
 
   const handleUpdatePosition = async updatedArr => {
     let temArr = [...updatedArr, ...futureTodoItems, ...pastTodoItems];
-    console.log(temArr.length);
+    // console.log(temArr.length);
     // console.log(temArr);
 
     try {
@@ -185,32 +186,31 @@ const ShowTodayItemsCompo = ({
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
       /> */}
-      <DraggableFlatList
-        data={todayTodoItems}
-        // onDragEnd={({data}) => setTodayTodoItems(data)}
-        onDragEnd={({data}) => {
-          // setTodayTodoItems(data);
-          // console.log('after drag');
+      <View style={{flex: 1, paddingTop: 12}}>
+        <DraggableFlatList
+          data={todayTodoItems}
+          // onDragEnd={({data}) => setTodayTodoItems(data)}
+          onDragEnd={({data}) => {
+            // setTodayTodoItems(data);
+            // console.log('after drag');
 
-          const updatedTodoItems = data.map((item, index) => ({
-            ...item,
-            position: index,
-          }));
-          setTodayTodoItems(updatedTodoItems);
-          handleUpdatePosition(updatedTodoItems);
-
-          // Store the updated todo items along with their positions/indexes
-          // AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems))
-          //   .then(() => console.log('Todo items updated with new positions'))
-          //   .catch(error =>
-          //     console.error('Error updating todo items: ', error),
-          //   );
-        }}
-        ListHeaderComponent={() => <View />}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
-      />
+            const updatedTodoItems = data.map((item, index) => ({
+              ...item,
+              position: index,
+            }));
+            setTodayTodoItems(updatedTodoItems);
+            handleUpdatePosition(updatedTodoItems);
+          }}
+          ListHeaderComponent={() => <View />}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+          showsVerticalScrollIndicator={false}
+          autoscrollThreshold={50}
+          dragItemOverflow={true}
+          activationDistance={20}
+        />
+      </View>
     </>
   );
 };

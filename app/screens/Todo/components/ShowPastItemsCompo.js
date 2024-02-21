@@ -73,13 +73,15 @@ const ShowPastItemsCompo = ({pastTodoItems}) => {
 
   return (
     <>
-      <FlatList
-        data={pastTodoItems}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
-      />
+      <View style={{flex: 1, paddingTop: 12}}>
+        <FlatList
+          data={pastTodoItems}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
+        />
+      </View>
     </>
   );
 };

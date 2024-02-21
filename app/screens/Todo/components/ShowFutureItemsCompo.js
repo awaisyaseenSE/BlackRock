@@ -83,28 +83,27 @@ const ShowFutureItemsCompo = ({
 
   return (
     <>
-      {/* <FlatList
-        data={futureTodoItems}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
-      /> */}
-      <DraggableFlatList
-        data={futureTodoItems}
-        onDragEnd={({data}) => {
-          const updatedTodoItems = data.map((item, index) => ({
-            ...item,
-            position: index,
-          }));
-          setFutureTodoItems(updatedTodoItems);
-          handleUpdatePosition(updatedTodoItems);
-        }}
-        ListHeaderComponent={() => <View />}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
-      />
+      <View style={{flex: 1, paddingTop: 12}}>
+        <DraggableFlatList
+          data={futureTodoItems}
+          onDragEnd={({data}) => {
+            const updatedTodoItems = data.map((item, index) => ({
+              ...item,
+              position: index,
+            }));
+            setFutureTodoItems(updatedTodoItems);
+            handleUpdatePosition(updatedTodoItems);
+          }}
+          ListHeaderComponent={() => <View />}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+          dragItemOverflow={true}
+          activationDistance={20}
+          showsVerticalScrollIndicator={false}
+          autoscrollThreshold={50}
+        />
+      </View>
     </>
   );
 };

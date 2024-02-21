@@ -82,7 +82,8 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
             //     selectedTab === 0 ? colors.black : colors.todoWhite,
             // },
           ]}
-          onPress={() => setSelectedTab(0)}>
+          onPress={() => setSelectedTab(0)}
+          activeOpacity={0.6}>
           <Image
             source={require('../../../assets/today.png')}
             style={[
@@ -112,7 +113,8 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
             //     selectedTab === 1 ? colors.black : colors.todoWhite,
             // },
           ]}
-          onPress={() => setSelectedTab(1)}>
+          onPress={() => setSelectedTab(1)}
+          activeOpacity={0.6}>
           <Image
             source={require('../../../assets/future.png')}
             style={[
@@ -142,7 +144,8 @@ const TodoButtomTabCompo = ({selectedTab, setSelectedTab}) => {
             //     selectedTab === 2 ? colors.black : colors.todoWhite,
             // },
           ]}
-          onPress={() => setSelectedTab(2)}>
+          onPress={() => setSelectedTab(2)}
+          activeOpacity={0.6}>
           <Image
             source={require('../../../assets/checkmark.png')}
             style={[
