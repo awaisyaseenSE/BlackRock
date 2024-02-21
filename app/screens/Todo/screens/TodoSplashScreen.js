@@ -7,7 +7,7 @@ import colors from '../../../styles/colors';
 export default function TodoSplashScreen() {
   return (
     <>
-      <StatusBar hidden backgroundColor={colors.white} />
+      <StatusBar hidden backgroundColor={colors.black} />
       <LinearGradient
         style={{flex: 1}}
         start={{x: 0.5, y: 0}}

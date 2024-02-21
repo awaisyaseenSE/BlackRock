@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from 'react-native';
 import React from 'react';
 import fontFamily from '../../../styles/fontFamily';
 import colors from '../../../styles/colors';
@@ -24,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
+    marginTop: Platform.OS === 'android' ? 6 : 0,
   },
   text: {
     fontSize: 20,

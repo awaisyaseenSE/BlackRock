@@ -66,7 +66,6 @@ export default function CreateTodoScreen() {
     try {
       setLoading(true);
       const existingTodoItems = await AsyncStorage.getItem('todoItems');
-      console.log('existingTodoItems is: ', existingTodoItems);
       let updatedTodoItems = [];
       if (existingTodoItems !== null) {
         updatedTodoItems = JSON.parse(existingTodoItems);
@@ -132,7 +131,12 @@ export default function CreateTodoScreen() {
           backIconStyle={styles.backICon}
           onPress={() => navigation.goBack()}
         />
-        <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
+        <StatusBar
+          backgroundColor={colors.black}
+          barStyle={
+            Platform.OS === 'android' ? 'light-content' : 'dark-content'
+          }
+        />
         <KeyboardAvoidingView
           style={{
             flex: 1,
@@ -200,7 +204,6 @@ export default function CreateTodoScreen() {
                 onConfirm={date => {
                   setTodoDate(date);
                   setOpenDateModal(false);
-                  console.log('date in toISOString is: ', date.toISOString());
                 }}
                 onCancel={() => setOpenDateModal(false)}
               />
@@ -303,6 +306,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: getFontSize(14),
     fontFamily: fontFamily.rubik_medium,
+    color: colors.todoBlue,
   },
   addBtn: {
     borderRadius: 12,

@@ -1,4 +1,4 @@
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, Platform} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../../components/ScreenComponent';
 import colors from '../../../styles/colors';
@@ -130,7 +130,12 @@ export default function TodoScreen() {
     <>
       <GestureHandlerRootView style={{flex: 1}}>
         <ScreenComponent style={{backgroundColor: colors.todoPink}}>
-          <StatusBar backgroundColor={colors.white} barStyle={'dark-content'} />
+          <StatusBar
+            backgroundColor={colors.black}
+            barStyle={
+              Platform.OS === 'android' ? 'light-content' : 'dark-content'
+            }
+          />
           <TodoHeaderCompo
             onPress={() =>
               navigation.navigate(navigationStrings.CREATE_TODO_SCREEN)
