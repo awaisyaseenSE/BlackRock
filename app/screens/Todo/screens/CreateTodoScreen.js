@@ -43,6 +43,24 @@ export default function CreateTodoScreen() {
     setOpenDateModal(!openDateModal);
   };
 
+  // const storeTodoItem = async todoItem => {
+  //   try {
+  //     setLoading(true);
+  //     const existingTodoItems = await AsyncStorage.getItem('todoItems');
+  //     console.log('existingTodoItems is: ', existingTodoItems);
+  //     let updatedTodoItems = [];
+  //     if (existingTodoItems !== null) {
+  //       updatedTodoItems = JSON.parse(existingTodoItems);
+  //     }
+  //     updatedTodoItems.push(todoItem);
+  //     await AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems));
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error('Error saving todo item: ', error);
+  //   }
+  // };
+
   const storeTodoItem = async todoItem => {
     try {
       setLoading(true);
@@ -52,7 +70,11 @@ export default function CreateTodoScreen() {
       if (existingTodoItems !== null) {
         updatedTodoItems = JSON.parse(existingTodoItems);
       }
-      updatedTodoItems.push(todoItem);
+      // Assign default position based on the length of existing todo items
+      const defaultPosition = updatedTodoItems.length;
+      // Add the todo item with the default position
+      const todoItemWithPosition = {...todoItem, position: defaultPosition};
+      updatedTodoItems.push(todoItemWithPosition);
       await AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems));
       setLoading(false);
     } catch (error) {

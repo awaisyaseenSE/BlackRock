@@ -10,6 +10,7 @@ import navigationStrings from '../../../navigation/navigationStrings';
 import ShowTodayItemsCompo from '../components/ShowTodayItemsCompo';
 import ShowPastItemsCompo from '../components/ShowPastItemsCompo';
 import ShowFutureItemsCompo from '../components/ShowFutureItemsCompo';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function TodoScreen() {
   const navigation = useNavigation();
@@ -87,6 +88,7 @@ export default function TodoScreen() {
     let allToday = todayItems;
     console.log('today items: ', allToday.length);
     // console.log('today items: ', allToday);
+    allToday.sort((a, b) => a.position - b.position); // new line added to sort items of todo based on position
     setTodayTodoItems(allToday);
 
     let allFuture = futureItems;
@@ -125,62 +127,67 @@ export default function TodoScreen() {
 
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.todoPink}}>
-        <TodoHeaderCompo
-          onPress={() =>
-            navigation.navigate(navigationStrings.CREATE_TODO_SCREEN)
-          }
-        />
-        <View style={styles.container}>
-          {selectedTab === 0 ? (
-            <ShowTodayItemsCompo
-              todayTodoItems={todayTodoItems}
-              getTodoItems={getTodoItems}
-            />
-          ) : selectedTab === 1 ? (
-            <ShowFutureItemsCompo futureTodoItems={futureTodoItems} />
-          ) : selectedTab === 2 ? (
-            <ShowPastItemsCompo pastTodoItems={pastTodoItems} />
-          ) : null}
-        </View>
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={[
-              styles.footerTxtContainer,
-              {
-                backgroundColor:
-                  selectedTab === 0 ? colors.todoGray : colors.todoPink,
-              },
-            ]}
-            onPress={() => setSelectedTab(0)}>
-            <Text style={styles.footerTxt}>Today</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.footerTxtContainer,
-              {
-                borderLeftWidth: 1,
-                borderRightWidth: 1,
-                backgroundColor:
-                  selectedTab === 1 ? colors.todoGray : colors.todoPink,
-              },
-            ]}
-            onPress={() => setSelectedTab(1)}>
-            <Text style={styles.footerTxt}>Future</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.footerTxtContainer,
-              {
-                backgroundColor:
-                  selectedTab === 2 ? colors.todoGray : colors.todoPink,
-              },
-            ]}
-            onPress={() => setSelectedTab(2)}>
-            <Text style={styles.footerTxt}>Past</Text>
-          </TouchableOpacity>
-        </View>
-      </ScreenComponent>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <ScreenComponent style={{backgroundColor: colors.todoPink}}>
+          <TodoHeaderCompo
+            onPress={() =>
+              navigation.navigate(navigationStrings.CREATE_TODO_SCREEN)
+            }
+          />
+          <View style={styles.container}>
+            {selectedTab === 0 ? (
+              <ShowTodayItemsCompo
+                todayTodoItems={todayTodoItems}
+                getTodoItems={getTodoItems}
+                setTodayTodoItems={setTodayTodoItems}
+                futureTodoItems={futureTodoItems}
+                pastTodoItems={pastTodoItems}
+              />
+            ) : selectedTab === 1 ? (
+              <ShowFutureItemsCompo futureTodoItems={futureTodoItems} />
+            ) : selectedTab === 2 ? (
+              <ShowPastItemsCompo pastTodoItems={pastTodoItems} />
+            ) : null}
+          </View>
+          <View style={styles.footer}>
+            <TouchableOpacity
+              style={[
+                styles.footerTxtContainer,
+                {
+                  backgroundColor:
+                    selectedTab === 0 ? colors.todoGray : colors.todoPink,
+                },
+              ]}
+              onPress={() => setSelectedTab(0)}>
+              <Text style={styles.footerTxt}>Today</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.footerTxtContainer,
+                {
+                  borderLeftWidth: 1,
+                  borderRightWidth: 1,
+                  backgroundColor:
+                    selectedTab === 1 ? colors.todoGray : colors.todoPink,
+                },
+              ]}
+              onPress={() => setSelectedTab(1)}>
+              <Text style={styles.footerTxt}>Future</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.footerTxtContainer,
+                {
+                  backgroundColor:
+                    selectedTab === 2 ? colors.todoGray : colors.todoPink,
+                },
+              ]}
+              onPress={() => setSelectedTab(2)}>
+              <Text style={styles.footerTxt}>Past</Text>
+            </TouchableOpacity>
+          </View>
+        </ScreenComponent>
+      </GestureHandlerRootView>
     </>
   );
 }

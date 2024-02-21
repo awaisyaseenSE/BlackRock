@@ -12,8 +12,17 @@ import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
 import MyIndicator from '../../../components/MyIndicator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DraggableFlatList, {
+  ScaleDecorator,
+} from 'react-native-draggable-flatlist';
 
-const ShowTodayItemsCompo = ({todayTodoItems, getTodoItems}) => {
+const ShowTodayItemsCompo = ({
+  todayTodoItems,
+  getTodoItems,
+  setTodayTodoItems,
+  futureTodoItems,
+  pastTodoItems,
+}) => {
   const [loading, setLoading] = useState(false);
   // const [status, setStatus] = useState(fa);
 
@@ -58,22 +67,71 @@ const ShowTodayItemsCompo = ({todayTodoItems, getTodoItems}) => {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  // const renderItem = ({item, index}) => {
+  //   const formattedDate = formatDate(item?.date);
+  //   let itemStatus = JSON.parse(item.done);
+  //   return (
+  //     <View
+  //       style={[
+  //         styles.container,
+  //         {
+  //           backgroundColor:
+  //             item?.priority == 'high'
+  //               ? colors.todoRed
+  //               : item?.priority == 'low'
+  //               ? colors.todoGreen
+  //               : colors.todoYellow,
+  //         },
+  //       ]}>
+  //       <Text style={styles.heading}>{item?.text}</Text>
+  //       <Text style={styles.dateText}>{formattedDate}</Text>
+  //       <View style={{alignItems: 'flex-end'}}>
+  //         <View style={styles.checkBoxContainer}>
+  //           <Text style={styles.subHeading}>Mark as completed</Text>
+  //           <TouchableOpacity
+  //             style={styles.checkBox}
+  //             onPress={() => toggleTodoItemDone(item.id)}>
+  //             {/* {itemStatus && (
+  //             <Image
+  //               source={require('../../../assets/check.png')}
+  //               style={styles.checkBoxIcon}
+  //             />
+  //           )} */}
+  //             {loading ? (
+  //               <ActivityIndicator size={14} color={colors.black} />
+  //             ) : itemStatus ? (
+  //               <Image
+  //                 source={require('../../../assets/check.png')}
+  //                 style={styles.checkBoxIcon}
+  //               />
+  //             ) : null}
+  //           </TouchableOpacity>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+  const renderItem = ({item, drag, isActive}) => {
     const formattedDate = formatDate(item?.date);
     let itemStatus = JSON.parse(item.done);
+    console.log('position: ', item.position);
     return (
-      <View
+      <TouchableOpacity
+        onLongPress={drag}
         style={[
           styles.container,
           {
-            backgroundColor:
-              item?.priority == 'high'
-                ? colors.todoRed
-                : item?.priority == 'low'
-                ? colors.todoGreen
-                : colors.todoYellow,
+            backgroundColor: isActive
+              ? colors.gray
+              : item?.priority == 'high'
+              ? colors.todoRed
+              : item?.priority == 'low'
+              ? colors.todoGreen
+              : colors.todoYellow,
           },
-        ]}>
+        ]}
+        activeOpacity={0.8}>
         <Text style={styles.heading}>{item?.text}</Text>
         <Text style={styles.dateText}>{formattedDate}</Text>
         <View style={{alignItems: 'flex-end'}}>
@@ -99,18 +157,59 @@ const ShowTodayItemsCompo = ({todayTodoItems, getTodoItems}) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
+  };
+
+  const handleUpdatePosition = async updatedArr => {
+    let temArr = [...updatedArr, ...futureTodoItems, ...pastTodoItems];
+    console.log(temArr.length);
+    // console.log(temArr);
+
+    try {
+      await AsyncStorage.setItem('todoItems', JSON.stringify(temArr));
+    } catch (error) {
+      console.error(
+        'Error updating todo item with position in show today items: ',
+        error,
+      );
+    }
   };
 
   return (
     <>
-      <FlatList
+      {/* <FlatList
         data={todayTodoItems}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
+      /> */}
+      <DraggableFlatList
+        data={todayTodoItems}
+        // onDragEnd={({data}) => setTodayTodoItems(data)}
+        onDragEnd={({data}) => {
+          // setTodayTodoItems(data);
+          // console.log('after drag');
+
+          const updatedTodoItems = data.map((item, index) => ({
+            ...item,
+            position: index,
+          }));
+          setTodayTodoItems(updatedTodoItems);
+          handleUpdatePosition(updatedTodoItems);
+
+          // Store the updated todo items along with their positions/indexes
+          // AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems))
+          //   .then(() => console.log('Todo items updated with new positions'))
+          //   .catch(error =>
+          //     console.error('Error updating todo items: ', error),
+          //   );
+        }}
+        ListHeaderComponent={() => <View />}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
       />
     </>
   );
