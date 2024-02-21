@@ -144,7 +144,12 @@ export default function TodoScreen() {
                 pastTodoItems={pastTodoItems}
               />
             ) : selectedTab === 1 ? (
-              <ShowFutureItemsCompo futureTodoItems={futureTodoItems} />
+              <ShowFutureItemsCompo
+                futureTodoItems={futureTodoItems}
+                setFutureTodoItems={setFutureTodoItems}
+                pastTodoItems={pastTodoItems}
+                todayTodoItems={todayTodoItems}
+              />
             ) : selectedTab === 2 ? (
               <ShowPastItemsCompo pastTodoItems={pastTodoItems} />
             ) : null}
