@@ -115,7 +115,7 @@ const ShowTodayItemsCompo = ({
   const renderItem = ({item, drag, isActive}) => {
     const formattedDate = formatDate(item?.date);
     let itemStatus = JSON.parse(item.done);
-    console.log('position: ', item.position);
+    // console.log('position: ', item.position);
     return (
       <TouchableOpacity
         onLongPress={drag}

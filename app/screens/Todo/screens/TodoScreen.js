@@ -87,19 +87,19 @@ export default function TodoScreen() {
       return itemDate < today || JSON.parse(item.done);
     });
     let allToday = todayItems;
-    console.log('today items: ', allToday.length);
+    // console.log('today items: ', allToday.length);
     // console.log('today items: ', allToday);
     allToday.sort((a, b) => a.position - b.position); // new line added to sort items of todo based on position
     setTodayTodoItems(allToday);
 
     let allFuture = futureItems;
     setFutureTodoItems(allFuture);
-    console.log('future items: ', allFuture.length);
+    // console.log('future items: ', allFuture.length);
     // console.log('future items: ', allFuture);
 
     let allHistory = historyItems;
     setPastTodoItems(allHistory);
-    console.log('History items: ', allHistory.length);
+    // console.log('History items: ', allHistory.length);
     // console.log('History items: ', allHistory);
   };
 
@@ -116,7 +116,7 @@ export default function TodoScreen() {
       const todoItems = await AsyncStorage.getItem('todoItems');
       if (todoItems !== null) {
         const parsedTodoItems = JSON.parse(todoItems);
-        console.log('Total Todo Items length is: ', parsedTodoItems.length);
+        // console.log('Total Todo Items length is: ', parsedTodoItems.length);
         // console.log('Todo Items is: ', parsedTodoItems);
         // setTodoItems(parsedTodoItems);
         separateTodoItems(parsedTodoItems);

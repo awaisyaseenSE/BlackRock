@@ -11,7 +11,7 @@ export default function SplashScreen() {
       <LinearGradient
         style={{flex: 1}}
         start={{x: 0.5, y: 0}}
-        end={{x: 0.8, y: 1}}
+        end={{x: 0.5, y: 0}}
         colors={['#12212F', '#1C2A34', '#12212F']}>
         <View style={styles.container}>
           <LottieView

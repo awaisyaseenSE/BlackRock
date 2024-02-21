@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import {View, LogBox} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import MainNavigator from './app/navigation/MainNavigator';
+// import MainNavigator from './app/navigation/MainNavigator';
 import SplashScreen from './app/screens/SplashScreen';
 import {getValue} from './app/helper/storeAndGetAsyncStorageValue';
 import constants from './app/constants/constants';
