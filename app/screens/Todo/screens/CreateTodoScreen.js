@@ -115,6 +115,7 @@ export default function CreateTodoScreen() {
         setTodoText('');
         setTodoDate('');
         setTodoPriority('');
+        navigation.goBack();
       } catch (error) {
         setLoading(false);
         console.log('Error in handleAddTodo(): ', error);
