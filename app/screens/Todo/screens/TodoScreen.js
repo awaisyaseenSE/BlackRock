@@ -12,6 +12,8 @@ import ShowPastItemsCompo from '../components/ShowPastItemsCompo';
 import ShowFutureItemsCompo from '../components/ShowFutureItemsCompo';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {StatusBar} from 'react-native';
+import TodoButtomTabCompo from '../components/TodoButtomTabCompo';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export default function TodoScreen() {
   const navigation = useNavigation();
@@ -21,6 +23,7 @@ export default function TodoScreen() {
   const [futureTodoItems, setFutureTodoItems] = useState([]);
   const [pastTodoItems, setPastTodoItems] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (isFocused) {
@@ -129,7 +132,12 @@ export default function TodoScreen() {
   return (
     <>
       <GestureHandlerRootView style={{flex: 1}}>
-        <ScreenComponent style={{backgroundColor: colors.todoPink}}>
+        <View
+          style={{
+            backgroundColor: colors.todoPink,
+            flex: 1,
+            paddingTop: Platform.OS == 'ios' ? insets.top : 10,
+          }}>
           <StatusBar
             backgroundColor={colors.black}
             barStyle={
@@ -161,44 +169,11 @@ export default function TodoScreen() {
               <ShowPastItemsCompo pastTodoItems={pastTodoItems} />
             ) : null}
           </View>
-          <View style={styles.footer}>
-            <TouchableOpacity
-              style={[
-                styles.footerTxtContainer,
-                {
-                  backgroundColor:
-                    selectedTab === 0 ? colors.todoGray : colors.todoPink,
-                },
-              ]}
-              onPress={() => setSelectedTab(0)}>
-              <Text style={styles.footerTxt}>Today</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.footerTxtContainer,
-                {
-                  borderLeftWidth: 1,
-                  borderRightWidth: 1,
-                  backgroundColor:
-                    selectedTab === 1 ? colors.todoGray : colors.todoPink,
-                },
-              ]}
-              onPress={() => setSelectedTab(1)}>
-              <Text style={styles.footerTxt}>Future</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.footerTxtContainer,
-                {
-                  backgroundColor:
-                    selectedTab === 2 ? colors.todoGray : colors.todoPink,
-                },
-              ]}
-              onPress={() => setSelectedTab(2)}>
-              <Text style={styles.footerTxt}>Past</Text>
-            </TouchableOpacity>
-          </View>
-        </ScreenComponent>
+          <TodoButtomTabCompo
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
+        </View>
       </GestureHandlerRootView>
     </>
   );
@@ -208,25 +183,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-  },
-  footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 6,
-    height: 50,
-  },
-  footerTxtContainer: {
-    flex: 1,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderTopWidth: 1,
-    borderColor: colors.todoBlue,
-    borderBottomWidth: 1,
-  },
-  footerTxt: {
-    fontSize: 16,
-    fontFamily: fontFamily.rubik_semi_bold,
-    color: colors.black,
   },
 });
