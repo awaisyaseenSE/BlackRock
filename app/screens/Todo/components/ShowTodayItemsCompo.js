@@ -117,48 +117,51 @@ const ShowTodayItemsCompo = ({
     let itemStatus = JSON.parse(item.done);
     // console.log('position: ', item.position);
     return (
-      <TouchableOpacity
-        onLongPress={drag}
-        style={[
-          styles.container,
-          {
-            backgroundColor: isActive
-              ? colors.gray
-              : item?.priority == 'high'
-              ? colors.todoRed
-              : item?.priority == 'low'
-              ? colors.todoGreen
-              : colors.todoYellow,
-            marginBottom: isActive ? 12 : 0,
-          },
-        ]}
-        activeOpacity={0.8}>
-        <Text style={styles.heading}>{item?.text}</Text>
-        <Text style={styles.dateText}>{formattedDate}</Text>
-        <View style={{alignItems: 'flex-end'}}>
-          <View style={styles.checkBoxContainer}>
-            <Text style={styles.subHeading}>Mark as completed</Text>
-            <TouchableOpacity
-              style={styles.checkBox}
-              onPress={() => toggleTodoItemDone(item.id)}>
-              {/* {itemStatus && (
+      <View style={{paddingVertical: 12}}>
+        <TouchableOpacity
+          onLongPress={drag}
+          style={[
+            styles.container,
+            {
+              backgroundColor: isActive
+                ? colors.gray
+                : item?.priority == 'high'
+                ? colors.todoRed
+                : item?.priority == 'low'
+                ? colors.todoGreen
+                : colors.todoYellow,
+              // marginBottom: isActive ? 12 : 0,
+              // marginVertical: isActive ? 16 : 0,
+            },
+          ]}
+          activeOpacity={0.8}>
+          <Text style={styles.heading}>{item?.text}</Text>
+          <Text style={styles.dateText}>{formattedDate}</Text>
+          <View style={{alignItems: 'flex-end'}}>
+            <View style={styles.checkBoxContainer}>
+              <Text style={styles.subHeading}>Mark as completed</Text>
+              <TouchableOpacity
+                style={styles.checkBox}
+                onPress={() => toggleTodoItemDone(item.id)}>
+                {/* {itemStatus && (
               <Image
                 source={require('../../../assets/check.png')}
                 style={styles.checkBoxIcon}
               />
             )} */}
-              {loading ? (
-                <ActivityIndicator size={14} color={colors.black} />
-              ) : itemStatus ? (
-                <Image
-                  source={require('../../../assets/check.png')}
-                  style={styles.checkBoxIcon}
-                />
-              ) : null}
-            </TouchableOpacity>
+                {loading ? (
+                  <ActivityIndicator size={14} color={colors.black} />
+                ) : itemStatus ? (
+                  <Image
+                    source={require('../../../assets/check.png')}
+                    style={styles.checkBoxIcon}
+                  />
+                ) : null}
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -204,11 +207,12 @@ const ShowTodayItemsCompo = ({
           ListHeaderComponent={() => <View />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
-          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+          // ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
           showsVerticalScrollIndicator={false}
-          autoscrollThreshold={50}
-          dragItemOverflow={true}
+          // dragItemOverflow={true}
           activationDistance={20}
+          autoscrollThreshold={50}
+          containerStyle={{flex: 1}}
         />
       </View>
     </>

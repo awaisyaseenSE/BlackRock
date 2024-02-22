@@ -60,24 +60,26 @@ const ShowFutureItemsCompo = ({
   const renderItem = ({item, drag, isActive}) => {
     const formattedDate = formatDate(item?.date);
     return (
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onLongPress={drag}
-        style={[
-          styles.container,
-          {
-            backgroundColor: isActive
-              ? colors.gray
-              : item?.priority == 'high'
-              ? colors.todoRed
-              : item?.priority == 'low'
-              ? colors.todoGreen
-              : colors.todoYellow,
-          },
-        ]}>
-        <Text style={styles.heading}>{item?.text}</Text>
-        <Text style={styles.dateText}>{formattedDate}</Text>
-      </TouchableOpacity>
+      <View style={{paddingVertical: 12}}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onLongPress={drag}
+          style={[
+            styles.container,
+            {
+              backgroundColor: isActive
+                ? colors.gray
+                : item?.priority == 'high'
+                ? colors.todoRed
+                : item?.priority == 'low'
+                ? colors.todoGreen
+                : colors.todoYellow,
+            },
+          ]}>
+          <Text style={styles.heading}>{item?.text}</Text>
+          <Text style={styles.dateText}>{formattedDate}</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -97,11 +99,12 @@ const ShowFutureItemsCompo = ({
           ListHeaderComponent={() => <View />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
-          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
-          dragItemOverflow={true}
+          // ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+          // dragItemOverflow={true}
           activationDistance={20}
           showsVerticalScrollIndicator={false}
           autoscrollThreshold={50}
+          containerStyle={{flex: 1}}
         />
       </View>
     </>
