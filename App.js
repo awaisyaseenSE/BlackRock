@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import {View, LogBox} from 'react-native';
+import {View, LogBox, StatusBar} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 // import MainNavigator from './app/navigation/MainNavigator';

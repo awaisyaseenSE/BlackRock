@@ -9,11 +9,23 @@ import {
 import React from 'react';
 import fontFamily from '../../../styles/fontFamily';
 import colors from '../../../styles/colors';
+import {removeItemValue} from '../../../helper/storeAndGetAsyncStorageValue';
 
 const TodoHeaderCompo = ({onPress}) => {
+  const handleClearTodoItems = async () => {
+    try {
+      let key = 'todoItems';
+      await removeItemValue(key);
+      // navigation.navigate('MainTabRoutes');
+    } catch (error) {
+      console.log('Error in deleting all todo items in ToHeaderCompo: ', error);
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Todo List</Text>
+      <TouchableOpacity>
+        <Text style={styles.text}>Todo List</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onPress}>
         <Image
           source={require('../../../assets/add-todo.png')}

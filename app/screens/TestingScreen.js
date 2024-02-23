@@ -3,8 +3,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
+import ButtonComponent from '../components/ButtonComponent';
 
 export default function TestingScreen() {
+  const [loading, setLoading] = useState(false);
   const data = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
   ];
@@ -18,9 +20,76 @@ export default function TestingScreen() {
     });
   }, [selectedIndex]);
 
+  const handleFetchMemesData = async () => {
+    const url =
+      'https://ronreiter-meme-generator.p.rapidapi.com/meme?top=Top%20Text&bottom=Bottom%20Text&meme=Condescending-Wonka&font_size=50&font=Impact';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
+        'X-RapidAPI-Host': 'ronreiter-meme-generator.p.rapidapi.com',
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log('...............START................');
+      console.log(result);
+      console.log('...............END................');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const handleFetchMovieData = async () => {
+  //   const url =
+  //     'https://moviesminidatabase.p.rapidapi.com/movie/order/upcoming/';
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {
+  //       'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
+  //       'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
+  //     },
+  //   };
+
+  //   try {
+  //     const response = await fetch(url, options);
+  //     const result = await response.text();
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  const getMovieByYear = async () => {
+    const url = 'https://moviesminidatabase.p.rapidapi.com/movie/byYear/2020/';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
+        'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
+        <ButtonComponent
+          title="get data"
+          style={{marginVertical: 20, width: '50%', alignSelf: 'center'}}
+          onPress={getMovieByYear}
+          loading={loading}
+        />
         <View style={styles.flatlistOneConatiner}>
           <FlatList
             data={data}

@@ -5,13 +5,12 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import ScreenComponent from '../../../components/ScreenComponent';
 import colors from '../../../styles/colors';
 import TopCompoWithHeading from '../../../components/TopCompoWithHeading';
@@ -21,66 +20,48 @@ import DatePicker from 'react-native-date-picker';
 import {
   getFontSize,
   getResponsiveHeight,
-  getResponsiveMargin,
 } from '../../../utils/getResponsiveMarginPadding';
 import fontFamily from '../../../styles/fontFamily';
 import PriorityModalCompo from '../components/PriorityModalCompo';
 import ButtonComponent from '../../../components/ButtonComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MyIndicator from '../../../components/MyIndicator';
 
-export default function CreateTodoScreen() {
+export default function UpdateTodoScreen({route}) {
   const navigation = useNavigation();
-  const [todoText, setTodoText] = useState('');
+  const todoItemData = route?.params?.data;
+  const [todoText, setTodoText] = useState(todoItemData?.text || '');
   const [openDateModal, setOpenDateModal] = useState(false);
-  const [todoDate, setTodoDate] = useState('');
-  const [todoPriority, setTodoPriority] = useState('');
+  const [todoDate, setTodoDate] = useState(todoItemData?.date || '');
+  const [todoPriority, setTodoPriority] = useState(
+    todoItemData?.priority || '',
+  );
   const [showPriorityModal, setShowPriorityModal] = useState(false);
   const [todoTextError, setTodoTextError] = useState('');
   const [todoDateError, setTodoDateError] = useState('');
   const [todoPriorityError, setTodoPriorityError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [itemStatus, setItemStatus] = useState(JSON.parse(todoItemData?.done));
+  const [deleteloading, setDeleteLoading] = useState(false);
+
+  const handleDataSetting = () => {
+    const myNewDate = new Date(todoDate);
+    console.log('newdate: ', myNewDate);
+    let day = myNewDate.getDate();
+    let fullYear = myNewDate.getFullYear();
+    let month = myNewDate.getMonth() + 1;
+    let finalDate = `${fullYear}-${month}-${day}`;
+    // return finalDate;
+    let correctTodayDate = new Date();
+    // console.log(correctTodayDate);
+
+    let checkTodayDate = new Date(finalDate);
+    console.log('correctTodayDate:  ', correctTodayDate);
+    console.log('checkTodayDate:  ', checkTodayDate);
+  };
 
   const toggleOpenDateModal = () => {
     setOpenDateModal(!openDateModal);
-  };
-
-  // const storeTodoItem = async todoItem => {
-  //   try {
-  //     setLoading(true);
-  //     const existingTodoItems = await AsyncStorage.getItem('todoItems');
-  //     console.log('existingTodoItems is: ', existingTodoItems);
-  //     let updatedTodoItems = [];
-  //     if (existingTodoItems !== null) {
-  //       updatedTodoItems = JSON.parse(existingTodoItems);
-  //     }
-  //     updatedTodoItems.push(todoItem);
-  //     await AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems));
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error('Error saving todo item: ', error);
-  //   }
-  // };
-
-  const storeTodoItem = async todoItem => {
-    try {
-      setLoading(true);
-      const existingTodoItems = await AsyncStorage.getItem('todoItems');
-      let updatedTodoItems = [];
-      if (existingTodoItems !== null) {
-        updatedTodoItems = JSON.parse(existingTodoItems);
-      }
-      // Assign default position based on the length of existing todo items
-      const defaultPosition = updatedTodoItems.length;
-      // Add the todo item with the default position
-      const todoItemWithPosition = {...todoItem, position: defaultPosition};
-      updatedTodoItems.push(todoItemWithPosition);
-      await AsyncStorage.setItem('todoItems', JSON.stringify(updatedTodoItems));
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error saving todo item: ', error);
-    }
   };
 
   const handleAddTodo = async () => {
@@ -102,24 +83,65 @@ export default function CreateTodoScreen() {
 
     if (todoText.length > 0 && todoDate !== '' && todoPriority !== '') {
       try {
-        let id = Date.now().toString();
-        const todoItem = {
-          id: id,
-          text: todoText,
-          date: todoDate.toDateString(),
-          priority: todoPriority,
-          done: JSON.stringify(false),
-        };
-        await storeTodoItem(todoItem);
-        // Alert.alert('Item is added successfully!');
-        setTodoText('');
-        setTodoDate('');
-        setTodoPriority('');
-        navigation.goBack();
+        setLoading(true);
+
+        const existingTodoItems = await AsyncStorage.getItem('todoItems');
+        let updatedTodoItems = JSON.parse(existingTodoItems) || [];
+
+        const indexToUpdate = updatedTodoItems.findIndex(
+          item => item.id === todoItemData.id,
+        );
+
+        if (indexToUpdate !== -1) {
+          updatedTodoItems[indexToUpdate] = {
+            ...updatedTodoItems[indexToUpdate],
+            text: todoText,
+            date: todoDate,
+            priority: todoPriority,
+            done: JSON.stringify(itemStatus),
+          };
+
+          await AsyncStorage.setItem(
+            'todoItems',
+            JSON.stringify(updatedTodoItems),
+          );
+          navigation.goBack();
+        }
+
+        setLoading(false);
       } catch (error) {
         setLoading(false);
         console.log('Error in handleAddTodo(): ', error);
       }
+    }
+  };
+
+  const handleDeleteTodoItem = async () => {
+    let todoItemId = todoItemData.id;
+    try {
+      setDeleteLoading(true);
+      const existingTodoItems = await AsyncStorage.getItem('todoItems');
+      let updatedTodoItems = JSON.parse(existingTodoItems) || [];
+
+      // Find here specific item of array based on id
+      const indexToUpdate = updatedTodoItems.findIndex(
+        item => item.id === todoItemId,
+      );
+
+      if (indexToUpdate !== -1) {
+        // Delete the item at the found index
+        updatedTodoItems.splice(indexToUpdate, 1);
+
+        await AsyncStorage.setItem(
+          'todoItems',
+          JSON.stringify(updatedTodoItems),
+        );
+      }
+      setDeleteLoading(false);
+      navigation.goBack();
+    } catch (error) {
+      setDeleteLoading(false);
+      console.error('Error deleting todo item: ', error);
     }
   };
 
@@ -130,6 +152,9 @@ export default function CreateTodoScreen() {
           style={styles.topCompoStyle}
           backIconStyle={styles.backICon}
           onPress={() => navigation.goBack()}
+          rightIcon={require('../../../assets/delete.png')}
+          rightIconStyle={{tintColor: colors.todoRed, width: 22, height: 22}}
+          onPressRight={() => handleDeleteTodoItem()}
         />
         <StatusBar
           backgroundColor={colors.black}
@@ -173,7 +198,8 @@ export default function CreateTodoScreen() {
                 onPress={toggleOpenDateModal}>
                 <TextInput
                   editable={false}
-                  value={todoDate !== '' ? todoDate.toDateString() : todoDate}
+                  //   value={todoDate !== '' ? todoDate.toDateString() : todoDate}
+                  value={todoDate}
                   style={styles.inputDate}
                   placeholder="Select date"
                   placeholderTextColor={colors.grey}
@@ -202,8 +228,9 @@ export default function CreateTodoScreen() {
                 // minimumDate={new Date()}
                 minimumDate={new Date('2001-12-10')}
                 onConfirm={date => {
-                  setTodoDate(date);
+                  setTodoDate(date.toDateString());
                   setOpenDateModal(false);
+                  //   console.log(date);
                 }}
                 onCancel={() => setOpenDateModal(false)}
               />
@@ -236,9 +263,28 @@ export default function CreateTodoScreen() {
                   showPriorityModal={showPriorityModal}
                 />
               )}
+              <View
+                style={{
+                  paddingHorizontal: 4,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity
+                  style={styles.checkIconContainer}
+                  onPress={() => setItemStatus(!itemStatus)}
+                  activeOpacity={0.8}>
+                  {itemStatus && (
+                    <Image
+                      source={require('../../../assets/check.png')}
+                      style={styles.iconStyle}
+                    />
+                  )}
+                </TouchableOpacity>
+                <Text style={styles.subText}>Mark as completed</Text>
+              </View>
               <ButtonComponent
                 style={styles.addBtn}
-                title="Add todo"
+                title="Update todo"
                 onPress={handleAddTodo}
                 loading={loading}
               />
@@ -246,6 +292,10 @@ export default function CreateTodoScreen() {
           </ScrollView>
         </KeyboardAvoidingView>
       </ScreenComponent>
+      <MyIndicator
+        visible={deleteloading}
+        backgroundColor={colors.lightBlackTwo}
+      />
     </>
   );
 }
@@ -257,7 +307,7 @@ const styles = StyleSheet.create({
   },
   topCompoStyle: {
     paddingVertical: 0,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   backICon: {
     width: 22,
@@ -328,5 +378,26 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.rubik_medium,
     paddingHorizontal: 8,
     marginVertical: 8,
+  },
+  iconStyle: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
+    tintColor: colors.todoBlue,
+  },
+  checkIconContainer: {
+    width: 22,
+    height: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: colors.todoBlue,
+    borderRadius: 4,
+  },
+  subText: {
+    fontSize: 14,
+    color: colors.todoBlue,
+    fontFamily: fontFamily.rubik_semi_bold,
+    marginLeft: 12,
   },
 });

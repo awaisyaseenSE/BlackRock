@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TodoScreen from '../screens/TodoScreen';
 import CreateTodoScreen from '../screens/CreateTodoScreen';
+import UpdateTodoScreen from '../screens/UpdateTodoScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,13 @@ export default function TodoNavigator() {
           <Stack.Screen
             name="CreateTodoScreen"
             component={CreateTodoScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="UpdateTodoScreen"
+            component={UpdateTodoScreen}
             options={{
               headerShown: false,
             }}

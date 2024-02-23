@@ -9,20 +9,11 @@ import {
 import React from 'react';
 import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
+import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../../../navigation/navigationStrings';
 
 const ShowPastItemsCompo = ({pastTodoItems}) => {
-  const handleCheckboxToggle = async item => {
-    // Toggle the 'done' property
-    console.log('before: ', item.done);
-    item.done = !JSON.parse(item.done);
-    console.log('after ', item.done);
-
-    // Update AsyncStorage with the modified todo item
-    // await AsyncStorage.setItem("todoItems", JSON.stringify(pastTodoItems));
-
-    // // Update the UI by calling the parent component's function
-    // updateTodoItem(pastTodoItems);
-  };
+  const navigation = useNavigation();
 
   const formatDate = dateString => {
     const date = new Date(dateString);
@@ -40,7 +31,13 @@ const ShowPastItemsCompo = ({pastTodoItems}) => {
     let itemDoneStatus = JSON.parse(item.done);
     // console.log(item?.done !== undefined && JSON.parse(item?.done));
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() =>
+          navigation.navigate(navigationStrings.UPDATE_TODO_SCREEN, {
+            data: item,
+          })
+        }
         style={[
           styles.container,
           {
@@ -67,13 +64,13 @@ const ShowPastItemsCompo = ({pastTodoItems}) => {
             </View>
           </View>
         )}
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
     <>
-      <View style={{flex: 1, paddingTop: 12}}>
+      <View style={{flex: 1, paddingTop: 24}}>
         <FlatList
           data={pastTodoItems}
           renderItem={renderItem}

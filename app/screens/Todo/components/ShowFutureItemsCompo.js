@@ -1,11 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
-import DraggableFlatList, {
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../../../navigation/navigationStrings';
 
 const ShowFutureItemsCompo = ({
   futureTodoItems,
@@ -13,6 +13,7 @@ const ShowFutureItemsCompo = ({
   pastTodoItems,
   todayTodoItems,
 }) => {
+  const navigation = useNavigation();
   const formatDate = dateString => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString('en-US', {
@@ -23,27 +24,6 @@ const ShowFutureItemsCompo = ({
     });
     return formattedDate;
   };
-
-  // const renderItem = ({item, index}) => {
-  //   const formattedDate = formatDate(item?.date);
-  //   return (
-  //     <View
-  //       style={[
-  //         styles.container,
-  //         {
-  //           backgroundColor:
-  //             item?.priority == 'high'
-  //               ? colors.todoRed
-  //               : item?.priority == 'low'
-  //               ? colors.todoGreen
-  //               : colors.todoYellow,
-  //         },
-  //       ]}>
-  //       <Text style={styles.heading}>{item?.text}</Text>
-  //       <Text style={styles.dateText}>{formattedDate}</Text>
-  //     </View>
-  //   );
-  // };
 
   const handleUpdatePosition = async updatedArr => {
     let temArr = [...updatedArr, ...todayTodoItems, ...pastTodoItems];
@@ -64,16 +44,21 @@ const ShowFutureItemsCompo = ({
         <TouchableOpacity
           activeOpacity={0.8}
           onLongPress={drag}
+          onPress={() =>
+            navigation.navigate(navigationStrings.UPDATE_TODO_SCREEN, {
+              data: item,
+            })
+          }
           style={[
             styles.container,
             {
-              backgroundColor: isActive
-                ? colors.gray
-                : item?.priority == 'high'
-                ? colors.todoRed
-                : item?.priority == 'low'
-                ? colors.todoGreen
-                : colors.todoYellow,
+              backgroundColor:
+                item?.priority == 'high'
+                  ? colors.todoRed
+                  : item?.priority == 'low'
+                  ? colors.todoGreen
+                  : colors.todoYellow,
+              opacity: isActive ? 0.8 : 1,
             },
           ]}>
           <Text style={styles.heading}>{item?.text}</Text>
@@ -99,7 +84,6 @@ const ShowFutureItemsCompo = ({
           ListHeaderComponent={() => <View />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
-          // ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
           // dragItemOverflow={true}
           activationDistance={20}
           showsVerticalScrollIndicator={false}

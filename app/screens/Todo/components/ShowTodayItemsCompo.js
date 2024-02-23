@@ -1,20 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React, {useState} from 'react';
 import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
-import MyIndicator from '../../../components/MyIndicator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DraggableFlatList, {
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import {useNavigation} from '@react-navigation/native';
+import navigationStrings from '../../../navigation/navigationStrings';
 
 const ShowTodayItemsCompo = ({
   todayTodoItems,
@@ -24,7 +15,7 @@ const ShowTodayItemsCompo = ({
   pastTodoItems,
 }) => {
   const [loading, setLoading] = useState(false);
-  // const [status, setStatus] = useState(fa);
+  const navigation = useNavigation();
 
   const formatDate = dateString => {
     const date = new Date(dateString);
@@ -67,71 +58,29 @@ const ShowTodayItemsCompo = ({
     }
   };
 
-  // const renderItem = ({item, index}) => {
-  //   const formattedDate = formatDate(item?.date);
-  //   let itemStatus = JSON.parse(item.done);
-  //   return (
-  //     <View
-  //       style={[
-  //         styles.container,
-  //         {
-  //           backgroundColor:
-  //             item?.priority == 'high'
-  //               ? colors.todoRed
-  //               : item?.priority == 'low'
-  //               ? colors.todoGreen
-  //               : colors.todoYellow,
-  //         },
-  //       ]}>
-  //       <Text style={styles.heading}>{item?.text}</Text>
-  //       <Text style={styles.dateText}>{formattedDate}</Text>
-  //       <View style={{alignItems: 'flex-end'}}>
-  //         <View style={styles.checkBoxContainer}>
-  //           <Text style={styles.subHeading}>Mark as completed</Text>
-  //           <TouchableOpacity
-  //             style={styles.checkBox}
-  //             onPress={() => toggleTodoItemDone(item.id)}>
-  //             {/* {itemStatus && (
-  //             <Image
-  //               source={require('../../../assets/check.png')}
-  //               style={styles.checkBoxIcon}
-  //             />
-  //           )} */}
-  //             {loading ? (
-  //               <ActivityIndicator size={14} color={colors.black} />
-  //             ) : itemStatus ? (
-  //               <Image
-  //                 source={require('../../../assets/check.png')}
-  //                 style={styles.checkBoxIcon}
-  //               />
-  //             ) : null}
-  //           </TouchableOpacity>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
   const renderItem = ({item, drag, isActive}) => {
     const formattedDate = formatDate(item?.date);
     let itemStatus = JSON.parse(item.done);
-    // console.log('position: ', item.position);
+    // console.log('position: ', item.position, '  item text is: ', item.text);
     return (
       <View style={{paddingVertical: 12}}>
         <TouchableOpacity
           onLongPress={drag}
+          onPress={() =>
+            navigation.navigate(navigationStrings.UPDATE_TODO_SCREEN, {
+              data: item,
+            })
+          }
           style={[
             styles.container,
             {
-              backgroundColor: isActive
-                ? colors.gray
-                : item?.priority == 'high'
-                ? colors.todoRed
-                : item?.priority == 'low'
-                ? colors.todoGreen
-                : colors.todoYellow,
-              // marginBottom: isActive ? 12 : 0,
-              // marginVertical: isActive ? 16 : 0,
+              backgroundColor:
+                item?.priority == 'high'
+                  ? colors.todoRed
+                  : item?.priority == 'low'
+                  ? colors.todoGreen
+                  : colors.todoYellow,
+              opacity: isActive ? 0.8 : 1,
             },
           ]}
           activeOpacity={0.8}>
@@ -143,20 +92,12 @@ const ShowTodayItemsCompo = ({
               <TouchableOpacity
                 style={styles.checkBox}
                 onPress={() => toggleTodoItemDone(item.id)}>
-                {/* {itemStatus && (
-              <Image
-                source={require('../../../assets/check.png')}
-                style={styles.checkBoxIcon}
-              />
-            )} */}
-                {loading ? (
-                  <ActivityIndicator size={14} color={colors.black} />
-                ) : itemStatus ? (
+                {itemStatus && (
                   <Image
                     source={require('../../../assets/check.png')}
                     style={styles.checkBoxIcon}
                   />
-                ) : null}
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -167,9 +108,6 @@ const ShowTodayItemsCompo = ({
 
   const handleUpdatePosition = async updatedArr => {
     let temArr = [...updatedArr, ...futureTodoItems, ...pastTodoItems];
-    // console.log(temArr.length);
-    // console.log(temArr);
-
     try {
       await AsyncStorage.setItem('todoItems', JSON.stringify(temArr));
     } catch (error) {
@@ -182,21 +120,10 @@ const ShowTodayItemsCompo = ({
 
   return (
     <>
-      {/* <FlatList
-        data={todayTodoItems}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={<View style={{marginVertical: 8}} />}
-      /> */}
       <View style={{flex: 1, paddingTop: 12}}>
         <DraggableFlatList
           data={todayTodoItems}
-          // onDragEnd={({data}) => setTodayTodoItems(data)}
           onDragEnd={({data}) => {
-            // setTodayTodoItems(data);
-            // console.log('after drag');
-
             const updatedTodoItems = data.map((item, index) => ({
               ...item,
               position: index,
@@ -207,7 +134,6 @@ const ShowTodayItemsCompo = ({
           ListHeaderComponent={() => <View />}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
-          // ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
           showsVerticalScrollIndicator={false}
           // dragItemOverflow={true}
           activationDistance={20}

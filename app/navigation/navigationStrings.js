@@ -19,4 +19,5 @@ export default {
   Show_Movie_Collection_Screen: 'ShowMovieCollectionScreen',
   TODO_SCREEN: 'TodoScreen',
   CREATE_TODO_SCREEN: 'CreateTodoScreen',
+  UPDATE_TODO_SCREEN: 'UpdateTodoScreen',
 };
