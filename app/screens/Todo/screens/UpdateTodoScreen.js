@@ -155,6 +155,8 @@ export default function UpdateTodoScreen({route}) {
           rightIcon={require('../../../assets/delete.png')}
           rightIconStyle={{tintColor: colors.todoRed, width: 22, height: 22}}
           onPressRight={() => handleDeleteTodoItem()}
+          title="Update"
+          titleStyle={{color: colors.todoBlue}}
         />
         <StatusBar
           backgroundColor={colors.black}
@@ -284,7 +286,7 @@ export default function UpdateTodoScreen({route}) {
               </View>
               <ButtonComponent
                 style={styles.addBtn}
-                title="Update todo"
+                title="Update"
                 onPress={handleAddTodo}
                 loading={loading}
               />

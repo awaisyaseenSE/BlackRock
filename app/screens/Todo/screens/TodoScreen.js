@@ -92,7 +92,8 @@ export default function TodoScreen() {
     let allToday = todayItems;
     // console.log('today items: ', allToday.length);
     // console.log('today items: ', allToday);
-    allToday.sort((a, b) => a.position - b.position); // new line added to sort items of todo based on position
+    allToday.sort((a, b) => a.position - b.position);
+    // allToday.sort((a, b) => b.position - a.position);
     setTodayTodoItems(allToday);
 
     let allFuture = futureItems;
