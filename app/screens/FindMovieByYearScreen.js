@@ -4,28 +4,15 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
-  Platform,
-  StatusBar,
   TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Modal,
-  Button,
   ScrollView,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import LinearGradient from 'react-native-linear-gradient';
+import React, {useState, useEffect, useCallback} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
-import constants from '../constants/constants';
-import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-import navigationStrings from '../navigation/navigationStrings';
 import ScreenComponent from '../components/ScreenComponent';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
-import LottieView from 'lottie-react-native';
-import ButtonComponent from '../components/ButtonComponent';
 import MyIndicator from '../components/MyIndicator';
 import MovieDetailComponent from '../components/MovieDetailComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
@@ -36,67 +23,95 @@ const screenHeight = Dimensions.get('window').height;
 
 export default function FindMovieByYearScreen() {
   const [movies, setMovies] = useState([]);
-  const [nextPageLink, setNextPageLink] = useState('');
-  const [year, setYear] = useState(2001);
+  const [year, setYear] = useState(1999);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const [isUrlNull, setIsUrlNull] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const fetchMovies = async () => {
-    // const url =
-    //   nextPageLink !== ''
-    //     ? nextPageLink?.replace('http://', 'https://')
-    //     : `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${year}`;
-    const url =
-      nextPageLink !== ''
-        ? nextPageLink?.replace('http://', 'https://')
-        : nextPageLink == null || nextPageLink == undefined
-        ? null
-        : `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${year}`;
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-        'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
-      },
-    };
+  // const fetchMovies = async () => {
+  //   // const url =
+  //   //   nextPageLink !== ''
+  //   //     ? nextPageLink?.replace('http://', 'https://')
+  //   //     : `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${year}`;
+  //   const url =
+  //     nextPageLink !== ''
+  //       ? nextPageLink?.replace('http://', 'https://')
+  //       : nextPageLink == null || nextPageLink == undefined
+  //       ? null
+  //       : `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${year}`;
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {
+  //       'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
+  //       'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
+  //     },
+  //   };
 
-    if (url == null) {
-      setIsUrlNull(true);
-      return null;
-    }
+  //   if (url == null) {
+  //     setIsUrlNull(true);
+  //     return null;
+  //   }
 
+  //   try {
+  //     setLoading(true);
+  //     const response = await fetch(url, options);
+  //     if (!response.ok) {
+  //       setLoading(false);
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     setMovies(prevMovies => [...prevMovies, ...data.results]);
+  //     setNextPageLink(data.links.next);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchMovies();
+  // }, [year]);
+
+  const fetchMovies = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const response = await fetch(url, options);
+      const response = await fetch(
+        `https://moviesminidatabase.p.rapidapi.com/movie/byYear/${year}`,
+        {
+          headers: {
+            'X-RapidAPI-Key':
+              '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
+            'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
+          },
+        },
+      );
       if (!response.ok) {
-        setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      setMovies(prevMovies => [...prevMovies, ...data.results]);
-      setNextPageLink(data.links.next);
-      setLoading(false);
+      setMovies(data.results);
     } catch (error) {
-      setLoading(false);
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [year]);
 
   useEffect(() => {
     fetchMovies();
-  }, [year]);
+  }, [fetchMovies]);
 
   const handleEndReached = () => {
-    if (!isUrlNull && nextPageLink) {
-      fetchMovies();
-    }
+    // console.log('reach to end');
+    // if (!isUrlNull && nextPageLink) {
+    //   fetchMovies();
+    // }
   };
 
   const data = [
-    2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012,
-    2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
+    1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
   ];
 
   const handleDonePress = () => {
@@ -104,7 +119,6 @@ export default function FindMovieByYearScreen() {
       let numberSearch = parseInt(searchText);
       if (!isNaN(numberSearch)) {
         setYear(numberSearch);
-        setNextPageLink('');
         setMovies([]);
       }
     }
@@ -179,9 +193,7 @@ export default function FindMovieByYearScreen() {
                     }}
                     onPress={() => {
                       setYear(item);
-                      setNextPageLink('');
                       setMovies([]);
-                      //   fetchMovies();
                     }}>
                     <Text style={styles.yearText}>{item}</Text>
                   </TouchableOpacity>
