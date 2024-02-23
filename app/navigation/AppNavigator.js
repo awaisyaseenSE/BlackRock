@@ -20,6 +20,8 @@ import MovieCollectionScreen from '../screens/MovieCollectionScreen';
 import ShowMovieCollectionScreen from '../screens/ShowMovieCollectionScreen';
 import TodoScreen from '../screens/Todo/screens/TodoScreen';
 import CreateTodoScreen from '../screens/Todo/screens/CreateTodoScreen';
+import FindMovieByYearScreen from '../screens/FindMovieByYearScreen';
+import UpdateTodoScreen from '../screens/Todo/screens/UpdateTodoScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -174,6 +176,20 @@ function AppNavigator() {
       <Stack.Screen
         name="CreateTodoScreen"
         component={CreateTodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UpdateTodoScreen"
+        component={UpdateTodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FindMovieByYearScreen"
+        component={FindMovieByYearScreen}
         options={{
           headerShown: false,
         }}
