@@ -22,6 +22,8 @@ import TodoScreen from '../screens/Todo/screens/TodoScreen';
 import CreateTodoScreen from '../screens/Todo/screens/CreateTodoScreen';
 import FindMovieByYearScreen from '../screens/FindMovieByYearScreen';
 import UpdateTodoScreen from '../screens/Todo/screens/UpdateTodoScreen';
+import SearchPexelsPhotosScreen from '../screens/SearchPexelsPhotosScreen';
+import DetailPhotoScreen from '../screens/DetailPhotoScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -190,6 +192,20 @@ function AppNavigator() {
       <Stack.Screen
         name="FindMovieByYearScreen"
         component={FindMovieByYearScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchPexelsPhotosScreen"
+        component={SearchPexelsPhotosScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailPhotoScreen"
+        component={DetailPhotoScreen}
         options={{
           headerShown: false,
         }}

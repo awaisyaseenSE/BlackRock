@@ -97,6 +97,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Search Photos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.SEARCH_PEXELS_SCREEN)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/user.png')}
             title="About"
             onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}

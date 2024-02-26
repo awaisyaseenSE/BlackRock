@@ -21,4 +21,6 @@ export default {
   CREATE_TODO_SCREEN: 'CreateTodoScreen',
   UPDATE_TODO_SCREEN: 'UpdateTodoScreen',
   Find_Movie_by_year_SCREEN: 'FindMovieByYearScreen',
+  SEARCH_PEXELS_SCREEN: 'SearchPexelsPhotosScreen',
+  Detail_Photo_Screen: 'DetailPhotoScreen',
 };

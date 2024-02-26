@@ -84,34 +84,40 @@ export default function SimilarMovieDetailScreen({route}) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
-      <FastImage
-        style={styles.imagePoster}
-        source={
-          routeData?.imagePoster.endsWith('null')
-            ? {
-                uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
-              }
-            : {uri: routeData?.imagePoster}
-        }
-      />
-      <TouchableOpacity
-        style={[
-          styles.iconContainer,
-          {top: Platform.OS === 'android' ? 12 : insets.top - 6},
-        ]}
-        onPress={() => navigation.goBack()}>
-        <Image source={require('../assets/backward.png')} style={styles.icon} />
-      </TouchableOpacity>
-      <LinearGradient
-        colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
-        start={{x: 0.5, y: 0}}
-        end={{x: 0.5, y: 1}}
-        style={{
-          width: screenWidth,
-          flex: 1,
-        }}>
+    <ScrollView
+      style={{flex: 1, backgroundColor: colors.moviesBg}}
+      showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
+        <FastImage
+          style={styles.imagePoster}
+          source={
+            routeData?.imagePoster.endsWith('null')
+              ? {
+                  uri: 'https://cdn.cinematerial.com/p/297x/rlhwo8t9/dummy-dutch-movie-poster-md.jpg?v=1456307982',
+                }
+              : {uri: routeData?.imagePoster}
+          }
+        />
+        <TouchableOpacity
+          style={[
+            styles.iconContainer,
+            {top: Platform.OS === 'android' ? 12 : insets.top - 6},
+          ]}
+          onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../assets/backward.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        {/* <LinearGradient
+          colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
+          start={{x: 0.5, y: 0}}
+          end={{x: 0.5, y: 1}}
+          style={{
+            width: screenWidth,
+            flex: 1,
+          }}> */}
         <Text style={styles.heading}>{movieDetails?.title}</Text>
         <View style={styles.contentContainer}>
           <Text style={[styles.grayText, {textAlign: 'center'}]}>
@@ -136,8 +142,9 @@ export default function SimilarMovieDetailScreen({route}) {
           </View>
         )}
         <View style={{marginVertical: 10}} />
-      </LinearGradient>
-    </View>
+        {/* </LinearGradient> */}
+      </View>
+    </ScrollView>
   );
 }
 
