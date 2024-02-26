@@ -50,6 +50,7 @@ export default function SimilarMovieDetailScreen({route}) {
   const [laoding, setLoading] = useState(false);
   const [similarMovies, setSimilarMovies] = useState([]);
   const [youtubeVideoID, setYoutubeVideoID] = useState('');
+  const [youtubeLoading, setYoutubeLoading] = useState(true);
 
   const getYoutubeVideoLink = async () => {
     // getApi('/movie/157336/videos');
@@ -132,7 +133,12 @@ export default function SimilarMovieDetailScreen({route}) {
           <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
         </View>
         {youtubeVideoID !== '' && (
-          <View style={{alignItems: 'center'}}>
+          <View style={{alignItems: 'center', width: '100%', height: 220}}>
+            {youtubeLoading && (
+              <View style={styles.youtubeLoadingStyle}>
+                <ActivityIndicator size={30} color={colors.gray} />
+              </View>
+            )}
             <YoutubePlayer
               height={220}
               play={false}
@@ -224,5 +230,14 @@ const styles = StyleSheet.create({
     width: screenWidth / 3,
     height: screenHeight * 0.2,
     borderRadius: 12,
+  },
+  youtubeLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

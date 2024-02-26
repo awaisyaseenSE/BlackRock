@@ -21,16 +21,21 @@ const screenHeight = Dimensions.get('window').height;
 const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
   const [movieData, setMovieData] = useState(null);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [fastImgLoading, setFastImgLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${constants.theMovieDb_API_KEY}`,
         );
         const data = await response.json();
         setMovieData(data);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error('Error fetching movie data:', error);
       }
     };
@@ -52,6 +57,11 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
       <View style={{...styles.container, ...style}}>
         {movieData ? (
           <TouchableOpacity onPress={handleNextScreen}>
+            {fastImgLoading && (
+              <View style={styles.fastImageLoadingStyle}>
+                <ActivityIndicator size={20} color={colors.gray} />
+              </View>
+            )}
             <FastImage
               source={
                 movieData?.backdrop_path == undefined ||
@@ -64,6 +74,8 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
                     }
               }
               style={{...styles.imageStyle, ...imageStyle}}
+              onLoadStart={() => setFastImgLoading(true)}
+              onLoadEnd={() => setFastImgLoading(false)}
             />
             <Text style={{...styles.title, ...textStyle}} numberOfLines={1}>
               {movieData?.title?.length > 10
@@ -113,6 +125,15 @@ const styles = StyleSheet.create({
     width: screenWidth / 3,
     height: screenHeight * 0.2,
     borderRadius: 12,
+  },
+  fastImageLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

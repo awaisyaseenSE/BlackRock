@@ -401,8 +401,8 @@ export default function AllCatogoryMovieScreen() {
             />
           )}
         </View>
-        <MyIndicator visible={laoding} />
       </ScreenComponent>
+      <MyIndicator visible={laoding} />
     </>
   );
 }

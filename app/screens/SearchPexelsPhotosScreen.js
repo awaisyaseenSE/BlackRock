@@ -28,6 +28,7 @@ export default function SearchPexelsPhotosScreen() {
   const [photos, setPhotos] = useState([]);
   const [nextPage, setNextPage] = useState('');
   const perPage = 15;
+  const [imgLoading, setImgLoading] = useState(false);
 
   const fetchPhotos = async (call, retryCount = 0) => {
     if (nextPage === null) return; // If there are no more pages, don't fetch
@@ -84,6 +85,7 @@ export default function SearchPexelsPhotosScreen() {
   const renderItem = ({item}) => {
     // console.log(item);
     // console.log('......................');
+    let fastImgLoad = true;
     return (
       <TouchableOpacity
         onPress={() =>
@@ -92,9 +94,16 @@ export default function SearchPexelsPhotosScreen() {
           })
         }
         activeOpacity={0.6}>
+        {fastImgLoad && (
+          <View style={styles.loadingImageStyle}>
+            <ActivityIndicator size={'small'} color={colors.gray} />
+          </View>
+        )}
         <FastImage
           source={{uri: item?.src?.landscape}}
           style={styles.pexelsImageStyle}
+          onLoadStart={() => (fastImgLoad = true)}
+          onLoadEnd={() => (fastImgLoad = false)}
         />
       </TouchableOpacity>
     );
@@ -236,5 +245,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 14,
     marginBottom: 12,
+  },
+  loadingImageStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
