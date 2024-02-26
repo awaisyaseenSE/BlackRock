@@ -21,6 +21,7 @@ import navigationStrings from '../navigation/navigationStrings';
 import TopHomeComponent from '../components/TopHomeComponent';
 import fontFamily from '../styles/fontFamily';
 import MovieDetailComponent from '../components/MovieDetailComponent';
+import {ActivityIndicator} from 'react-native';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -169,9 +170,20 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({item, index}) => {
+    let fastImgLoading = true;
     return (
       <TouchableOpacity onPress={() => navigateToNextScreen(index, item)}>
-        <FastImage source={{uri: item}} style={styles.posterImage} />
+        {fastImgLoading && (
+          <View style={styles.fastImgLoadingStyle}>
+            <ActivityIndicator animating size={20} color={colors.gray} />
+          </View>
+        )}
+        <FastImage
+          source={{uri: item}}
+          style={styles.posterImage}
+          onLoadStart={() => (fastImgLoading = true)}
+          onLoadEnd={() => (fastImgLoading = false)}
+        />
       </TouchableOpacity>
     );
   };
@@ -187,9 +199,21 @@ export default function HomeScreen() {
       });
     };
 
+    let myfastImgLoading = true;
+
     return (
       <TouchableOpacity style={{marginLeft: 12}} onPress={handleNaviToDetail}>
-        <FastImage source={{uri: postURL}} style={styles.posterImageStyle} />
+        {myfastImgLoading && (
+          <View style={styles.fastImgLoadingStyle}>
+            <ActivityIndicator animating size={20} color={colors.gray} />
+          </View>
+        )}
+        <FastImage
+          source={{uri: postURL}}
+          style={styles.posterImageStyle}
+          onLoadStart={() => (myfastImgLoading = true)}
+          onLoadEnd={() => (myfastImgLoading = false)}
+        />
         <Text numberOfLines={1} style={styles.subHeading}>
           {data?.title?.length > 18
             ? data?.title.slice(0, 18) + '...'
@@ -341,5 +365,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 14,
     marginBottom: 14,
+  },
+  fastImgLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

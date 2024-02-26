@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -53,7 +54,7 @@ export default function DetailPhotoScreen({route}) {
           style={[
             styles.iconContainer,
             {
-              top: insets.top,
+              top: Platform.OS === 'ios' ? insets.top : 14,
             },
           ]}
           onPress={() => navigation.goBack()}>
