@@ -312,4 +312,10 @@ const styles = StyleSheet.create({
     top: 6,
     right: 4,
   },
+  btn: {
+    width: '60%',
+    alignSelf: 'center',
+    marginTop: 20,
+    borderRadius: 8,
+  },
 });
