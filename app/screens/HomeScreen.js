@@ -22,7 +22,6 @@ import TopHomeComponent from '../components/TopHomeComponent';
 import fontFamily from '../styles/fontFamily';
 import MovieDetailComponent from '../components/MovieDetailComponent';
 import {ActivityIndicator} from 'react-native';
-import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -267,7 +266,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
               horizontal
-              // estimatedItemSize={40}
+              // estimatedItemSize={20}
             />
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>

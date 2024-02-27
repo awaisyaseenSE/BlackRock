@@ -7,6 +7,8 @@ import {
   Alert,
   Button,
   FlatList,
+  Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -21,11 +23,24 @@ import FastImage from 'react-native-fast-image';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 export default function DetailProductScreen({route}) {
   const navigation = useNavigation();
   const routeData = route?.params?.data;
   const [allDocuments, setAllDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadStart = () => {
+    setIsLoading(true);
+  };
+
+  const handleLoadEnd = () => {
+    setIsLoading(false);
+  };
 
   const uploadData = async allMedia => {
     setLoading(true);
@@ -124,18 +139,27 @@ export default function DetailProductScreen({route}) {
 
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
+      <ScreenComponent
+        style={{backgroundColor: routeData?.avg_color || colors.moviesBg}}>
         <TopCompoWithHeading
-          title="Detail Product"
+          title="Detail"
           onPress={() => navigation.goBack()}
         />
-        <View style={{marginVertical: 8, alignItems: 'center'}}>
-          <Animated.Image
-            source={{uri: routeData?.src?.landscape}}
+        <View style={{flex: 1, marginBottom: 20}}>
+          {isLoading && (
+            <View style={styles.placeholder}>
+              <ActivityIndicator size="large" color={colors.black} />
+            </View>
+          )}
+          <FastImage
+            source={{uri: routeData?.src?.portrait}}
             style={styles.image}
+            resizeMode={'cover'}
+            onLoadStart={handleLoadStart}
+            onLoadEnd={handleLoadEnd}
           />
         </View>
-        <View
+        {/* <View
           style={{
             marginVertical: 20,
             paddingHorizontal: 20,
@@ -178,7 +202,7 @@ export default function DetailProductScreen({route}) {
           style={styles.btn}
           onPress={handleUpoadData}
           loading={loading}
-        />
+        /> */}
       </ScreenComponent>
     </>
   );
@@ -194,10 +218,9 @@ const styles = StyleSheet.create({
     color: colors.darkBlue,
   },
   image: {
-    width: '60%',
-    height: 200,
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
-    borderRadius: 8,
   },
   docuIconContainer: {
     width: 90,
@@ -229,5 +252,14 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 8,
+  },
+  placeholder: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

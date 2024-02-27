@@ -17,6 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import MovieDetailComponent from '../components/MovieDetailComponent';
 import {getApi} from '../helper/APICalls';
 import LottieView from 'lottie-react-native';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -79,7 +80,7 @@ export default function AllMoviesList({route}) {
             backIconStyle={{tintColor: colors.white}}
           />
           {allmoviesIDs.length > 0 ? (
-            <FlatList
+            <FlashList
               data={allmoviesIDs}
               renderItem={({item}) => (
                 <MovieDetailComponent
@@ -91,7 +92,9 @@ export default function AllMoviesList({route}) {
               )}
               numColumns={3}
               showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={<View style={{marginVertical: 6}} />}
+              ItemSeparatorComponent={() => (
+                <View style={{marginVertical: 6}} />
+              )}
               onEndReached={handleEndReached}
               onEndReachedThreshold={0.5}
               ListFooterComponent={() => {
@@ -115,6 +118,7 @@ export default function AllMoviesList({route}) {
                   setEndReached(true);
                 }
               }}
+              estimatedItemSize={200}
             />
           ) : (
             <View style={{marginBottom: 50, alignItems: 'center'}}>

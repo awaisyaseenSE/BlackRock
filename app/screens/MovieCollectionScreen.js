@@ -18,6 +18,7 @@ import FastImage from 'react-native-fast-image';
 import fontFamily from '../styles/fontFamily';
 import navigationStrings from '../navigation/navigationStrings';
 import MyIndicator from '../components/MyIndicator';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -137,12 +138,14 @@ export default function MovieCollectionScreen() {
           />
           {searchMovieCollectionData.length > 0 && (
             <View style={{paddingHorizontal: 4, flex: 1}}>
-              <FlatList
+              <FlashList
                 data={searchMovieCollectionData}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={2}
-                ItemSeparatorComponent={<View style={{marginVertical: 10}} />}
+                ItemSeparatorComponent={() => (
+                  <View style={{marginVertical: 10}} />
+                )}
                 showsVerticalScrollIndicator={false}
                 onEndReached={handleEndReached}
                 onEndReachedThreshold={0.5}
@@ -167,6 +170,7 @@ export default function MovieCollectionScreen() {
                     setEndReached(true);
                   }
                 }}
+                estimatedItemSize={200}
               />
             </View>
           )}
