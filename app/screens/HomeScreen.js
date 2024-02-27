@@ -241,7 +241,7 @@ export default function HomeScreen() {
               sliderWidth={screenWidth}
               itemWidth={screenWidth * 0.62}
               slideStyle={{alignItems: 'center'}}
-              firstItem={1}
+              firstItem={2}
               inactiveSlideOpacity={0.6}
             />
             <View style={{marginVertical: 18}} />
