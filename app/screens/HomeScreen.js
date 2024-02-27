@@ -4,9 +4,9 @@ import {
   Dimensions,
   StatusBar,
   TouchableOpacity,
-  FlatList,
   Text,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
@@ -22,6 +22,7 @@ import TopHomeComponent from '../components/TopHomeComponent';
 import fontFamily from '../styles/fontFamily';
 import MovieDetailComponent from '../components/MovieDetailComponent';
 import {ActivityIndicator} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -266,6 +267,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
               horizontal
+              // estimatedItemSize={40}
             />
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
@@ -289,6 +291,7 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
               horizontal
+              // estimatedItemSize={40}
             />
 
             <View style={{marginVertical: 18}} />
@@ -318,6 +321,7 @@ export default function HomeScreen() {
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
+                // estimatedItemSize={40}
               />
             </View>
           </View>

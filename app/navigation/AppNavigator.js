@@ -24,6 +24,7 @@ import FindMovieByYearScreen from '../screens/FindMovieByYearScreen';
 import UpdateTodoScreen from '../screens/Todo/screens/UpdateTodoScreen';
 import SearchPexelsPhotosScreen from '../screens/SearchPexelsPhotosScreen';
 import DetailPhotoScreen from '../screens/DetailPhotoScreen';
+import FlashListTestingScreen from '../screens/FlashListTestingScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -206,6 +207,13 @@ function AppNavigator() {
       <Stack.Screen
         name="DetailPhotoScreen"
         component={DetailPhotoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FlashListTestingScreen"
+        component={FlashListTestingScreen}
         options={{
           headerShown: false,
         }}

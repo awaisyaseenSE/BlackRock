@@ -17,6 +17,7 @@ import ShowTvSeriesCompo from '../components/ShowTvSeriesCompo';
 import fontFamily from '../styles/fontFamily';
 import MyIndicator from '../components/MyIndicator';
 import constants from '../constants/constants';
+import {FlashList} from '@shopify/flash-list';
 
 export default function AllCatogoryMovieScreen() {
   const [laoding, setLoading] = useState(false);
@@ -370,6 +371,7 @@ export default function AllCatogoryMovieScreen() {
                   setEndReached(true);
                 }
               }}
+              // estimatedItemSize={200}
             />
           )}
 
@@ -398,6 +400,7 @@ export default function AllCatogoryMovieScreen() {
                   setAllMovieEndReached(true);
                 }
               }}
+              // estimatedItemSize={200}
             />
           )}
         </View>

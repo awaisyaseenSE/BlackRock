@@ -6,7 +6,6 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  FlatList,
   ScrollView,
   Alert,
   Platform,

@@ -23,4 +23,5 @@ export default {
   Find_Movie_by_year_SCREEN: 'FindMovieByYearScreen',
   SEARCH_PEXELS_SCREEN: 'SearchPexelsPhotosScreen',
   Detail_Photo_Screen: 'DetailPhotoScreen',
+  FlashList_Testing_Screen: 'FlashListTestingScreen',
 };

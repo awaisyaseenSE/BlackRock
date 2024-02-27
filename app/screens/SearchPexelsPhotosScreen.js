@@ -17,6 +17,7 @@ import FastImage from 'react-native-fast-image';
 import constants from '../constants/constants';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
 import {Image} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -187,7 +188,7 @@ export default function SearchPexelsPhotosScreen() {
           </View>
         </View>
         <View style={styles.container}>
-          <FlatList
+          <FlashList
             data={photos}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
@@ -195,10 +196,11 @@ export default function SearchPexelsPhotosScreen() {
             onEndReached={handleEndReached}
             onEndReachedThreshold={0.1}
             showsVerticalScrollIndicator={false}
-            ItemSeparatorComponent={
+            ItemSeparatorComponent={() => (
               <View style={{height: 4, backgroundColor: colors.bottomTabBg}} />
-            }
+            )}
             // ListHeaderComponent={renderHeader}
+            estimatedItemSize={200}
           />
         </View>
       </ScreenComponent>

@@ -17,13 +17,14 @@ import MyIndicator from '../components/MyIndicator';
 import MovieDetailComponent from '../components/MovieDetailComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import {getResponsiveHeight} from '../utils/getResponsiveMarginPadding';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function FindMovieByYearScreen() {
   const [movies, setMovies] = useState([]);
-  const [year, setYear] = useState(1999);
+  const [year, setYear] = useState(1767);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
@@ -74,6 +75,9 @@ export default function FindMovieByYearScreen() {
   // }, [year]);
 
   const fetchMovies = useCallback(async () => {
+    if (year === 1767) {
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetch(
@@ -179,7 +183,7 @@ export default function FindMovieByYearScreen() {
               )}
             </View>
             <View style={{marginTop: 8, marginBottom: 30, paddingLeft: 8}}>
-              <FlatList
+              <FlashList
                 data={data}
                 renderItem={({item, index}) => (
                   <TouchableOpacity
@@ -201,10 +205,11 @@ export default function FindMovieByYearScreen() {
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                estimatedItemSize={120}
               />
             </View>
             <View style={styles.container}>
-              <FlatList
+              <FlashList
                 data={movies}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item}) => (
@@ -219,8 +224,11 @@ export default function FindMovieByYearScreen() {
                 onEndReached={handleEndReached}
                 onEndReachedThreshold={0.1}
                 showsVerticalScrollIndicator={false}
-                ItemSeparatorComponent={<View style={{marginVertical: 12}} />}
+                ItemSeparatorComponent={() => (
+                  <View style={{marginVertical: 12}} />
+                )}
                 scrollEnabled={false}
+                estimatedItemSize={120}
               />
             </View>
           </View>
@@ -235,6 +243,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 6,
+    minHeight: 2,
   },
   text: {
     color: colors.white,
