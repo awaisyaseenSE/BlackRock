@@ -6,16 +6,15 @@ import {
   TouchableOpacity,
   Image,
   Platform,
-  Alert,
-  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../styles/colors';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ActivityIndicator} from 'react-native';
 import {handleDownload} from '../utils/FileDownloader';
+import fontFamily from '../styles/fontFamily';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -27,6 +26,7 @@ export default function DetailPhotoScreen({route}) {
   const [isLoading, setIsLoading] = useState(true);
   const [downloadUrlLoading, setDownloadUrlLoading] = useState(false);
   const [imgName, setImgName] = useState(photoData?.alt || '');
+  const [showIosToast, setShowIosToast] = useState(true);
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -36,19 +36,13 @@ export default function DetailPhotoScreen({route}) {
     setIsLoading(false);
   };
 
-  const showToastWithMargin = (message, duration, gravity, margin) => {
-    ToastAndroid.showWithGravityAndOffset(
-      message,
-      duration,
-      gravity,
-      25,
-      margin,
-    );
-  };
-
-  if (Platform.OS === 'android') {
-    showToastWithMargin(imgName, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 50);
-  }
+  useEffect(() => {
+    const delayedFunction = () => {
+      setShowIosToast(false);
+    };
+    const timeoutId = setTimeout(delayedFunction, 3000);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <>
@@ -104,6 +98,15 @@ export default function DetailPhotoScreen({route}) {
             />
           )}
         </TouchableOpacity>
+        {showIosToast && (
+          <View
+            style={[
+              styles.toast,
+              {bottom: Platform.OS === 'ios' ? insets.bottom : 30},
+            ]}>
+            <Text style={styles.toastTxt}>{imgName}</Text>
+          </View>
+        )}
       </View>
     </>
   );
@@ -152,5 +155,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
     position: 'absolute',
     right: 20,
+  },
+  toast: {
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    position: 'absolute',
+    bottom: 20,
+    alignSelf: 'center',
+    marginHorizontal: 30,
+  },
+  toastTxt: {
+    fontSize: 12,
+    color: colors.lightOffWhite,
+    fontFamily: fontFamily.rubik_medium,
   },
 });
