@@ -7,6 +7,7 @@ import {
   Image,
   Platform,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -25,6 +26,7 @@ export default function DetailPhotoScreen({route}) {
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [downloadUrlLoading, setDownloadUrlLoading] = useState(false);
+  const [imgName, setImgName] = useState(photoData?.alt || '');
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -33,6 +35,20 @@ export default function DetailPhotoScreen({route}) {
   const handleLoadEnd = () => {
     setIsLoading(false);
   };
+
+  const showToastWithMargin = (message, duration, gravity, margin) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      duration,
+      gravity,
+      25,
+      margin,
+    );
+  };
+
+  if (Platform.OS === 'android') {
+    showToastWithMargin(imgName, ToastAndroid.SHORT, ToastAndroid.BOTTOM, 50);
+  }
 
   return (
     <>
@@ -60,7 +76,9 @@ export default function DetailPhotoScreen({route}) {
               top: Platform.OS === 'ios' ? insets.top : 14,
             },
           ]}
-          onPress={() => navigation.goBack()}>
+          onPress={() => {
+            navigation.goBack();
+          }}>
           <Image
             source={require('../assets/backward.png')}
             style={styles.icon}
