@@ -76,7 +76,9 @@ export default function DetailPhotoScreen({route}) {
               top: Platform.OS === 'ios' ? insets.top : 14,
             },
           ]}
-          onPress={() => navigation.goBack()}>
+          onPress={() => {
+            navigation.goBack();
+          }}>
           <Image
             source={require('../assets/backward.png')}
             style={styles.icon}
