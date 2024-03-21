@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -13,6 +14,7 @@ import colors from '../styles/colors';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ActivityIndicator} from 'react-native';
+import {handleDownload} from '../utils/FileDownloader';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -22,6 +24,7 @@ export default function DetailPhotoScreen({route}) {
   const photoData = route?.params?.data;
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
+  const [downloadUrlLoading, setDownloadUrlLoading] = useState(false);
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -63,6 +66,26 @@ export default function DetailPhotoScreen({route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.downlaodIconConatianer,
+            {
+              top: Platform.OS === 'ios' ? insets.top : 14,
+            },
+          ]}
+          onPress={() =>
+            handleDownload(photoData?.src?.portrait, setDownloadUrlLoading)
+          }>
+          {downloadUrlLoading ? (
+            <ActivityIndicator size={'small'} color={colors.white} />
+          ) : (
+            <Image
+              source={require('../assets/ic_download.png')}
+              style={styles.icon}
+            />
+          )}
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -84,9 +107,9 @@ const styles = StyleSheet.create({
     tintColor: colors.LightWhite,
   },
   iconContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.black,
@@ -101,5 +124,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  downlaodIconConatianer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.black,
+    position: 'absolute',
+    right: 20,
   },
 });

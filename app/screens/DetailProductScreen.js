@@ -103,7 +103,8 @@ export default function DetailProductScreen({route}) {
       for (const res of results) {
         let newUri = res?.uri;
         let type = res?.type;
-        temArr.push({uri: newUri, type: type});
+        // temArr.push({uri: newUri, type: type});
+        temArr.push(newUri);
       }
       if (temArr.length > 0) {
         setAllDocuments(temArr);
