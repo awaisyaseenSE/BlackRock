@@ -224,6 +224,11 @@ export default function RealTimeDatabase() {
                 }}
                 ItemSeparatorComponent={<View style={styles.line} />}
                 showsVerticalScrollIndicator={false}
+                ListEmptyComponent={
+                  <View style={{alignItems: 'center', marginTop: 30}}>
+                    <ActivityIndicator size={40} color={colors.LightWhite} />
+                  </View>
+                }
               />
             )}
           </View>

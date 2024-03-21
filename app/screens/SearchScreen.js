@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,7 +23,6 @@ import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 import ScreenComponent from '../components/ScreenComponent';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
-import LottieView from 'lottie-react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -92,9 +92,21 @@ export default function SearchScreen() {
 
   const renderItem = ({item, index}) => {
     let postURL = `${constants.image_poster_url}${item.backdrop_path}`;
+    let fastImgLoading = true;
     return (
-      <View style={{alignItems: 'center', paddingHorizontal: 4}}>
+      <View
+        style={{
+          alignItems: 'center',
+          paddingHorizontal: 4,
+          width: screenWidth / 2 - 4,
+          // height: 200,
+        }}>
         <TouchableOpacity onPress={() => handleNaviToDetail(item, postURL)}>
+          {fastImgLoading && (
+            <View style={styles.fastImgLoadingStyle}>
+              <ActivityIndicator size={20} color={colors.gray} />
+            </View>
+          )}
           <FastImage
             source={
               postURL?.endsWith('null')
@@ -104,6 +116,8 @@ export default function SearchScreen() {
                 : {uri: postURL}
             }
             style={styles.posterStyle}
+            onLoadStart={() => (fastImgLoading = true)}
+            onLoadEnd={() => (fastImgLoading = false)}
           />
         </TouchableOpacity>
         <Text style={styles.heading} numberOfLines={1}>
@@ -140,6 +154,7 @@ export default function SearchScreen() {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
+                    marginBottom: 14,
                   }}>
                   <TextInputWithLeftIconCompo
                     value={searchText}
@@ -161,29 +176,30 @@ export default function SearchScreen() {
                   />
                   <TouchableOpacity
                     style={{
-                      // height: getResponsiveHeight(6),
-                      alignItems: 'center',
-                      marginLeft: 20,
-                      justifyContent: 'center',
+                      marginLeft: 12,
+                      paddingHorizontal: 8,
+                      paddingVertical: 6,
                     }}
-                    onPress={() => setShowModal(true)}>
-                    <Image
-                      source={require('../assets/menu-burger.png')}
-                      style={styles.menuIcon}
-                    />
+                    onPress={() => {
+                      if (!loading) {
+                        setShowModal(true);
+                      }
+                    }}>
+                    {loading ? (
+                      <ActivityIndicator
+                        animating
+                        size={24}
+                        color={colors.gray}
+                      />
+                    ) : (
+                      <Image
+                        source={require('../assets/menu-burger.png')}
+                        style={styles.menuIcon}
+                      />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
-              {loading && (
-                <View style={{marginBottom: 2, alignItems: 'center'}}>
-                  <LottieView
-                    style={styles.laodingStyle}
-                    source={require('../assets/animation/movie-loading-animation.json')}
-                    loop={true}
-                    autoPlay
-                  />
-                </View>
-              )}
               {searchMovieData.length > 0 && (
                 <View style={{paddingHorizontal: 6}}>
                   <FlatList
@@ -195,27 +211,8 @@ export default function SearchScreen() {
                       <View style={{marginVertical: 10}} />
                     }
                     showsVerticalScrollIndicator={false}
-                    // ListFooterComponent={() => (
-                    //   <View style={{marginVertical: 50}} />
-                    // )}
                     onEndReached={handleEndReached}
                     onEndReachedThreshold={0.5}
-                    ListFooterComponent={() => {
-                      if (endReached) {
-                        return null; // No activity indicator if end is reached
-                      }
-
-                      return loading ? (
-                        <View style={{marginBottom: 50, alignItems: 'center'}}>
-                          <LottieView
-                            style={styles.laodingStyle}
-                            source={require('../assets/animation/movie-loading-animation.json')}
-                            loop={true}
-                            autoPlay
-                          />
-                        </View>
-                      ) : null;
-                    }}
                     onMomentumScrollEnd={() => {
                       if (!endReached) {
                         setEndReached(true);
@@ -224,9 +221,6 @@ export default function SearchScreen() {
                   />
                 </View>
               )}
-              {/* {searchText === '' && (
-                <Text style={{color: colors.white}}>Hello EverOne</Text>
-              )} */}
             </View>
           </TouchableWithoutFeedback>
           {showModal && (
@@ -304,6 +298,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     flex: 1,
     alignItems: 'center',
+    marginBottom: 0,
   },
   posterStyle: {
     width: screenWidth / 2 - 12,
@@ -371,5 +366,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 4,
     marginBottom: 14,
+  },
+  fastImgLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

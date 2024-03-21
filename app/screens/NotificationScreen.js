@@ -20,6 +20,7 @@ import {getResponsiveMargin} from '../utils/getResponsiveMarginPadding';
 import MyIndicator from '../components/MyIndicator';
 import constants from '../constants/constants';
 import FastImage from 'react-native-fast-image';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -103,13 +104,16 @@ export default function NotificationScreen() {
               Pictures fetched from Pexels API
             </Animated.Text>
             <View style={{marginBottom: getResponsiveMargin(6)}} />
-            <FlatList
-              data={photos}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
-              scrollEnabled={false}
-            />
+            <View style={{flex: 1, minHeight: 2}}>
+              <FlashList
+                data={photos}
+                renderItem={renderItem}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                scrollEnabled={false}
+                estimatedItemSize={60}
+              />
+            </View>
           </View>
         </ScrollView>
       </LinearGradient>

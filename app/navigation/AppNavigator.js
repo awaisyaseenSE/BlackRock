@@ -18,6 +18,13 @@ import BottomTabComponent from '../components/BottomTabComponent';
 import BottomTabNavigator from './BottomTabNavigator';
 import MovieCollectionScreen from '../screens/MovieCollectionScreen';
 import ShowMovieCollectionScreen from '../screens/ShowMovieCollectionScreen';
+import TodoScreen from '../screens/Todo/screens/TodoScreen';
+import CreateTodoScreen from '../screens/Todo/screens/CreateTodoScreen';
+import FindMovieByYearScreen from '../screens/FindMovieByYearScreen';
+import UpdateTodoScreen from '../screens/Todo/screens/UpdateTodoScreen';
+import SearchPexelsPhotosScreen from '../screens/SearchPexelsPhotosScreen';
+import DetailPhotoScreen from '../screens/DetailPhotoScreen';
+import FlashListTestingScreen from '../screens/FlashListTestingScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -158,6 +165,55 @@ function AppNavigator() {
       <Stack.Screen
         name="ShowMovieCollectionScreen"
         component={ShowMovieCollectionScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TodoScreen"
+        component={TodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CreateTodoScreen"
+        component={CreateTodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UpdateTodoScreen"
+        component={UpdateTodoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FindMovieByYearScreen"
+        component={FindMovieByYearScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchPexelsPhotosScreen"
+        component={SearchPexelsPhotosScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailPhotoScreen"
+        component={DetailPhotoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FlashListTestingScreen"
+        component={FlashListTestingScreen}
         options={{
           headerShown: false,
         }}

@@ -6,7 +6,6 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  FlatList,
   ScrollView,
   Alert,
   Platform,
@@ -29,6 +28,7 @@ import ButtonComponent from '../components/ButtonComponent';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
+import navigationStrings from '../navigation/navigationStrings';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
   const handleFinishOnBoarding = async () => {
     try {
       console.log('Finish on boarding func is called!');
-      let key = 'onBoarding';
+      let key = 'todoItems';
       await removeItemValue(key);
       // navigation.navigate('MainTabRoutes');
     } catch (error) {
@@ -163,11 +163,18 @@ export default function ProfileScreen() {
                 />
               </TouchableOpacity>
 
-              <Text style={styles.profileTxt}>Profile</Text>
-              <Image
-                source={require('../assets/tab_search.png')}
-                style={styles.icons}
-              />
+              <Text style={styles.profileTxt}>
+                {auth()?.currentUser?.displayName}
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(navigationStrings.SEARCH_SCREEN)
+                }>
+                <Image
+                  source={require('../assets/tab_search.png')}
+                  style={styles.icons}
+                />
+              </TouchableOpacity>
             </View>
           </ImageBackground>
         </View>
@@ -179,7 +186,10 @@ export default function ProfileScreen() {
             style={styles.profileImage}
           />
         </View>
-        <ScrollView
+        <View style={{alignItems: 'center', marginTop: 20}}>
+          <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
+        </View>
+        {/* <ScrollView
           style={styles.imageUploadContainer}
           horizontal
           showsHorizontalScrollIndicator={false}>
@@ -209,12 +219,7 @@ export default function ProfileScreen() {
               style={{marginBottom: 12}}
             />
           )}
-          <ButtonComponent
-            title="Remove Onboading"
-            onPress={handleFinishOnBoarding}
-            style={{backgroundColor: colors.lightBlack}}
-          />
-        </View>
+        </View> */}
       </View>
     </>
   );
@@ -305,5 +310,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     right: 4,
+  },
+  btn: {
+    width: '60%',
+    alignSelf: 'center',
+    marginTop: 20,
+    borderRadius: 8,
   },
 });

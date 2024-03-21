@@ -31,4 +31,11 @@ export default {
   moviesBg: '#212320',
   yellow: '#FEDD00',
   bottomTabBg: '#121212',
+  todoPink: '#D4CCFF',
+  todoBlue: '#2B1887',
+  todoWhite: '#F5F2FF',
+  todoRed: '#E42B5F',
+  todoYellow: '#ECB802',
+  todoGray: '#D9D9D9',
+  todoGreen: '#32B791',
 };

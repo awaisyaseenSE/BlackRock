@@ -17,4 +17,11 @@ export default {
   SEARCH_SCREEN: 'SearchScreen',
   Movie_Collection_Screen: 'MovieCollectionScreen',
   Show_Movie_Collection_Screen: 'ShowMovieCollectionScreen',
+  TODO_SCREEN: 'TodoScreen',
+  CREATE_TODO_SCREEN: 'CreateTodoScreen',
+  UPDATE_TODO_SCREEN: 'UpdateTodoScreen',
+  Find_Movie_by_year_SCREEN: 'FindMovieByYearScreen',
+  SEARCH_PEXELS_SCREEN: 'SearchPexelsPhotosScreen',
+  Detail_Photo_Screen: 'DetailPhotoScreen',
+  FlashList_Testing_Screen: 'FlashListTestingScreen',
 };

@@ -17,6 +17,7 @@ import ShowTvSeriesCompo from '../components/ShowTvSeriesCompo';
 import fontFamily from '../styles/fontFamily';
 import MyIndicator from '../components/MyIndicator';
 import constants from '../constants/constants';
+import {FlashList} from '@shopify/flash-list';
 
 export default function AllCatogoryMovieScreen() {
   const [laoding, setLoading] = useState(false);
@@ -342,46 +343,54 @@ export default function AllCatogoryMovieScreen() {
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
                 ListHeaderComponent={handleFlatlistHeaderCompo}
+                // estimatedItemSize={30}
               />
             </View>
           )}
 
           {movieDataBasedOnGenere.length > 0 && (
-            <FlatList
-              data={movieDataBasedOnGenere}
-              renderItem={({item}) => <ShowTvSeriesCompo data={item} />}
-              showsVerticalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
-              numColumns={2}
-              ItemSeparatorComponent={<View style={{marginVertical: 4}} />}
-              onEndReached={handleEndReached}
-              onEndReachedThreshold={0.5}
-              ListFooterComponent={() => {
-                if (endReached) {
-                  return null; // No activity indicator if end is reached
-                }
+            <View style={{flex: 1}}>
+              <FlashList
+                data={movieDataBasedOnGenere}
+                renderItem={({item}) => <ShowTvSeriesCompo data={item} />}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={2}
+                ItemSeparatorComponent={() => (
+                  <View style={{marginVertical: 4}} />
+                )}
+                onEndReached={handleEndReached}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={() => {
+                  if (endReached) {
+                    return null; // No activity indicator if end is reached
+                  }
 
-                return laoding ? (
-                  <ActivityIndicator size="large" color={colors.blue} />
-                ) : null;
-              }}
-              onMomentumScrollEnd={() => {
-                if (!endReached) {
-                  setEndReached(true);
-                }
-              }}
-            />
+                  return laoding ? (
+                    <ActivityIndicator size="large" color={colors.blue} />
+                  ) : null;
+                }}
+                onMomentumScrollEnd={() => {
+                  if (!endReached) {
+                    setEndReached(true);
+                  }
+                }}
+                estimatedItemSize={200}
+              />
+            </View>
           )}
 
           {isAllSelected && (
             // <Text style={styles.catogryNameText}>All movies</Text>
-            <FlatList
+            <FlashList
               data={allMoviesData}
               renderItem={({item}) => <ShowTvSeriesCompo data={item} />}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
-              ItemSeparatorComponent={<View style={{marginVertical: 4}} />}
+              ItemSeparatorComponent={() => (
+                <View style={{marginVertical: 4}} />
+              )}
               onEndReached={handleEndReachedAllMovies}
               onEndReachedThreshold={0.5}
               ListFooterComponent={() => {
@@ -398,11 +407,12 @@ export default function AllCatogoryMovieScreen() {
                   setAllMovieEndReached(true);
                 }
               }}
+              estimatedItemSize={200}
             />
           )}
         </View>
-        <MyIndicator visible={laoding} />
       </ScreenComponent>
+      <MyIndicator visible={laoding} />
     </>
   );
 }

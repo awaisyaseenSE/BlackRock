@@ -19,6 +19,7 @@ import fontFamily from '../styles/fontFamily';
 import {getApi} from '../helper/APICalls';
 import navigationStrings from '../navigation/navigationStrings';
 import MyIndicator from '../components/MyIndicator';
+import {FlashList} from '@shopify/flash-list';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -94,13 +95,14 @@ export default function ShowMovieCollectionScreen({route}) {
           onPress={() => navigation.goBack()}
         />
         <View style={styles.container}>
-          <FlatList
+          <FlashList
             data={collectionData}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
-            ItemSeparatorComponent={<View style={{marginVertical: 10}} />}
+            ItemSeparatorComponent={() => <View style={{marginVertical: 10}} />}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={60}
           />
         </View>
         <MyIndicator visible={loading} />

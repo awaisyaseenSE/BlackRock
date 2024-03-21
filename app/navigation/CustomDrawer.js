@@ -62,10 +62,45 @@ function CustomDrawer(props) {
         </Text>
         <View style={{flex: 1, marginTop: 18}}>
           <DrawerItemListCompo
+            image={require('../assets/film.png')}
+            title="Movie Collection"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Movie_Collection_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+
+          <DrawerItemListCompo
+            image={require('../assets/find-movie.png')}
+            title="Find Movies by Year"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Find_Movie_by_year_SCREEN)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/checklist.png')}
+            title="Todo Screen"
+            onPress={() => navigation.navigate(navigationStrings.TODO_SCREEN)}
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/favorite.png')}
             title="Real Time Database"
             onPress={() =>
               navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Search Photos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.SEARCH_PEXELS_SCREEN)
             }
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
@@ -78,10 +113,10 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
-            image={require('../assets/film.png')}
-            title="Movie Collection"
+            image={require('../assets/schedule.png')}
+            title="Flah list"
             onPress={() =>
-              navigation.navigate(navigationStrings.Movie_Collection_Screen)
+              navigation.navigate(navigationStrings.FlashList_Testing_Screen)
             }
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}

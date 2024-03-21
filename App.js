@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import {View, LogBox} from 'react-native';
+import {View, LogBox, StatusBar} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import MainNavigator from './app/navigation/MainNavigator';
@@ -7,6 +7,9 @@ import SplashScreen from './app/screens/SplashScreen';
 import {getValue} from './app/helper/storeAndGetAsyncStorageValue';
 import constants from './app/constants/constants';
 import OnboardingScreen from './app/screens/OnboardingScreen';
+import TodoNavigator from './app/screens/Todo/todoNavigation/TodoNavigator';
+import TodoSplashScreen from './app/screens/Todo/screens/TodoSplashScreen';
+import TestingScreen from './app/screens/TestingScreen';
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);
@@ -31,5 +34,6 @@ export default function App() {
   };
 
   return <>{splashDone ? <MainNavigator /> : <SplashScreen />}</>;
-  // return <SplashScreen />;
+  // return <>{splashDone ? <TodoNavigator /> : <TodoSplashScreen />}</>;
+  return <TestingScreen />;
 }

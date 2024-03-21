@@ -25,6 +25,7 @@ import FastImage from 'react-native-fast-image';
 import MyIndicator from '../components/MyIndicator';
 import navigationStrings from '../navigation/navigationStrings';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import {ActivityIndicator} from 'react-native';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -43,6 +44,7 @@ export default function DetailMovieScreen({route}) {
   const [laoding, setLoading] = useState(false);
   const [similarMovies, setSimilarMovies] = useState([]);
   const [youtubeVideoID, setYoutubeVideoID] = useState('');
+  const [youtubeLoading, setYoutubeLoading] = useState(true);
 
   const getSimilarMovies = async () => {
     try {
@@ -182,13 +184,19 @@ export default function DetailMovieScreen({route}) {
               <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
             </View>
             {youtubeVideoID !== '' && (
-              <View style={{alignItems: 'center'}}>
+              <View style={{alignItems: 'center', width: '100%', height: 220}}>
+                {youtubeLoading && (
+                  <View style={styles.youtubeLoadingStyle}>
+                    <ActivityIndicator size={30} color={colors.gray} />
+                  </View>
+                )}
                 <YoutubePlayer
                   height={220}
                   play={false}
                   videoId={youtubeVideoID}
                   width={'90%'}
                   allowWebViewZoom
+                  onReady={() => setYoutubeLoading(false)}
                 />
               </View>
             )}
@@ -308,5 +316,14 @@ const styles = StyleSheet.create({
     width: screenWidth / 3,
     height: screenHeight * 0.2,
     borderRadius: 12,
+  },
+  youtubeLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
