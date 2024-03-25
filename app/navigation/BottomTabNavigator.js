@@ -34,8 +34,7 @@ const BottomTabNavigator = () => {
           height: 80,
           paddingBottom: isIOS ? 14 : 16,
         },
-      }}
-      initialRouteName="ProfileScreen">
+      }}>
       <BottomTab.Screen
         component={HomeScreen}
         name="HomeScreen"
