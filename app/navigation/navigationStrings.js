@@ -24,4 +24,8 @@ export default {
   SEARCH_PEXELS_SCREEN: 'SearchPexelsPhotosScreen',
   Detail_Photo_Screen: 'DetailPhotoScreen',
   FlashList_Testing_Screen: 'FlashListTestingScreen',
+  Search_Pexels_Videos: 'SearchPexelsVideos',
+  Pexels_Videos_Screen: 'PexelsVideosScreen',
+  Show_Video_Screen: 'ShowVideoScreen',
+  Pexel_Collection_Screen: 'PexelCollectionScreen',
 };

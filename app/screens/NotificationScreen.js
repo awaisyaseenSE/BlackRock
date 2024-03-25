@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -61,6 +62,7 @@ export default function NotificationScreen() {
 
   const renderItem = ({item, index}) => {
     const time = Date.now();
+
     return (
       <Animated.View
         entering={FadeInDown.delay(index * 100)
@@ -134,5 +136,14 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenHeight / 4,
     resizeMode: 'contain',
+  },
+  fastImgLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

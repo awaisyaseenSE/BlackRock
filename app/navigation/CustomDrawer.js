@@ -121,6 +121,24 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/music-player.png')}
+            title="Pixels Videos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pexels_Videos_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/music-player.png')}
+            title="Pixels Collection"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pexel_Collection_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

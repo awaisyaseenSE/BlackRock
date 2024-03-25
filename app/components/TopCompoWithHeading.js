@@ -14,6 +14,7 @@ const TopCompoWithHeading = ({
   style,
   titleStyle,
   backIconStyle,
+  rightIconContainerStyle,
 }) => {
   return (
     <View style={{...styles.container, ...style}}>
@@ -33,10 +34,7 @@ const TopCompoWithHeading = ({
       </View>
       {rightIcon !== '' && (
         <TouchableOpacity
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 6,
-          }}
+          style={[styles.rightIconContainer, rightIconContainerStyle]}
           onPress={onPressRight}>
           <Image source={rightIcon} style={[styles.backIcon, rightIconStyle]} />
         </TouchableOpacity>
@@ -79,6 +77,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontFamily.rubik_medium,
     color: colors.blue,
+  },
+  rightIconContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
 });
 

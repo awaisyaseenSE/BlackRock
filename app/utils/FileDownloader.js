@@ -22,8 +22,15 @@ const downloadIosFile = (url, setDownloadUrlLoading) => {
   }
   setDownloadUrlLoading(true);
   const fileName = getFileNameFromUrl(url);
+  let id = Date.now();
+  let finalFileName = '';
+  if (fileName?.includes('.mp4')) {
+    finalFileName = `${id}_${fileName}`;
+  } else {
+    finalFileName = fileName;
+  }
   const selectedFolder = `${RNFS.DocumentDirectoryPath}`;
-  const destinationPath = `${selectedFolder}/${fileName}`;
+  const destinationPath = `${selectedFolder}/${finalFileName}`;
   RNFS.downloadFile({
     fromUrl: url,
     toFile: destinationPath,
