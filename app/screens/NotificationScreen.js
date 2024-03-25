@@ -31,38 +31,88 @@ export default function NotificationScreen() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
+  const [nextPage, setNextPage] = useState('');
+  const perPage = 15;
 
   useEffect(() => {
-    fetchPhotos();
+    fetchPhotos('btnCall', 0);
   }, []);
-  const fetchPhotos = async () => {
+  const fetchPhotos = async (call, retryCount = 0) => {
+    // try {
+    //   setLoading(true);
+    //   const response = await fetch('https://api.pexels.com/v1/curated', {
+    //     headers: {
+    //       Authorization: constants.pexelApiKey,
+    //     },
+    //   });
+    //   if (!response.ok) {
+    //     setLoading(false);
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    //   }
+    //   const data = await response.json();
+    //   setPhotos(data.photos);
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    //   console.error('Error fetching photos:', error);
+    // }
+
+    if (nextPage === null) return; // If there are no more pages, don't fetch
+
+    let url;
+
+    if (call == 'btnCall') {
+      url = `https://api.pexels.com/v1/curated/?per_page=${perPage}`;
+    } else {
+      url =
+        nextPage === ''
+          ? `https://api.pexels.com/v1/curated/?per_page=${perPage}`
+          : nextPage.length > 10
+          ? nextPage
+          : null;
+    }
+
+    if (url === null) {
+      return null;
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: constants.pexelApiKey,
+      },
+    };
+
     try {
       setLoading(true);
-      const response = await fetch('https://api.pexels.com/v1/curated', {
-        headers: {
-          Authorization: constants.pexelApiKey,
-        },
-      });
+      const response = await fetch(url, options);
+
+      if (response.status === 504 && retryCount < MAX_RETRY_COUNT) {
+        const waitTime = retryCount * 1000; // Adjust wait time as needed
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        return fetchPhotos(retryCount + 1);
+      }
+
       if (!response.ok) {
-        setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      setPhotos(data.photos);
+      const result = await response.json();
+      if (!!result) {
+        setPhotos(prevPhotos => [...prevPhotos, ...result.photos]);
+      } else {
+        setPhotos([]);
+      }
+      setNextPage(result.next_page || null);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error('Error fetching photos:', error);
+      console.log('Error fetching photos:', error);
     }
   };
 
-  if (loading) {
-    return <LoadingComponent />;
-  }
-
   const renderItem = ({item, index}) => {
     const time = Date.now();
-
+    let fastImgLoad = true;
     return (
       <Animated.View
         entering={FadeInDown.delay(index * 100)
@@ -76,14 +126,36 @@ export default function NotificationScreen() {
                 data: item,
               })
             }>
+            {fastImgLoad && (
+              <View style={styles.loadingImageStyle}>
+                <ActivityIndicator size={'small'} color={colors.gray} />
+              </View>
+            )}
             <FastImage
               source={{uri: item?.src?.landscape}}
               style={styles.image}
+              onLoadStart={() => (fastImgLoad = true)}
+              onLoadEnd={() => (fastImgLoad = false)}
             />
           </TouchableOpacity>
         </View>
       </Animated.View>
     );
+  };
+
+  const renderFooter = () => {
+    if (!loading) return null;
+    return (
+      <View style={{alignItems: 'center', marginTop: 20}}>
+        <ActivityIndicator animating size="large" color={colors.white} />
+      </View>
+    );
+  };
+
+  const handleEndReached = () => {
+    if (!loading && nextPage !== null && photos.length > 4) {
+      fetchPhotos();
+    }
   };
 
   return (
@@ -101,12 +173,14 @@ export default function NotificationScreen() {
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, index) => index.toString()}
-              estimatedItemSize={60}
+              estimatedItemSize={200}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.1}
             />
           </View>
         </View>
       </View>
-      <MyIndicator visible={loading} />
     </>
   );
 }
@@ -128,6 +202,15 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   fastImgLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingImageStyle: {
     position: 'absolute',
     top: 0,
     left: 0,

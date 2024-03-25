@@ -98,7 +98,7 @@ export default function DetailPhotoScreen({route}) {
             />
           )}
         </TouchableOpacity>
-        {showIosToast && (
+        {showIosToast && imgName && (
           <View
             style={[
               styles.toast,

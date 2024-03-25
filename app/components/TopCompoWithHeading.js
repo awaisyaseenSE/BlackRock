@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
@@ -15,6 +22,7 @@ const TopCompoWithHeading = ({
   titleStyle,
   backIconStyle,
   rightIconContainerStyle,
+  loading = false,
 }) => {
   return (
     <View style={{...styles.container, ...style}}>
@@ -35,8 +43,16 @@ const TopCompoWithHeading = ({
       {rightIcon !== '' && (
         <TouchableOpacity
           style={[styles.rightIconContainer, rightIconContainerStyle]}
-          onPress={onPressRight}>
-          <Image source={rightIcon} style={[styles.backIcon, rightIconStyle]} />
+          onPress={onPressRight}
+          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size={'small'} color={colors.white} />
+          ) : (
+            <Image
+              source={rightIcon}
+              style={[styles.backIcon, rightIconStyle]}
+            />
+          )}
         </TouchableOpacity>
       )}
       {rightTitle !== '' && (

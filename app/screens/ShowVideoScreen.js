@@ -39,6 +39,7 @@ export default function ShowVideoScreen({route}) {
           rightIcon={require('../assets/ic_download.png')}
           rightIconContainerStyle={styles.downlaodContainer}
           onPressRight={() => handleDownload(videoLink, setDownloadUrlLoading)}
+          loading={downloadUrlLoading}
         />
         <View style={styles.container}>
           <Video

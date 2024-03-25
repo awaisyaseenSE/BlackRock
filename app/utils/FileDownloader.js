@@ -57,8 +57,15 @@ const downloadAndriodFile = (url, setDownloadUrlLoading) => {
     setDownloadUrlLoading(true);
     const {config, fs} = RNFetchBlob;
     const fileName = getFileNameFromUrl(url);
-    console.log('filename is: ', fileName);
-    const destPath = RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName;
+    let id = Date.now();
+    let finalFileName = '';
+    if (fileName?.includes('.mp4')) {
+      finalFileName = `Pexels_Video_${id}_${fileName}`;
+    } else {
+      finalFileName = fileName;
+    }
+    console.log('Final file name is: ', finalFileName);
+    const destPath = RNFetchBlob.fs.dirs.DownloadDir + '/' + finalFileName;
     let options = {
       fileCache: true,
       addAndroidDownloads: {
@@ -73,7 +80,12 @@ const downloadAndriodFile = (url, setDownloadUrlLoading) => {
       .then(res => {
         console.log('<<<', res);
         setDownloadUrlLoading(false);
-        Alert.alert('Your file is downloaded!');
+        Alert.alert(
+          `Download Complete! 🎉`,
+          `Your ${
+            finalFileName?.includes('.mp4') ? 'video' : 'photo'
+          } has been downloaded and is ready to view.`,
+        );
       })
       .catch(er => {
         setDownloadUrlLoading(false);
