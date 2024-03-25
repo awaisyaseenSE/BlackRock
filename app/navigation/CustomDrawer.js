@@ -131,7 +131,7 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
-            image={require('../assets/music-player.png')}
+            image={require('../assets/photo-album.png')}
             title="Pixels Collection"
             onPress={() =>
               navigation.navigate(navigationStrings.Pexel_Collection_Screen)
