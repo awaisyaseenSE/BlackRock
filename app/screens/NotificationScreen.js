@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -30,37 +31,88 @@ export default function NotificationScreen() {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(false);
   const insets = useSafeAreaInsets();
+  const [nextPage, setNextPage] = useState('');
+  const perPage = 15;
 
   useEffect(() => {
-    fetchPhotos();
+    fetchPhotos('btnCall', 0);
   }, []);
-  const fetchPhotos = async () => {
+  const fetchPhotos = async (call, retryCount = 0) => {
+    // try {
+    //   setLoading(true);
+    //   const response = await fetch('https://api.pexels.com/v1/curated', {
+    //     headers: {
+    //       Authorization: constants.pexelApiKey,
+    //     },
+    //   });
+    //   if (!response.ok) {
+    //     setLoading(false);
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    //   }
+    //   const data = await response.json();
+    //   setPhotos(data.photos);
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    //   console.error('Error fetching photos:', error);
+    // }
+
+    if (nextPage === null) return; // If there are no more pages, don't fetch
+
+    let url;
+
+    if (call == 'btnCall') {
+      url = `https://api.pexels.com/v1/curated/?per_page=${perPage}`;
+    } else {
+      url =
+        nextPage === ''
+          ? `https://api.pexels.com/v1/curated/?per_page=${perPage}`
+          : nextPage.length > 10
+          ? nextPage
+          : null;
+    }
+
+    if (url === null) {
+      return null;
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: constants.pexelApiKey,
+      },
+    };
+
     try {
       setLoading(true);
-      const response = await fetch('https://api.pexels.com/v1/curated', {
-        headers: {
-          Authorization: constants.pexelApiKey,
-        },
-      });
+      const response = await fetch(url, options);
+
+      if (response.status === 504 && retryCount < MAX_RETRY_COUNT) {
+        const waitTime = retryCount * 1000; // Adjust wait time as needed
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        return fetchPhotos(retryCount + 1);
+      }
+
       if (!response.ok) {
-        setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      setPhotos(data.photos);
+      const result = await response.json();
+      if (!!result) {
+        setPhotos(prevPhotos => [...prevPhotos, ...result.photos]);
+      } else {
+        setPhotos([]);
+      }
+      setNextPage(result.next_page || null);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error('Error fetching photos:', error);
+      console.log('Error fetching photos:', error);
     }
   };
 
-  if (loading) {
-    return <LoadingComponent />;
-  }
-
   const renderItem = ({item, index}) => {
     const time = Date.now();
+    let fastImgLoad = true;
     return (
       <Animated.View
         entering={FadeInDown.delay(index * 100)
@@ -70,13 +122,20 @@ export default function NotificationScreen() {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
+              navigation.navigate(navigationStrings.Detail_Photo_Screen, {
                 data: item,
               })
             }>
+            {fastImgLoad && (
+              <View style={styles.loadingImageStyle}>
+                <ActivityIndicator size={'small'} color={colors.gray} />
+              </View>
+            )}
             <FastImage
               source={{uri: item?.src?.landscape}}
               style={styles.image}
+              onLoadStart={() => (fastImgLoad = true)}
+              onLoadEnd={() => (fastImgLoad = false)}
             />
           </TouchableOpacity>
         </View>
@@ -84,45 +143,52 @@ export default function NotificationScreen() {
     );
   };
 
+  const renderFooter = () => {
+    if (!loading) return null;
+    return (
+      <View style={{alignItems: 'center', marginTop: 20}}>
+        <ActivityIndicator animating size="large" color={colors.white} />
+      </View>
+    );
+  };
+
+  const handleEndReached = () => {
+    if (!loading && nextPage !== null && photos.length > 4) {
+      fetchPhotos();
+    }
+  };
+
   return (
     <>
-      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
-      <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}
-        colors={['#313131', '#262626', '#131313']}
-        style={{flex: 1}}>
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              styles.container,
-              {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
-            ]}>
-            <Animated.Text
-              entering={FadeInLeft.delay(200).duration(500)}
-              style={styles.text}>
-              Pictures fetched from Pexels API
-            </Animated.Text>
-            <View style={{marginBottom: getResponsiveMargin(6)}} />
-            <View style={{flex: 1, minHeight: 2}}>
-              <FlashList
-                data={photos}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                scrollEnabled={false}
-                estimatedItemSize={60}
-              />
-            </View>
+      <View style={{flex: 1, backgroundColor: colors.moviesBg}}>
+        <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+        <View
+          style={[
+            styles.container,
+            {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
+          ]}>
+          <View style={{flex: 1, minHeight: 2}}>
+            <FlashList
+              data={photos}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              estimatedItemSize={200}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.1}
+            />
           </View>
-        </ScrollView>
-      </LinearGradient>
-      <MyIndicator visible={loading} />
+        </View>
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   text: {
     fontSize: 16,
     color: colors.lineColor,
@@ -134,5 +200,23 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenHeight / 4,
     resizeMode: 'contain',
+  },
+  fastImgLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingImageStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

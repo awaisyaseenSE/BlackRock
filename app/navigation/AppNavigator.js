@@ -25,6 +25,10 @@ import UpdateTodoScreen from '../screens/Todo/screens/UpdateTodoScreen';
 import SearchPexelsPhotosScreen from '../screens/SearchPexelsPhotosScreen';
 import DetailPhotoScreen from '../screens/DetailPhotoScreen';
 import FlashListTestingScreen from '../screens/FlashListTestingScreen';
+import SearchPexelsVideos from '../screens/SearchPexelsVideos';
+import PexelsVideosScreen from '../screens/PexelsVideosScreen';
+import ShowVideoScreen from '../screens/ShowVideoScreen';
+import PexelCollectionScreen from '../screens/PexelCollectionScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -205,6 +209,20 @@ function AppNavigator() {
         }}
       />
       <Stack.Screen
+        name="SearchPexelsVideos"
+        component={SearchPexelsVideos}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PexelsVideosScreen"
+        component={PexelsVideosScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="DetailPhotoScreen"
         component={DetailPhotoScreen}
         options={{
@@ -212,8 +230,22 @@ function AppNavigator() {
         }}
       />
       <Stack.Screen
+        name="ShowVideoScreen"
+        component={ShowVideoScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="FlashListTestingScreen"
         component={FlashListTestingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PexelCollectionScreen"
+        component={PexelCollectionScreen}
         options={{
           headerShown: false,
         }}

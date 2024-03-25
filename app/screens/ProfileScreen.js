@@ -29,6 +29,8 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
 import navigationStrings from '../navigation/navigationStrings';
+import constants from '../constants/constants';
+import MyIndicatorLoader from '../components/MyIndicatorLoader';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -221,6 +223,7 @@ export default function ProfileScreen() {
           )}
         </View> */}
       </View>
+      <MyIndicatorLoader visible={loading} />
     </>
   );
 }

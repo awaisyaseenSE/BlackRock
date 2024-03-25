@@ -34,7 +34,8 @@ const BottomTabNavigator = () => {
           height: 80,
           paddingBottom: isIOS ? 14 : 16,
         },
-      }}>
+      }}
+      initialRouteName="ProfileScreen">
       <BottomTab.Screen
         component={HomeScreen}
         name="HomeScreen"
@@ -75,14 +76,16 @@ const BottomTabNavigator = () => {
         component={NotificationScreen}
         name="NotificationScreen"
         options={{
-          tabBarLabel: 'Notification',
+          tabBarLabel: 'Photos',
           tabBarIcon: ({focused}) => {
             return (
               <Image
-                source={require('../assets/bell.png')}
+                source={require('../assets/photos.png')}
                 style={[
                   styles.iconStyle,
-                  {tintColor: focused ? colors.lineColor : colors.gray},
+                  {
+                    opacity: focused ? 0.8 : 0.4,
+                  },
                 ]}
               />
             );

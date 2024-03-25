@@ -1,4 +1,11 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
@@ -14,6 +21,8 @@ const TopCompoWithHeading = ({
   style,
   titleStyle,
   backIconStyle,
+  rightIconContainerStyle,
+  loading = false,
 }) => {
   return (
     <View style={{...styles.container, ...style}}>
@@ -33,12 +42,17 @@ const TopCompoWithHeading = ({
       </View>
       {rightIcon !== '' && (
         <TouchableOpacity
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 6,
-          }}
-          onPress={onPressRight}>
-          <Image source={rightIcon} style={[styles.backIcon, rightIconStyle]} />
+          style={[styles.rightIconContainer, rightIconContainerStyle]}
+          onPress={onPressRight}
+          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size={'small'} color={colors.white} />
+          ) : (
+            <Image
+              source={rightIcon}
+              style={[styles.backIcon, rightIconStyle]}
+            />
+          )}
         </TouchableOpacity>
       )}
       {rightTitle !== '' && (
@@ -79,6 +93,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fontFamily.rubik_medium,
     color: colors.blue,
+  },
+  rightIconContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
 });
 

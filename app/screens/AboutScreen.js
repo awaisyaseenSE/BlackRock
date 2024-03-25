@@ -23,6 +23,7 @@ import LoadingComponent from '../components/LoadingComponent';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import MyIndicator from '../components/MyIndicator';
 import constants from '../constants/constants';
+import MyIndicatorLoader from '../components/MyIndicatorLoader';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -67,9 +68,24 @@ export default function AboutScreen() {
       <View style={{marginVertical: 10}}>
         <FlatList
           data={item?.imagesUrls}
-          renderItem={({item}) => (
-            <FastImage source={{uri: item}} style={styles.image} />
-          )}
+          renderItem={({item}) => {
+            let fastImgLoad = true;
+            return (
+              <View style={{width: 120, height: 120}}>
+                {fastImgLoad && (
+                  <View style={styles.loadingImageStyle}>
+                    <ActivityIndicator size={'small'} color={colors.gray} />
+                  </View>
+                )}
+                <FastImage
+                  source={{uri: item}}
+                  style={styles.image}
+                  onLoadStart={() => (fastImgLoad = true)}
+                  onLoadEnd={() => (fastImgLoad = false)}
+                />
+              </View>
+            );
+          }}
           horizontal
           showsHorizontalScrollIndicator={false}
           ItemSeparatorComponent={<View style={{marginVertical: 10}} />}
@@ -217,7 +233,7 @@ export default function AboutScreen() {
           </View>
         </ScrollView>
       </ScreenComponent>
-      {/* <MyIndicator visible={loading} /> */}
+      <MyIndicatorLoader visible={loading} />
     </>
   );
 }
@@ -247,7 +263,14 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenHeight * 0.25,
     resizeMode: 'contain',
-    // width: 40,
-    // height: 40,
+  },
+  loadingImageStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
