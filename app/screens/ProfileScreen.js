@@ -143,55 +143,6 @@ export default function ProfileScreen() {
     }
   };
 
-  const handleCollectionCall = async () => {
-    // https://api.pexels.com/v1/collections/featured
-    try {
-      setLoading(true);
-      const response = await fetch(
-        'https://api.pexels.com/v1/collections/featured',
-        {
-          headers: {
-            Authorization: constants.pexelApiKey,
-          },
-        },
-      );
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('data of collection: ', data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error fetching photos:', error);
-    }
-  };
-  const handleCollectionDataById = async collectionID => {
-    // https://api.pexels.com/v1/collections/featured
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `https://api.pexels.com/v1/collections/${collectionID}`,
-        {
-          headers: {
-            Authorization: constants.pexelApiKey,
-          },
-        },
-      );
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('data of collection by ID : ', data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error('Error fetching photos:', error);
-    }
-  };
-
   return (
     <>
       <View style={styles.container}>
@@ -240,16 +191,6 @@ export default function ProfileScreen() {
         <View style={{alignItems: 'center', marginTop: 20}}>
           <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
         </View>
-        <ButtonComponent
-          title="get Collection"
-          style={styles.btn}
-          onPress={handleCollectionCall}
-        />
-        <ButtonComponent
-          title="get data by id"
-          style={styles.btn}
-          onPress={() => handleCollectionDataById('ouftwfx')}
-        />
         {/* <ScrollView
           style={styles.imageUploadContainer}
           horizontal

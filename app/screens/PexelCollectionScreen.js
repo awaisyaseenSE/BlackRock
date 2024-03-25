@@ -21,6 +21,7 @@ import navigationStrings from '../navigation/navigationStrings';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
 import fontFamily from '../styles/fontFamily';
 import Video from 'react-native-video';
+import MyIndicatorLoader from '../components/MyIndicatorLoader';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -66,31 +67,88 @@ export default function PexelCollectionScreen() {
     }
   };
 
-  const handleCollectionDataById = async collectionID => {
+  const handleCollectionDataById = async (
+    collectionID,
+    call,
+    retryCount = 0,
+  ) => {
+    // try {
+    //   setLoading(true);
+    //   const response = await fetch(
+    //     `https://api.pexels.com/v1/collections/${collectionID}`,
+    //     {
+    //       headers: {
+    //         Authorization: constants.pexelApiKey,
+    //       },
+    //     },
+    //   );
+    //   if (!response.ok) {
+    //     setLoading(false);
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    //   }
+    //   const data = await response.json();
+    //   if (data?.media) {
+    //     setCollectionData(data?.media);
+    //   } else {
+    //     setCollectionData([]);
+    //   }
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    //   console.error('Error fetching Collection Data by ID :', error);
+    // }
+
+    if (nextPage === null) return; // If there are no more pages, don't fetch
+
+    let url;
+
+    if (call == 'btnCall') {
+      url = `https://api.pexels.com/v1/collections/${collectionID}?per_page=${perPage}`;
+    } else {
+      url =
+        nextPage === ''
+          ? `https://api.pexels.com/v1/collections/${collectionID}?per_page=${perPage}`
+          : nextPage.length > 10
+          ? nextPage
+          : null;
+    }
+
+    if (url === null) {
+      return null;
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: constants.pexelApiKey,
+      },
+    };
+
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://api.pexels.com/v1/collections/${collectionID}`,
-        {
-          headers: {
-            Authorization: constants.pexelApiKey,
-          },
-        },
-      );
+      const response = await fetch(url, options);
+
+      if (response.status === 504 && retryCount < MAX_RETRY_COUNT) {
+        const waitTime = retryCount * 1000; // Adjust wait time as needed
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        return handleCollectionDataById(collectionID, retryCount + 1);
+      }
+
       if (!response.ok) {
         setLoading(false);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      const data = await response.json();
-      if (data?.media) {
-        setCollectionData(data?.media);
+      const result = await response.json();
+      if (result?.media) {
+        setCollectionData(preData => [...preData, ...result?.media]);
       } else {
         setCollectionData([]);
       }
+      setNextPage(result.next_page || null);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error('Error fetching Collection Data by ID :', error);
+      console.log(error);
     }
   };
 
@@ -99,8 +157,9 @@ export default function PexelCollectionScreen() {
       <TouchableOpacity
         style={styles.collectionNameContainer}
         onPress={() => {
+          setCollectionData([]);
           setSelectedId(item?.id);
-          handleCollectionDataById(item?.id);
+          handleCollectionDataById(item?.id, 'btnCall', 0);
         }}>
         <Text
           style={[
@@ -163,6 +222,21 @@ export default function PexelCollectionScreen() {
     );
   };
 
+  const handleEndReached = () => {
+    if (nextPage !== null && collectionData.length > 4) {
+      handleCollectionDataById(selectedId);
+    }
+  };
+
+  const renderFooter = () => {
+    if (!loading) return null;
+    return (
+      <View style={{alignItems: 'center', marginTop: 20}}>
+        <ActivityIndicator animating size="large" color={colors.white} />
+      </View>
+    );
+  };
+
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
@@ -197,10 +271,14 @@ export default function PexelCollectionScreen() {
               )}
               // ListHeaderComponent={renderHeader}
               estimatedItemSize={200}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={renderFooter}
             />
           </View>
         </View>
       </ScreenComponent>
+      {/* <MyIndicatorLoader visible={loading} /> */}
     </>
   );
 }
