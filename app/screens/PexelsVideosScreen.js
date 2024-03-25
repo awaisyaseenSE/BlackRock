@@ -103,11 +103,13 @@ export default function PexelsVideosScreen() {
           onLoadEnd={() => (fastImgLoad = false)}
         />
         {!loading && (
-          <View style={styles.loadingImageStyle} onPress={() => {}}>
-            <Image
-              source={require('../assets/music-player.png')}
-              style={styles.downloadIcon}
-            />
+          <View style={styles.loadingImageStyle}>
+            <View style={styles.videoPlayerIconConatainer}>
+              <Image
+                source={require('../assets/music-player.png')}
+                style={styles.downloadIcon}
+              />
+            </View>
           </View>
         )}
       </TouchableOpacity>
@@ -254,5 +256,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 20,
     marginBottom: 16,
+  },
+  videoPlayerIconConatainer: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

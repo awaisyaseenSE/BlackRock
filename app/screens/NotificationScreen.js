@@ -72,7 +72,7 @@ export default function NotificationScreen() {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate(navigationStrings.DETAIL_PRODUCT_ROUTES, {
+              navigation.navigate(navigationStrings.Detail_Photo_Screen, {
                 data: item,
               })
             }>
@@ -88,43 +88,33 @@ export default function NotificationScreen() {
 
   return (
     <>
-      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
-      <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 1}}
-        colors={['#313131', '#262626', '#131313']}
-        style={{flex: 1}}>
-        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              styles.container,
-              {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
-            ]}>
-            <Animated.Text
-              entering={FadeInLeft.delay(200).duration(500)}
-              style={styles.text}>
-              Pictures fetched from Pexels API
-            </Animated.Text>
-            <View style={{marginBottom: getResponsiveMargin(6)}} />
-            <View style={{flex: 1, minHeight: 2}}>
-              <FlashList
-                data={photos}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                scrollEnabled={false}
-                estimatedItemSize={60}
-              />
-            </View>
+      <View style={{flex: 1, backgroundColor: colors.moviesBg}}>
+        <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+        <View
+          style={[
+            styles.container,
+            {paddingTop: Platform.OS === 'ios' ? insets.top - 6 : 0},
+          ]}>
+          <View style={{flex: 1, minHeight: 2}}>
+            <FlashList
+              data={photos}
+              renderItem={renderItem}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              estimatedItemSize={60}
+            />
           </View>
-        </ScrollView>
-      </LinearGradient>
+        </View>
+      </View>
       <MyIndicator visible={loading} />
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   text: {
     fontSize: 16,
     color: colors.lineColor,

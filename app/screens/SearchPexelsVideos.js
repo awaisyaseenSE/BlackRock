@@ -139,11 +139,13 @@ export default function SearchPexelsVideos() {
           onLoadEnd={() => (fastImgLoad = false)}
         />
         {!loading && (
-          <View style={styles.loadingImageStyle} onPress={() => {}}>
-            <Image
-              source={require('../assets/music-player.png')}
-              style={styles.downloadIcon}
-            />
+          <View style={styles.loadingImageStyle}>
+            <View style={styles.videoPlayerIconConatainer}>
+              <Image
+                source={require('../assets/music-player.png')}
+                style={styles.downloadIcon}
+              />
+            </View>
           </View>
         )}
       </TouchableOpacity>
@@ -285,5 +287,13 @@ const styles = StyleSheet.create({
     color: colors.gray,
     fontFamily: '500',
     marginLeft: 12,
+  },
+  videoPlayerIconConatainer: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
