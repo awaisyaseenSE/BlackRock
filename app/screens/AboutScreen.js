@@ -1,28 +1,19 @@
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   ScrollView,
   ActivityIndicator,
   Dimensions,
+  StatusBar,
 } from 'react-native';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../styles/colors';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
-import ButtonComponent from '../components/ButtonComponent';
-import navigationStrings from '../navigation/navigationStrings';
-import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
-import LoadingComponent from '../components/LoadingComponent';
-import YoutubePlayer from 'react-native-youtube-iframe';
-import MyIndicator from '../components/MyIndicator';
-import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 
 const screenWidth = Dimensions.get('window').width;
@@ -95,125 +86,9 @@ export default function AboutScreen() {
     );
   };
 
-  const getMovie = async () => {
-    // const url =
-    //   'https://moviesminidatabase.p.rapidapi.com/movie/byContentRating/4.3/';
-    // const options = {
-    //   method: 'GET',
-    //   headers: {
-    //     'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-    //     'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
-    //   },
-    // };
-
-    // try {
-    //   const response = await fetch(url, options);
-    //   const result = await response.text();
-    //   console.log(result);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-    // const url =
-    //   'https://moviesminidatabase.p.rapidapi.com/series/byKeywords/game/';
-    // const options = {
-    //   method: 'GET',
-    //   headers: {
-    //     'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-    //     'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
-    //   },
-    // };
-
-    // try {
-    //   const response = await fetch(url, options);
-    //   const result = await response.json();
-    //   console.log(result?.results);
-    //   console.log(result?.results?.length);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-    // const url =
-    //   'https://moviesminidatabase.p.rapidapi.com/series/order/byPopularity/';
-    // const options = {
-    //   method: 'GET',
-    //   headers: {
-    //     'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-    //     'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com',
-    //   },
-    // };
-
-    // try {
-    //   const response = await fetch(url, options);
-    //   const result = await response.json();
-    //   console.log(result?.results);
-    //   console.log(result?.results?.length);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-    // const url = 'https://ronreiter-meme-generator.p.rapidapi.com/images';
-    // const options = {
-    //   method: 'GET',
-    //   headers: {
-    //     'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-    //     'X-RapidAPI-Host': 'ronreiter-meme-generator.p.rapidapi.com',
-    //   },
-    // };
-
-    // try {
-    //   const response = await fetch(url, options);
-    //   const result = await response.text();
-    //   console.log(result);
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
-    const url =
-      nextPage == ''
-        ? 'https://pexelsdimasv1.p.rapidapi.com/v1/search?query=men&locale=en-US&per_page=15&page=1'
-        : nextPage.length > 10
-        ? nextPage
-        : null;
-    if (url == null) {
-      console.log('url is null ', url);
-      return null;
-    }
-    const options = {
-      method: 'GET',
-      headers: {
-        Authorization: constants.pexelApiKey,
-        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
-        'X-RapidAPI-Host': 'PexelsdimasV1.p.rapidapi.com',
-      },
-    };
-
-    try {
-      setLoading(true);
-      console.log('URL is: ', url);
-      const response = await fetch(url, options);
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const result = await response.json();
-      if (!!result) {
-        setPhotos(prevPhotos => [...prevPhotos, ...result.photos]);
-      }
-      if (!!result.next_page) {
-        setNextPage(result?.next_page);
-        console.log('next page link', result?.next_page);
-      }
-      console.log(result?.photos?.length);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error(error);
-    }
-  };
-
   return (
     <>
+      <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <TopCompoWithHeading
           title="About"
@@ -233,6 +108,20 @@ export default function AboutScreen() {
           </View>
         </ScrollView>
       </ScreenComponent>
+      {/* <ImageBackground
+          source={{
+            uri: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+          }}
+          style={{flex: 1, width: null, height: null}}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={{fontSize: 16, color: colors.blue}}>Your Contents</Text>
+          </View>
+        </ImageBackground> */}
       <MyIndicatorLoader visible={loading} />
     </>
   );
@@ -241,7 +130,6 @@ export default function AboutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: 10,
   },
   text: {
     fontSize: 20,
@@ -272,5 +160,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  topCompo: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
   },
 });
