@@ -268,7 +268,10 @@ export default function PhotoEditingScreen() {
               styles.textStyle1,
               {
                 color:
-                  item.filter == selectedFilter ? colors.white : colors.gray,
+                  item.filter == selectedFilter ||
+                  (item.title == 'Original' && selectedFilter == null)
+                    ? colors.white
+                    : colors.gray,
               },
             ]}
             numberOfLines={1}>
@@ -370,7 +373,7 @@ export default function PhotoEditingScreen() {
   return (
     <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
       <TopCompoWithHeading
-        title="Photo Editing"
+        title="Edit your Photo"
         onPress={() => navigation.goBack()}
         rightTitle={selectedPhoto !== '' ? 'Save' : ''}
         onPressRightTitle={() => {

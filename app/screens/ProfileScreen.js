@@ -239,7 +239,7 @@ export default function ProfileScreen() {
           )}
         </View> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             paddingHorizontal: 20,
             paddingVertical: 12,
@@ -253,7 +253,7 @@ export default function ProfileScreen() {
           <Text style={{fontSize: 14, color: colors.white}}>
             generate Color
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity

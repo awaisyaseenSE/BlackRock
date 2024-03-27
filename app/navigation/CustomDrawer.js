@@ -140,8 +140,8 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
-            image={require('../assets/photo-album.png')}
-            title="Photo Editing Screen"
+            image={require('../assets/edit-photo.png')}
+            title="Edit Photo"
             onPress={() =>
               navigation.navigate(navigationStrings.Photo_Editing_Screen)
             }
