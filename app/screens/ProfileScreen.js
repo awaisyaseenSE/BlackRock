@@ -145,6 +145,15 @@ export default function ProfileScreen() {
     }
   };
 
+  const [color, setColor] = useState('#072e70');
+  const generateColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, '0');
+    setColor(`#${randomColor}`);
+    // return `#${randomColor}`;
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -197,6 +206,7 @@ export default function ProfileScreen() {
         <View style={{alignItems: 'center', marginTop: 20}}>
           <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
         </View>
+
         {/* <ScrollView
           style={styles.imageUploadContainer}
           horizontal
@@ -228,6 +238,23 @@ export default function ProfileScreen() {
             />
           )}
         </View> */}
+
+        <TouchableOpacity
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 12,
+            backgroundColor: color,
+            alignSelf: 'center',
+            marginTop: 30,
+            borderRadius: 8,
+          }}
+          activeOpacity={0.8}
+          onPress={generateColor}>
+          <Text style={{fontSize: 14, color: colors.white}}>
+            generate Color
+          </Text>
+        </TouchableOpacity>
+
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
             activeOpacity={1}
@@ -238,6 +265,7 @@ export default function ProfileScreen() {
             }}
             onPress={() => setShowImageModal(false)}>
             <TouchableOpacity activeOpacity={1} style={styles.modalStyle}>
+              {/* <Sepia> */}
               <FastImage
                 source={
                   !!userImage ? {uri: userImage} : require('../assets/men.jpg')
@@ -245,6 +273,7 @@ export default function ProfileScreen() {
                 style={styles.modalImageStyle}
                 resizeMode="contain"
               />
+              {/* </Sepia> */}
             </TouchableOpacity>
           </TouchableOpacity>
         </Modal>
@@ -348,10 +377,10 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     width: screenWidth,
-    height: screenHeight / 2,
+    // height: screenHeight / 2,
   },
   modalImageStyle: {
     width: '100%',
-    height: '100%',
+    height: screenHeight * 0.26,
   },
 });

@@ -15,6 +15,7 @@ import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
+import {Vintage} from 'react-native-color-matrix-image-filters';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -68,12 +69,14 @@ export default function AboutScreen() {
                     <ActivityIndicator size={'small'} color={colors.gray} />
                   </View>
                 )}
+                {/* <Vintage> */}
                 <FastImage
                   source={{uri: item}}
                   style={styles.image}
                   onLoadStart={() => (fastImgLoad = true)}
                   onLoadEnd={() => (fastImgLoad = false)}
                 />
+                {/* </Vintage> */}
               </View>
             );
           }}

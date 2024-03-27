@@ -194,6 +194,7 @@ export default function SearchPexelsVideos() {
             }}
             placeholder="Search Photos..."
             placeholderTextColor="gray"
+            autoFocus={true}
           />
           <View style={styles.checkIconMainContainer}>
             <TouchableOpacity

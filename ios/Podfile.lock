@@ -1149,6 +1149,8 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
+  - react-native-color-matrix-image-filters (6.0.7):
+    - React-Core
   - react-native-date-picker (4.3.6):
     - React-Core
   - react-native-document-picker (9.1.0):
@@ -1366,6 +1368,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-color-matrix-image-filters (from `../node_modules/react-native-color-matrix-image-filters`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
@@ -1490,6 +1493,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-color-matrix-image-filters:
+    :path: "../node_modules/react-native-color-matrix-image-filters"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
   react-native-document-picker:
@@ -1624,6 +1629,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
+  react-native-color-matrix-image-filters: d10824dc8db18e57cafe7d99b8d8aa46414eaf52
   react-native-date-picker: c28ccf1b3bc3de3bc6a785792a393fee49677f89
   react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
   react-native-image-picker: be000cd54f1b1bd71dba9677b36847827f9cc012
