@@ -12,19 +12,11 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {pickImage} from '../helper/mediaPicker';
 import {useNavigation} from '@react-navigation/native';
-// import {
-//   ColorMatrix,
-//   concatColorMatrices,
-//   tint,
-//   vintage,
-//   Sepia,
-//   Vintage,
-// } from 'react-native-color-matrix-image-filters';
 import {
   ColorMatrix,
   concatColorMatrices,
@@ -49,6 +41,7 @@ import {
 import ScreenComponent from '../components/ScreenComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import ButtonComponent from '../components/ButtonComponent';
+import Slider from '@react-native-community/slider';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -61,6 +54,9 @@ export default function PhotoEditingScreen() {
   const [brightnessValue, setBrightnessValue] = useState(null);
   const [contrastValue, setContrastValue] = useState(null);
   const [temperatureValue, setTemperatureValue] = useState(null);
+  const [touchStartBrightness, setTouchStartBrightness] = useState(false);
+  const [touchStartContrast, setTouchStartContrast] = useState(false);
+  const [touchStartTemp, setTouchStartTemp] = useState(false);
 
   const editingData = [
     {
@@ -239,31 +235,96 @@ export default function PhotoEditingScreen() {
             </View>
           </TouchableOpacity>
         )}
-        <View style={{flex: 1, marginTop: 12}}>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <ButtonComponent
-              title="Brightness"
-              style={{...styles.btn, ...{backgroundColor: colors.blue2}}}
-              onPress={() => {
-                setBrightnessValue(1.2);
-              }}
-            />
-            <ButtonComponent
-              title="Contrast"
-              style={styles.btn}
-              onPress={() => {
-                setContrastValue(1.2);
-              }}
-            />
-            <ButtonComponent
-              title="Temperatur"
-              style={{...styles.btn, ...{backgroundColor: colors.lightBlack}}}
-              onPress={() => {
-                setTemperatureValue(0.4);
-              }}
-            />
+        {selectedPhoto !== '' && (
+          <View style={{flex: 1, marginTop: 12}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.editProTxt}>Brightness</Text>
+              <Slider
+                style={{flex: 1, marginLeft: 12}}
+                minimumValue={0}
+                maximumValue={2}
+                step={0.1}
+                onValueChange={value => {
+                  if (value == 0) {
+                    handleBrightnessChange(null);
+                  } else {
+                    handleBrightnessChange(value);
+                  }
+                }}
+                value={brightnessValue}
+                thumbTintColor={
+                  touchStartBrightness ? colors.yellow : colors.grey
+                }
+                minimumTrackTintColor={colors.yellow}
+                onTouchStart={() => setTouchStartBrightness(true)}
+                onTouchEnd={() => setTouchStartBrightness(false)}
+              />
+              <Text style={styles.txt}>
+                {' '}
+                {brightnessValue !== null
+                  ? Math.floor(brightnessValue * 10)
+                  : 0}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.editProTxt}>Contrast</Text>
+              <Slider
+                style={{flex: 1, marginLeft: 12}}
+                minimumValue={0}
+                maximumValue={2}
+                step={0.1}
+                onValueChange={value => {
+                  if (value == 0) {
+                    handleContrastChange(null);
+                  } else {
+                    handleContrastChange(value);
+                  }
+                }}
+                value={contrastValue}
+                thumbTintColor={
+                  touchStartContrast ? colors.yellow : colors.grey
+                }
+                minimumTrackTintColor={colors.yellow}
+                onTouchStart={() => setTouchStartContrast(true)}
+                onTouchEnd={() => setTouchStartContrast(false)}
+              />
+              <Text style={styles.txt}>
+                {' '}
+                {contrastValue !== null ? Math.floor(contrastValue * 10) : 0}
+              </Text>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={styles.editProTxt}>Temperature</Text>
+              <Slider
+                style={{
+                  flex: 1,
+                  marginLeft: 12,
+                }}
+                minimumValue={0}
+                maximumValue={2}
+                step={0.1}
+                onValueChange={value => {
+                  if (value == 0) {
+                    handleTemperatureChange(null);
+                  } else {
+                    handleTemperatureChange(value);
+                  }
+                }}
+                value={temperatureValue}
+                thumbTintColor={touchStartTemp ? colors.yellow : colors.grey}
+                minimumTrackTintColor={colors.yellow}
+                onTouchStart={() => setTouchStartTemp(true)}
+                onTouchEnd={() => setTouchStartTemp(false)}
+              />
+              <Text style={styles.txt}>
+                {' '}
+                {temperatureValue !== null
+                  ? Math.floor(temperatureValue * 10)
+                  : 0}
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
         {selectedPhoto !== '' && (
           <View
             style={{
@@ -351,5 +412,16 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginLeft: 8,
     marginBottom: 8,
+  },
+  editProTxt: {
+    fontSize: 14,
+    fontFamily: fontFamily.rubik_regular,
+    color: colors.white,
+    width: '24%',
+  },
+  txt: {
+    fontSize: 14,
+    fontFamily: fontFamily.rubik_regular,
+    color: colors.white,
   },
 });
