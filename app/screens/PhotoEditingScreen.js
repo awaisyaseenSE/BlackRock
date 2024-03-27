@@ -11,8 +11,9 @@ import {
   Platform,
   Modal,
   FlatList,
+  PermissionsAndroid,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {pickImage} from '../helper/mediaPicker';
@@ -42,6 +43,9 @@ import ScreenComponent from '../components/ScreenComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import ButtonComponent from '../components/ButtonComponent';
 import Slider from '@react-native-community/slider';
+import ViewShot, {captureScreen, captureRef} from 'react-native-view-shot';
+import RNFetchBlob from 'rn-fetch-blob';
+import RNFS from 'react-native-fs';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -57,6 +61,8 @@ export default function PhotoEditingScreen() {
   const [touchStartBrightness, setTouchStartBrightness] = useState(false);
   const [touchStartContrast, setTouchStartContrast] = useState(false);
   const [touchStartTemp, setTouchStartTemp] = useState(false);
+
+  const screenShotRef = useRef(null);
 
   const editingData = [
     {
@@ -193,24 +199,118 @@ export default function PhotoEditingScreen() {
     );
   };
 
+  const handleSaveEditedPhoto = () => {
+    // screenShotRef.current.capture().then(uri => {
+    //   console.log('do something with ', uri);
+    // });
+    let id = Date.now();
+    let myfileName = `Edited_Photo_`;
+    captureRef(screenShotRef, {
+      format: 'jpg',
+      quality: 1.0,
+      fileName: myfileName,
+    }).then(
+      // uri => console.log('Image can be accessed at: ', uri),
+      uri => moveImageToDownloads(uri),
+      error => console.log('Snapshot failed', error),
+    );
+  };
+  let id = Date.now();
+  let fileName = `${id}_editedPhoto`;
+
+  const moveImageToDownloads = async sourceUri => {
+    console.log('URI is: ', sourceUri);
+    let myid = Date.now();
+    let fileName = `EditedPhoto_${myid}.jpg`;
+    try {
+      if (Platform.OS === 'android') {
+        let res = await requestStoragePermission();
+        if (!res) {
+          return null;
+        }
+      }
+
+      // Check if the source file exists
+      const sourceExists = await RNFS.exists(sourceUri);
+      if (!sourceExists) {
+        console.log('Source file does not exist');
+        return null;
+      }
+
+      // Get the destination directory based on the platform
+      const destinationDir = Platform.select({
+        ios: RNFS.DocumentDirectoryPath,
+        android: RNFS.DownloadDirectoryPath,
+      });
+
+      // Check if the destination directory exists, if not create it
+      const destinationExists = await RNFS.exists(destinationDir);
+      if (!destinationExists) {
+        await RNFS.mkdir(destinationDir);
+      }
+
+      // Move the image to the destination directory
+      const destinationPath = `${destinationDir}/${fileName}`;
+      await RNFS.moveFile(sourceUri, destinationPath);
+
+      // Show success message
+      console.log('Image moved successfully to:', destinationPath);
+      Alert.alert(
+        'Photo Saved!',
+        'Your edited photo is saved in download folder of your phone.',
+      );
+    } catch (error) {
+      console.error('Error moving image:', error);
+    }
+  };
+
+  const requestStoragePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission',
+          message: 'App needs access to your storage to save images.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Storage permission granted');
+        return true;
+      } else {
+        console.log('Storage permission denied');
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   return (
     <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
       <TopCompoWithHeading
         title="Photo Editing"
         onPress={() => navigation.goBack()}
+        rightTitle="Save"
+        onPressRightTitle={() => handleSaveEditedPhoto()}
       />
       <View style={styles.container}>
         {selectedPhoto !== '' ? (
           <View>
-            <View>
-              <ColorMatrix matrix={applyFilters()}>
-                {/* <ColorMatrix matrix={selectedFilter || normal()}> */}
-                <Image
-                  source={{uri: selectedPhoto}}
-                  style={styles.selectedPhotoSty}
-                />
-              </ColorMatrix>
-            </View>
+            <ViewShot ref={screenShotRef}>
+              <View>
+                <ColorMatrix matrix={applyFilters()}>
+                  {/* <ColorMatrix matrix={selectedFilter || normal()}> */}
+                  <Image
+                    source={{uri: selectedPhoto}}
+                    style={styles.selectedPhotoSty}
+                  />
+                </ColorMatrix>
+              </View>
+            </ViewShot>
             <TouchableOpacity
               activeOpacity={0.6}
               style={styles.crossContainer}
