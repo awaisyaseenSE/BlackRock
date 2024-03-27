@@ -29,6 +29,7 @@ import SearchPexelsVideos from '../screens/SearchPexelsVideos';
 import PexelsVideosScreen from '../screens/PexelsVideosScreen';
 import ShowVideoScreen from '../screens/ShowVideoScreen';
 import PexelCollectionScreen from '../screens/PexelCollectionScreen';
+import PhotoEditingScreen from '../screens/PhotoEditingScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -246,6 +247,13 @@ function AppNavigator() {
       <Stack.Screen
         name="PexelCollectionScreen"
         component={PexelCollectionScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PhotoEditingScreen"
+        component={PhotoEditingScreen}
         options={{
           headerShown: false,
         }}

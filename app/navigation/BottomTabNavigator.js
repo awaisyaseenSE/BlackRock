@@ -113,6 +113,7 @@ const BottomTabNavigator = () => {
                         {tintColor: focused ? colors.lineColor : colors.gray},
                       ]
                 }
+                defaultSource={require('../assets/avatar.png')}
               />
             );
           },

@@ -139,6 +139,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/photo-album.png')}
+            title="Photo Editing Screen"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Photo_Editing_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

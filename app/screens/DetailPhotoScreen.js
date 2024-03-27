@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Animated,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef, createRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import colors from '../styles/colors';
 import FastImage from 'react-native-fast-image';
@@ -15,6 +16,12 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ActivityIndicator} from 'react-native';
 import {handleDownload} from '../utils/FileDownloader';
 import fontFamily from '../styles/fontFamily';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  PinchGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -27,6 +34,62 @@ export default function DetailPhotoScreen({route}) {
   const [downloadUrlLoading, setDownloadUrlLoading] = useState(false);
   const [imgName, setImgName] = useState(photoData?.alt || '');
   const [showIosToast, setShowIosToast] = useState(true);
+
+  const [panEnabled, setPanEnabled] = useState(false);
+  const scale = useRef(new Animated.Value(1)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(0)).current;
+
+  const pinchRef = createRef();
+  const panRef = createRef();
+
+  const onPinchEvent = Animated.event(
+    [
+      {
+        nativeEvent: {scale},
+      },
+    ],
+    {useNativeDriver: true},
+  );
+
+  const onPanEvent = Animated.event(
+    [
+      {
+        nativeEvent: {
+          translationX: translateX,
+          translationY: translateY,
+        },
+      },
+    ],
+    {useNativeDriver: true},
+  );
+
+  const handlePinchStateChange = ({nativeEvent}) => {
+    // enabled pan only after pinch-zoom
+    if (nativeEvent.state === State.ACTIVE) {
+      setPanEnabled(true);
+    }
+    // when scale < 1, reset scale back to original (1)
+    const nScale = nativeEvent.scale;
+    if (nativeEvent.state === State.END) {
+      if (nScale < 1) {
+        Animated.spring(scale, {
+          toValue: 1,
+          useNativeDriver: true,
+        }).start();
+        Animated.spring(translateX, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+
+        setPanEnabled(false);
+      }
+    }
+  };
 
   const handleLoadStart = () => {
     setIsLoading(true);
@@ -46,68 +109,102 @@ export default function DetailPhotoScreen({route}) {
 
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          {backgroundColor: photoData?.avg_color || colors.moviesBg},
-        ]}>
-        {isLoading && (
-          <View style={styles.placeholder}>
-            <ActivityIndicator size="large" color={colors.black} />
-          </View>
-        )}
-        <FastImage
+      <GestureHandlerRootView style={{flex: 1}}>
+        <View
+          style={[
+            styles.container,
+            {backgroundColor: photoData?.avg_color || colors.moviesBg},
+          ]}>
+          <PanGestureHandler
+            onGestureEvent={onPanEvent}
+            ref={panRef}
+            simultaneousHandlers={[pinchRef]}
+            enabled={panEnabled}
+            failOffsetX={[-1000, 1000]}
+            shouldCancelWhenOutside>
+            <Animated.View>
+              <PinchGestureHandler
+                ref={pinchRef}
+                onGestureEvent={onPinchEvent}
+                simultaneousHandlers={[panRef]}
+                onHandlerStateChange={handlePinchStateChange}>
+                <Animated.Image
+                  source={{
+                    uri:
+                      photoData?.src?.portrait ||
+                      'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    transform: [{scale}, {translateX}, {translateY}],
+                  }}
+                  resizeMode="contain"
+                  onLoadStart={handleLoadStart}
+                  onLoadEnd={handleLoadEnd}
+                />
+              </PinchGestureHandler>
+            </Animated.View>
+          </PanGestureHandler>
+          {/* <FastImage
           source={{uri: photoData?.src?.portrait}}
           style={styles.imageStyle}
           resizeMode="contain"
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
-        />
-        <TouchableOpacity
-          style={[
-            styles.iconContainer,
-            {
-              top: Platform.OS === 'ios' ? insets.top : 14,
-            },
-          ]}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Image
-            source={require('../assets/backward.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
+        /> */}
+          {isLoading && (
+            <View style={styles.placeholder}>
+              <ActivityIndicator size="large" color={colors.black} />
+            </View>
+          )}
 
-        <TouchableOpacity
-          style={[
-            styles.downlaodIconConatianer,
-            {
-              top: Platform.OS === 'ios' ? insets.top : 14,
-            },
-          ]}
-          onPress={() =>
-            handleDownload(photoData?.src?.portrait, setDownloadUrlLoading)
-          }>
-          {downloadUrlLoading ? (
-            <ActivityIndicator size={'small'} color={colors.white} />
-          ) : (
+          <TouchableOpacity
+            style={[
+              styles.iconContainer,
+              {
+                top: Platform.OS === 'ios' ? insets.top : 14,
+              },
+            ]}
+            onPress={() => {
+              navigation.goBack();
+            }}>
             <Image
-              source={require('../assets/ic_download.png')}
+              source={require('../assets/backward.png')}
               style={styles.icon}
             />
-          )}
-        </TouchableOpacity>
-        {showIosToast && imgName && (
-          <View
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[
-              styles.toast,
-              {bottom: Platform.OS === 'ios' ? insets.bottom : 30},
-            ]}>
-            <Text style={styles.toastTxt}>{imgName}</Text>
-          </View>
-        )}
-      </View>
+              styles.downlaodIconConatianer,
+              {
+                top: Platform.OS === 'ios' ? insets.top : 14,
+              },
+            ]}
+            onPress={() =>
+              handleDownload(photoData?.src?.portrait, setDownloadUrlLoading)
+            }>
+            {downloadUrlLoading ? (
+              <ActivityIndicator size={'small'} color={colors.white} />
+            ) : (
+              <Image
+                source={require('../assets/ic_download.png')}
+                style={styles.icon}
+              />
+            )}
+          </TouchableOpacity>
+          {showIosToast && imgName && (
+            <View
+              style={[
+                styles.toast,
+                {bottom: Platform.OS === 'ios' ? insets.bottom : 30},
+              ]}>
+              <Text style={styles.toastTxt}>{imgName}</Text>
+            </View>
+          )}
+        </View>
+      </GestureHandlerRootView>
     </>
   );
 }

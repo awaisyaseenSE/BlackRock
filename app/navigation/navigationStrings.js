@@ -28,4 +28,5 @@ export default {
   Pexels_Videos_Screen: 'PexelsVideosScreen',
   Show_Video_Screen: 'ShowVideoScreen',
   Pexel_Collection_Screen: 'PexelCollectionScreen',
+  Photo_Editing_Screen: 'PhotoEditingScreen',
 };

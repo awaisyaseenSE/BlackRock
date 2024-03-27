@@ -38,4 +38,6 @@ export default {
   todoYellow: '#ECB802',
   todoGray: '#D9D9D9',
   todoGreen: '#32B791',
+  uploadModalBg: 'rgba(0,0,0,0.2)',
+  lightRed: '#FD5C5C',
 };

@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   Platform,
+  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -42,6 +43,7 @@ export default function ProfileScreen() {
   const [medialUrls, setMediaUrls] = useState([]);
   const navigation = useNavigation();
   const userImage = auth()?.currentUser?.photoURL;
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const handleAddselectImages = newImage => {
     setSelectedImage(prevImages => [...prevImages, newImage]);
@@ -143,6 +145,15 @@ export default function ProfileScreen() {
     }
   };
 
+  const [color, setColor] = useState('#072e70');
+  const generateColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, '0');
+    setColor(`#${randomColor}`);
+    // return `#${randomColor}`;
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -181,16 +192,21 @@ export default function ProfileScreen() {
           </ImageBackground>
         </View>
         <View style={{alignItems: 'center'}}>
-          <FastImage
-            source={
-              !!userImage ? {uri: userImage} : require('../assets/men.jpg')
-            }
-            style={styles.profileImage}
-          />
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => setShowImageModal(true)}>
+            <FastImage
+              source={
+                !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+              }
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center', marginTop: 20}}>
           <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
         </View>
+
         {/* <ScrollView
           style={styles.imageUploadContainer}
           horizontal
@@ -222,6 +238,45 @@ export default function ProfileScreen() {
             />
           )}
         </View> */}
+
+        <TouchableOpacity
+          style={{
+            paddingHorizontal: 20,
+            paddingVertical: 12,
+            backgroundColor: color,
+            alignSelf: 'center',
+            marginTop: 30,
+            borderRadius: 8,
+          }}
+          activeOpacity={0.8}
+          onPress={generateColor}>
+          <Text style={{fontSize: 14, color: colors.white}}>
+            generate Color
+          </Text>
+        </TouchableOpacity>
+
+        <Modal visible={showImageModal} style={{flex: 1}} transparent>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              justifyContent: 'center',
+            }}
+            onPress={() => setShowImageModal(false)}>
+            <TouchableOpacity activeOpacity={1} style={styles.modalStyle}>
+              {/* <Sepia> */}
+              <FastImage
+                source={
+                  !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+                }
+                style={styles.modalImageStyle}
+                resizeMode="contain"
+              />
+              {/* </Sepia> */}
+            </TouchableOpacity>
+          </TouchableOpacity>
+        </Modal>
       </View>
       <MyIndicatorLoader visible={loading} />
     </>
@@ -319,5 +374,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     borderRadius: 8,
+  },
+  modalStyle: {
+    width: screenWidth,
+    // height: screenHeight / 2,
+  },
+  modalImageStyle: {
+    width: '100%',
+    height: screenHeight * 0.26,
   },
 });
