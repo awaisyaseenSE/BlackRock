@@ -377,10 +377,22 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     width: screenWidth,
+    paddingVertical: 10,
+
     // height: screenHeight / 2,
   },
   modalImageStyle: {
     width: '100%',
     height: screenHeight * 0.26,
+    borderRadius: 12,
+    shadowColor: '#ffff',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+
+    elevation: 12,
   },
 });
