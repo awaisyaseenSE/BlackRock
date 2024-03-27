@@ -43,6 +43,7 @@
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-timeline-flatlist": "^0.8.0",
     "react-native-video": "^5.2.1",
     "react-native-video-controls": "^2.8.1",
     "react-native-view-shot": "^3.8.0",

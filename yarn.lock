@@ -7255,6 +7255,11 @@ react-native-snap-carousel@^3.9.1:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
 
+react-native-timeline-flatlist@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-timeline-flatlist/-/react-native-timeline-flatlist-0.8.0.tgz#7965a1ccd52b72791ddc3a0c976fe34701fa1ed7"
+  integrity sha512-IVfCOxYx7Js84CaUJmtuxq2eyLvoQ1nRO5GG0mri14NH2NbMUwL9VhX19/yI8LpU2bnarlo7kjR6GLUP3DM/iQ==
+
 react-native-video-controls@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/react-native-video-controls/-/react-native-video-controls-2.8.1.tgz#30ae707d8d218fed34bba3fc027b3943c5f438d9"

@@ -163,11 +163,11 @@ export default function DetailMovieScreen({route}) {
             />
           </TouchableOpacity>
           <View style={{backgroundColor: colors.moviesBg}}>
-            <Text style={styles.heading}>
+            <Text style={styles.heading} selectable>
               {movieDetails?.title} {movieDetails?.name}
             </Text>
             <View style={styles.contentContainer}>
-              <Text style={[styles.grayText, {textAlign: 'center'}]}>
+              <Text selectable style={[styles.grayText, {textAlign: 'center'}]}>
                 {movieDetails?.release_date
                   ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
                   : ''}

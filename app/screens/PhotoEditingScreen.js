@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import colors from '../styles/colors';
@@ -347,22 +348,43 @@ export default function PhotoEditingScreen() {
 
   const requestStoragePermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'App needs access to your storage to save images.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission granted');
-        return true;
+      if (Platform.Version < 30) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to save images.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Storage permission granted');
+          return true;
+        } else {
+          console.log('Storage permission denied');
+          Alert.alert(
+            'Storage Permission Required!',
+            'Please enable storage permission to save photo.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'Enable',
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+          );
+          return false;
+        }
       } else {
-        console.log('Storage permission denied');
-        return false;
+        return true;
       }
     } catch (err) {
       console.log(err);

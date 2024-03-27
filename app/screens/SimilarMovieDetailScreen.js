@@ -119,9 +119,11 @@ export default function SimilarMovieDetailScreen({route}) {
             width: screenWidth,
             flex: 1,
           }}> */}
-        <Text style={styles.heading}>{movieDetails?.title}</Text>
+        <Text style={styles.heading} selectable>
+          {movieDetails?.title}
+        </Text>
         <View style={styles.contentContainer}>
-          <Text style={[styles.grayText, {textAlign: 'center'}]}>
+          <Text style={[styles.grayText, {textAlign: 'center'}]} selectable>
             {movieDetails?.release_date
               ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
               : ''}

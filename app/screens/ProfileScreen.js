@@ -10,6 +10,8 @@ import {
   Alert,
   Platform,
   Modal,
+  Pressable,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -154,6 +156,16 @@ export default function ProfileScreen() {
     // return `#${randomColor}`;
   };
 
+  const openDialScreen = () => {
+    let number = '';
+    if (Platform.OS === 'ios') {
+      number = 'tel:${091123456789}';
+    } else {
+      number = 'tel:${03085449343}';
+    }
+    Linking.openURL(number);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -204,7 +216,9 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center', marginTop: 20}}>
-          <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
+          <Text style={styles.profileTxt} selectable>
+            {auth().currentUser?.email}
+          </Text>
         </View>
 
         {/* <ScrollView
@@ -239,21 +253,14 @@ export default function ProfileScreen() {
           )}
         </View> */}
 
-        {/* <TouchableOpacity
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 12,
-            backgroundColor: color,
-            alignSelf: 'center',
-            marginTop: 30,
-            borderRadius: 8,
-          }}
-          activeOpacity={0.8}
-          onPress={generateColor}>
-          <Text style={{fontSize: 14, color: colors.white}}>
-            generate Color
-          </Text>
-        </TouchableOpacity> */}
+        <View style={[styles.triangle, {alignSelf: 'center', marginTop: 12}]} />
+        {Platform.OS === 'android' && (
+          <ButtonComponent
+            title="Call"
+            onPress={openDialScreen}
+            style={styles.btn}
+          />
+        )}
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
@@ -265,7 +272,6 @@ export default function ProfileScreen() {
             }}
             onPress={() => setShowImageModal(false)}>
             <TouchableOpacity activeOpacity={1} style={styles.modalStyle}>
-              {/* <Sepia> */}
               <FastImage
                 source={
                   !!userImage ? {uri: userImage} : require('../assets/men.jpg')
@@ -273,7 +279,6 @@ export default function ProfileScreen() {
                 style={styles.modalImageStyle}
                 resizeMode="contain"
               />
-              {/* </Sepia> */}
             </TouchableOpacity>
           </TouchableOpacity>
         </Modal>
@@ -370,21 +375,15 @@ const styles = StyleSheet.create({
     right: 4,
   },
   btn: {
-    width: '60%',
+    width: '40%',
     alignSelf: 'center',
     marginTop: 20,
-    borderRadius: 8,
+    borderRadius: 22,
+    backgroundColor: '#12213F',
   },
   modalStyle: {
     width: screenWidth,
     paddingVertical: 10,
-
-    // height: screenHeight / 2,
-  },
-  modalImageStyle: {
-    width: '100%',
-    height: screenHeight * 0.26,
-    borderRadius: 12,
     shadowColor: '#ffff',
     shadowOffset: {
       width: 0,
@@ -394,5 +393,22 @@ const styles = StyleSheet.create({
     shadowRadius: 7.49,
 
     elevation: 12,
+  },
+  modalImageStyle: {
+    width: '100%',
+    height: screenHeight * 0.26,
+    borderRadius: 12,
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 50,
+    borderRightWidth: 50,
+    borderBottomWidth: 100,
+    borderStyle: 'solid',
+    borderBottomColor: 'green',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
   },
 });
