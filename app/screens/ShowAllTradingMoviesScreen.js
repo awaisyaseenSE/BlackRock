@@ -73,7 +73,7 @@ export default function ShowAllTradingMoviesScreen() {
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <View style={styles.container}>
           <TopCompoWithHeading
-            title="All Trending Movies"
+            title="Trending Movies"
             onPress={() => navigation.goBack()}
             titleStyle={{color: colors.LightWhite}}
             backIconStyle={{tintColor: colors.white}}

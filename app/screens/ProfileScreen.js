@@ -279,11 +279,11 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
-        <ButtonComponent
+        {/* <ButtonComponent
           title="region base data"
           onPress={getTrandingMovies}
           style={styles.btn}
-        />
+        /> */}
         {/* <ButtonComponent
           title="Tv data"
           onPress={() => getDetailByTv('138502')}

@@ -75,7 +75,7 @@ export default function TrendingTvSerialScreen() {
       <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
         <View style={styles.container}>
           <TopCompoWithHeading
-            title="All Trending Tv Series"
+            title="Trending Tv Series"
             onPress={() => navigation.goBack()}
             titleStyle={{color: colors.LightWhite}}
             backIconStyle={{tintColor: colors.white}}

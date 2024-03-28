@@ -78,9 +78,10 @@ export default function SimilarMovieDetailScreen({route}) {
 
   const getYoutubeVideoLink = async () => {
     // getApi('/movie/157336/videos');
+    let type = movieDetails?.title ? 'movie' : 'tv';
     try {
       setLoading(true);
-      let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+      let data = await getApi(`/${type}/${movieDetails?.id}/videos`);
 
       if (data?.results && data?.results?.length > 0) {
         // Find the trailer video key
@@ -188,23 +189,27 @@ export default function SimilarMovieDetailScreen({route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.hearticonContainer,
-            {
-              top: Platform.OS === 'ios' ? insets.top - 6 : 8,
-            },
-          ]}
-          onPress={() => handleAddToFavoriteMovie()}
-          activeOpacity={0.6}>
-          <Image
-            source={require('../assets/heart-fill.png')}
+        {movieDetails?.title && (
+          <TouchableOpacity
             style={[
-              styles.hearticon,
-              {tintColor: favoriteMovie ? colors.yellow : colors.LightWhite},
+              styles.hearticonContainer,
+              {
+                top: Platform.OS === 'ios' ? insets.top - 6 : 8,
+              },
             ]}
-          />
-        </TouchableOpacity>
+            onPress={() => handleAddToFavoriteMovie()}
+            activeOpacity={0.6}>
+            <Image
+              source={require('../assets/heart-fill.png')}
+              style={[
+                styles.hearticon,
+                {
+                  tintColor: favoriteMovie ? colors.yellow : colors.LightWhite,
+                },
+              ]}
+            />
+          </TouchableOpacity>
+        )}
         <Text style={styles.heading} selectable>
           {movieDetails?.title} {movieDetails?.name}
         </Text>

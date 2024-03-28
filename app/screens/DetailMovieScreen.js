@@ -73,8 +73,9 @@ export default function DetailMovieScreen({route}) {
 
   const getSimilarMovies = async () => {
     try {
+      let type = movieDetails?.title ? 'movie' : 'tv';
       setLoading(true);
-      let res = await getApi(`/movie/${movieDetails?.id}/similar`);
+      let res = await getApi(`/${type}/${movieDetails?.id}/similar`);
       if (!!res) {
         setLoading(false);
         let finalData = res?.results;
@@ -90,9 +91,12 @@ export default function DetailMovieScreen({route}) {
 
   const getYoutubeVideoLink = async () => {
     // getApi('/movie/157336/videos');
+    let type = movieDetails?.title ? 'movie' : 'tv';
     try {
       setLoading(true);
-      let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+      // let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+      let data = await getApi(`/${type}/${movieDetails?.id}/videos`);
+      // https://api.themoviedb.org/3/tv/{series_id}/videos
 
       if (data?.results && data?.results?.length > 0) {
         // Find the trailer video key
@@ -143,6 +147,9 @@ export default function DetailMovieScreen({route}) {
           {data?.title?.length > 18
             ? data?.title.slice(0, 18) + '...'
             : data?.title}
+          {data?.name?.length > 18
+            ? data?.name.slice(0, 18) + '...'
+            : data?.name}
         </Text>
       </TouchableOpacity>
     );
@@ -304,7 +311,9 @@ export default function DetailMovieScreen({route}) {
             <View style={{marginVertical: 10}} />
             {similarMovies?.length > 1 && (
               <View style={styles.newheadingContainer}>
-                <Text style={styles.newheading}>Similar Movie</Text>
+                <Text style={styles.newheading}>
+                  Similar {movieDetails?.title ? 'Movies' : 'Tv Series'}
+                </Text>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate(
