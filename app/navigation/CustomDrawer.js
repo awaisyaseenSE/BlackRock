@@ -62,13 +62,81 @@ function CustomDrawer(props) {
         </Text>
         <View style={{flex: 1, marginTop: 18}}>
           <DrawerItemListCompo
+            image={require('../assets/checklist.png')}
+            title="Todo Screen"
+            onPress={() => navigation.navigate(navigationStrings.TODO_SCREEN)}
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.todoPink}}
+          />
+          {/* <DrawerItemListCompo
+            image={require('../assets/favorite.png')}
+            title="Real Time Database"
+            onPress={() =>
+              navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          /> */}
+          <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Search Photos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.SEARCH_PEXELS_SCREEN)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          {/* <DrawerItemListCompo
+            image={require('../assets/user.png')}
+            title="About"
+            onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          /> */}
+          {/* <DrawerItemListCompo
+            image={require('../assets/schedule.png')}
+            title="Flah list"
+            onPress={() =>
+              navigation.navigate(navigationStrings.FlashList_Testing_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          /> */}
+          <DrawerItemListCompo
+            image={require('../assets/music-player.png')}
+            title="Pixels Videos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pexels_Videos_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/photo-album.png')}
+            title="Pixels Collection"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pexel_Collection_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/edit-photo1.png')}
+            title="Edit Photo"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Photo_Editing_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: null}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/film.png')}
             title="Movie Collection"
             onPress={() =>
               navigation.navigate(navigationStrings.Movie_Collection_Screen)
             }
             txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
+            iconStyle={{tintColor: colors.yellow}}
           />
 
           <DrawerItemListCompo
@@ -78,75 +146,36 @@ function CustomDrawer(props) {
               navigation.navigate(navigationStrings.Find_Movie_by_year_SCREEN)
             }
             txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
+            iconStyle={{tintColor: colors.yellow}}
           />
           <DrawerItemListCompo
-            image={require('../assets/checklist.png')}
-            title="Todo Screen"
-            onPress={() => navigation.navigate(navigationStrings.TODO_SCREEN)}
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          />
-          <DrawerItemListCompo
-            image={require('../assets/favorite.png')}
-            title="Real Time Database"
+            image={require('../assets/trend.png')}
+            title="Trending Movies"
             onPress={() =>
-              navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
+              navigation.navigate(
+                navigationStrings.Show_All_Trading_Movies_Screen,
+              )
             }
             txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
+            iconStyle={{tintColor: colors.yellow}}
           />
           <DrawerItemListCompo
-            image={require('../assets/tab_search.png')}
-            title="Search Photos"
+            image={require('../assets/trend.png')}
+            title="Tranding Tv Series"
             onPress={() =>
-              navigation.navigate(navigationStrings.SEARCH_PEXELS_SCREEN)
+              navigation.navigate(navigationStrings.Trending_Tv_Serial_Screen)
             }
             txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
+            iconStyle={{tintColor: colors.yellow}}
           />
           <DrawerItemListCompo
-            image={require('../assets/user.png')}
-            title="About"
-            onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          />
-          <DrawerItemListCompo
-            image={require('../assets/schedule.png')}
-            title="Flah list"
+            image={require('../assets/star.png')}
+            title="Your Favorite Movies"
             onPress={() =>
-              navigation.navigate(navigationStrings.FlashList_Testing_Screen)
+              navigation.navigate(navigationStrings.Favorite_Movie_Screen)
             }
             txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          />
-          <DrawerItemListCompo
-            image={require('../assets/music-player.png')}
-            title="Pixels Videos"
-            onPress={() =>
-              navigation.navigate(navigationStrings.Pexels_Videos_Screen)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          />
-          <DrawerItemListCompo
-            image={require('../assets/photo-album.png')}
-            title="Pixels Collection"
-            onPress={() =>
-              navigation.navigate(navigationStrings.Pexel_Collection_Screen)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          />
-          <DrawerItemListCompo
-            image={require('../assets/edit-photo.png')}
-            title="Edit Photo"
-            onPress={() =>
-              navigation.navigate(navigationStrings.Photo_Editing_Screen)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
+            iconStyle={{tintColor: colors.yellow}}
           />
         </View>
       </DrawerContentScrollView>

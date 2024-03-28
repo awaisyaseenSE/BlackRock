@@ -30,6 +30,9 @@ import PexelsVideosScreen from '../screens/PexelsVideosScreen';
 import ShowVideoScreen from '../screens/ShowVideoScreen';
 import PexelCollectionScreen from '../screens/PexelCollectionScreen';
 import PhotoEditingScreen from '../screens/PhotoEditingScreen';
+import FavoriteMovieScreen from '../screens/FavoriteMovieScreen';
+import ShowAllTradingMoviesScreen from '../screens/ShowAllTradingMoviesScreen';
+import TrendingTvSerialScreen from '../screens/TrendingTvSerialScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -254,6 +257,27 @@ function AppNavigator() {
       <Stack.Screen
         name="PhotoEditingScreen"
         component={PhotoEditingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FavoriteMovieScreen"
+        component={FavoriteMovieScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ShowAllTradingMoviesScreen"
+        component={ShowAllTradingMoviesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TrendingTvSerialScreen"
+        component={TrendingTvSerialScreen}
         options={{
           headerShown: false,
         }}

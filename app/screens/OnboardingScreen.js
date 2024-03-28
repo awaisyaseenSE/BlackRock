@@ -31,7 +31,7 @@ export default function OnboardingScreen() {
 
   const data = [
     {
-      img: require('../assets/poster-1.jpeg'),
+      img: require('../assets/newposter3.jpg'),
       imgURL:
         'https://www.joblo.com/wp-content/uploads/2017/10/Black-Panther-poster-main-xl-1.jpg',
       title: 'If you looking for latest movies',
@@ -66,7 +66,7 @@ export default function OnboardingScreen() {
       ],
     },
     {
-      img: require('../assets/poster-4.jpg'),
+      img: require('../assets/newposter2.jpg'),
       imgURL:
         'https://cdnb.artstation.com/p/assets/images/images/034/972/411/large/khushal-sharma-avatar-movie-poster.jpg?1613744215',
       title: 'Real Time',

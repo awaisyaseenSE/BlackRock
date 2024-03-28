@@ -29,4 +29,7 @@ export default {
   Show_Video_Screen: 'ShowVideoScreen',
   Pexel_Collection_Screen: 'PexelCollectionScreen',
   Photo_Editing_Screen: 'PhotoEditingScreen',
+  Favorite_Movie_Screen: 'FavoriteMovieScreen',
+  Show_All_Trading_Movies_Screen: 'ShowAllTradingMoviesScreen',
+  Trending_Tv_Serial_Screen: 'TrendingTvSerialScreen',
 };

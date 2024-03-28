@@ -32,6 +32,8 @@ import constants from '../constants/constants';
 import FastImage from 'react-native-fast-image';
 import MyIndicator from '../components/MyIndicator';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -51,6 +53,28 @@ export default function SimilarMovieDetailScreen({route}) {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [youtubeVideoID, setYoutubeVideoID] = useState('');
   const [youtubeLoading, setYoutubeLoading] = useState(true);
+  const [favoriteMovie, setFavoriteMovie] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = firestore()
+      .collection('users')
+      .doc(auth().currentUser?.uid)
+      .onSnapshot(snap => {
+        if (snap.exists) {
+          var data = snap.data();
+          if (data.hasOwnProperty('favMovies')) {
+            const isFavorites =
+              data.favMovies.includes(movieDetails?.id) || false;
+            setFavoriteMovie(isFavorites);
+          }
+          setLoading(false);
+        } else {
+          setLoading(false);
+        }
+      });
+    return () => unsubscribe();
+  }, []);
 
   const getYoutubeVideoLink = async () => {
     // getApi('/movie/157336/videos');
@@ -84,6 +108,59 @@ export default function SimilarMovieDetailScreen({route}) {
     getYoutubeVideoLink();
   }, []);
 
+  const handleAddToFavoriteMovie = async () => {
+    const userId = auth()?.currentUser?.uid;
+    const movieId = movieDetails?.id;
+    if (!userId || !movieId) {
+      Alert.alert('Something went wrong.', 'Please try again later!');
+      return;
+    }
+    try {
+      const userRef = firestore().collection('users').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (!userDoc.exists) {
+        Alert.alert('user not found!');
+        throw new Error('User not found');
+        return null;
+      }
+
+      const userData = userDoc.data();
+
+      // Ensure favMovies field exists in userData
+      if (!userData.hasOwnProperty('favMovies')) {
+        // If favMovies doesn't exist, create it as an empty array
+        await userRef.set(
+          {
+            favMovies: [movieId],
+          },
+          {merge: true},
+        );
+        // console.log('Favorite movie created and updated successfully');
+        return null;
+      }
+
+      if (userData.hasOwnProperty('favMovies')) {
+        let updatedFavUsersMovies = [...userData.favMovies]; // Create a new array
+        if (userData.favMovies.includes(movieId)) {
+          updatedFavUsersMovies = updatedFavUsersMovies.filter(
+            id => id !== movieId,
+          ); // Remove User id
+        } else {
+          updatedFavUsersMovies.push(movieId); // Add User id
+        }
+        await userRef.update({favMovies: updatedFavUsersMovies}); // Update the User id
+        // console.log('Favorite movie only updated successfully');
+      }
+    } catch (error) {
+      console.log('Error updating favorite movie:', error);
+      Alert.alert(
+        'Movie is not added.',
+        'Something went wrong. Please try again later!',
+      );
+    }
+  };
+
   return (
     <ScrollView
       style={{flex: 1, backgroundColor: colors.moviesBg}}
@@ -111,16 +188,25 @@ export default function SimilarMovieDetailScreen({route}) {
             style={styles.icon}
           />
         </TouchableOpacity>
-        {/* <LinearGradient
-          colors={['transparent', 'rgba(23,23,23,0.8)', 'rgba(23,23,23,0.4)']}
-          start={{x: 0.5, y: 0}}
-          end={{x: 0.5, y: 1}}
-          style={{
-            width: screenWidth,
-            flex: 1,
-          }}> */}
+        <TouchableOpacity
+          style={[
+            styles.hearticonContainer,
+            {
+              top: Platform.OS === 'ios' ? insets.top - 6 : 8,
+            },
+          ]}
+          onPress={() => handleAddToFavoriteMovie()}
+          activeOpacity={0.6}>
+          <Image
+            source={require('../assets/heart-fill.png')}
+            style={[
+              styles.hearticon,
+              {tintColor: favoriteMovie ? colors.yellow : colors.LightWhite},
+            ]}
+          />
+        </TouchableOpacity>
         <Text style={styles.heading} selectable>
-          {movieDetails?.title}
+          {movieDetails?.title} {movieDetails?.name}
         </Text>
         <View style={styles.contentContainer}>
           <Text style={[styles.grayText, {textAlign: 'center'}]} selectable>
@@ -150,7 +236,6 @@ export default function SimilarMovieDetailScreen({route}) {
           </View>
         )}
         <View style={{marginVertical: 10}} />
-        {/* </LinearGradient> */}
       </View>
     </ScrollView>
   );
@@ -241,5 +326,16 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  hearticonContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 8,
+    padding: 8,
+  },
+  hearticon: {
+    width: 26,
+    height: 26,
+    tintColor: colors.LightWhite,
   },
 });

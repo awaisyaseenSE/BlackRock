@@ -139,9 +139,16 @@ export default function ProfileScreen() {
   const handleFinishOnBoarding = async () => {
     try {
       console.log('Finish on boarding func is called!');
-      let key = 'todoItems';
-      await removeItemValue(key);
-      // navigation.navigate('MainTabRoutes');
+      let key = 'onBoarding';
+      let res = await removeItemValue(key);
+      if (res) {
+        Alert.alert('Onboarding is Removed Successfully!');
+      } else {
+        Alert.alert(
+          'Something went wrong.',
+          'Onboarding screens is not Removed!',
+        );
+      }
     } catch (error) {
       console.log('Error in finish on boarding screen function: ', error);
     }
@@ -164,6 +171,57 @@ export default function ProfileScreen() {
       number = 'tel:${03085449343}';
     }
     Linking.openURL(number);
+  };
+
+  const getTrandingMovies = async () => {
+    let url = 'https://api.themoviedb.org/3/trending/movie/week';
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/trending/tv/week?api_key=${constants.theMovieDb_API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        console.log(res);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getDetailByTv = async id => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}?api_key=${constants.theMovieDb_API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        console.log('TV data.......  :   ', res);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -221,6 +279,17 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
+        <ButtonComponent
+          title="region base data"
+          onPress={getTrandingMovies}
+          style={styles.btn}
+        />
+        {/* <ButtonComponent
+          title="Tv data"
+          onPress={() => getDetailByTv('138502')}
+          style={styles.btn}
+        /> */}
+
         {/* <ScrollView
           style={styles.imageUploadContainer}
           horizontal
@@ -253,14 +322,7 @@ export default function ProfileScreen() {
           )}
         </View> */}
 
-        <View style={[styles.triangle, {alignSelf: 'center', marginTop: 12}]} />
-        {Platform.OS === 'android' && (
-          <ButtonComponent
-            title="Call"
-            onPress={openDialScreen}
-            style={styles.btn}
-          />
-        )}
+        {/* <View style={[styles.triangle, {alignSelf: 'center', marginTop: 12}]} /> */}
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
