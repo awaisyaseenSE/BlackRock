@@ -203,7 +203,7 @@ export default function ProfileScreen() {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://api.themoviedb.org/3/tv/${id}?api_key=${constants.theMovieDb_API_KEY}`,
+        `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${constants.theMovieDb_API_KEY}`,
       );
 
       if (!response.ok) {
@@ -284,11 +284,11 @@ export default function ProfileScreen() {
           onPress={getTrandingMovies}
           style={styles.btn}
         /> */}
-        {/* <ButtonComponent
+        <ButtonComponent
           title="Tv data"
           onPress={() => getDetailByTv('138502')}
           style={styles.btn}
-        /> */}
+        />
 
         {/* <ScrollView
           style={styles.imageUploadContainer}
