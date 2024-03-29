@@ -32,4 +32,6 @@ export default {
   Favorite_Movie_Screen: 'FavoriteMovieScreen',
   Show_All_Trading_Movies_Screen: 'ShowAllTradingMoviesScreen',
   Trending_Tv_Serial_Screen: 'TrendingTvSerialScreen',
+  All_Users_List_Screen: 'AllUsersListScreen',
+  Chat_Screen: 'ChatScreen',
 };

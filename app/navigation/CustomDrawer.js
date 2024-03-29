@@ -177,6 +177,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.yellow}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/user.png')}
+            title="All Users List"
+            onPress={() =>
+              navigation.navigate(navigationStrings.All_Users_List_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

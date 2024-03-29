@@ -40,4 +40,5 @@ export default {
   todoGreen: '#32B791',
   uploadModalBg: 'rgba(0,0,0,0.2)',
   lightRed: '#FD5C5C',
+  chatBg: '#121212',
 };
