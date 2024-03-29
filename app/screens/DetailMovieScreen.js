@@ -49,6 +49,7 @@ export default function DetailMovieScreen({route}) {
   const [youtubeVideoID, setYoutubeVideoID] = useState('');
   const [youtubeLoading, setYoutubeLoading] = useState(true);
   const [favoriteMovie, setFavoriteMovie] = useState(false);
+  const [recommendationsMovies, setRecommendationsMovies] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -80,6 +81,27 @@ export default function DetailMovieScreen({route}) {
         setLoading(false);
         let finalData = res?.results;
         setSimilarMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const getRecommendationMovies = async () => {
+    try {
+      let type = movieDetails?.title ? 'movie' : 'tv';
+      setLoading(true);
+      let res = await getApi(`/${type}/${movieDetails?.id}/recommendations`);
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        console.log(
+          `Total length of Recommendations ${type}: `,
+          finalData?.length,
+        );
+        setRecommendationsMovies(finalData);
       } else {
         setLoading(false);
       }
@@ -123,15 +145,21 @@ export default function DetailMovieScreen({route}) {
   useEffect(() => {
     getSimilarMovies();
     getYoutubeVideoLink();
+    getRecommendationMovies();
   }, [routeData]);
 
   const PopularMovieCompo = ({data, id}) => {
     let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
-
+    const [fastImgLoading, setFastImgLoading] = useState(true);
     return (
       <TouchableOpacity
         style={{marginLeft: 12}}
         onPress={() => handleSimilarDetailScreenNavi(data, postURL)}>
+        {fastImgLoading && (
+          <View style={styles.fastImageLoadingStyle}>
+            <ActivityIndicator size={20} color={colors.gray} />
+          </View>
+        )}
         <FastImage
           // source={{uri: postURL}}
           source={
@@ -142,6 +170,8 @@ export default function DetailMovieScreen({route}) {
               : {uri: postURL}
           }
           style={styles.newposterImageStyle}
+          onLoadStart={() => setFastImgLoading(true)}
+          onLoadEnd={() => setFastImgLoading(false)}
         />
         <Text numberOfLines={1} style={styles.newsubHeading}>
           {data?.title?.length > 18
@@ -308,9 +338,41 @@ export default function DetailMovieScreen({route}) {
                 />
               </View>
             )}
+
+            {recommendationsMovies?.length > 1 && (
+              <View style={[styles.newheadingContainer, {marginTop: 12}]}>
+                <Text style={styles.newheading}>
+                  Recommendated {movieDetails?.title ? 'Movies' : 'Tv Series'}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate(
+                      navigationStrings.All_Similar_Movies_Screen,
+                      {
+                        data: recommendationsMovies,
+                      },
+                    )
+                  }>
+                  <Text style={[styles.newheading, {color: colors.yellow}]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <FlatList
+              data={recommendationsMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+
             <View style={{marginVertical: 10}} />
             {similarMovies?.length > 1 && (
-              <View style={styles.newheadingContainer}>
+              <View style={[styles.newheadingContainer, {marginTop: 12}]}>
                 <Text style={styles.newheading}>
                   Similar {movieDetails?.title ? 'Movies' : 'Tv Series'}
                 </Text>
@@ -339,7 +401,11 @@ export default function DetailMovieScreen({route}) {
               keyExtractor={(item, index) => index.toString()}
               horizontal
             />
-            {similarMovies?.length > 1 && <View style={{height: 80}} />}
+
+            {(similarMovies?.length > 1 ||
+              recommendationsMovies?.length > 1) && (
+              <View style={{height: 80}} />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -446,5 +512,14 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     tintColor: colors.LightWhite,
+  },
+  fastImageLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
