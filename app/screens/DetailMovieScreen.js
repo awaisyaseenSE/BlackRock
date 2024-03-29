@@ -97,10 +97,10 @@ export default function DetailMovieScreen({route}) {
       if (!!res) {
         setLoading(false);
         let finalData = res?.results;
-        console.log(
-          `Total length of Recommendations ${type}: `,
-          finalData?.length,
-        );
+        // console.log(
+        //   `Total length of Recommendations ${type}: `,
+        //   finalData?.length,
+        // );
         setRecommendationsMovies(finalData);
       } else {
         setLoading(false);
