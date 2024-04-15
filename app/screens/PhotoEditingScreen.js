@@ -245,7 +245,7 @@ export default function PhotoEditingScreen() {
     try {
       let res = await pickImage();
       if (!!res) {
-        setSelectedPhoto(res);
+        setSelectedPhoto(res?.uri);
       }
     } catch (error) {
       console.error('Error picking image:', error);

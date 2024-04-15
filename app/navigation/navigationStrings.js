@@ -34,4 +34,5 @@ export default {
   Trending_Tv_Serial_Screen: 'TrendingTvSerialScreen',
   All_Users_List_Screen: 'AllUsersListScreen',
   Chat_Screen: 'ChatScreen',
+  Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
 };

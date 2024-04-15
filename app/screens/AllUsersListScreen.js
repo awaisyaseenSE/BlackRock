@@ -109,6 +109,7 @@ export default function AllUsersListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 14,
   },
   userImgStyle: {
     width: 66,

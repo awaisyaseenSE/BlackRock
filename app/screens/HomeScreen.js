@@ -35,6 +35,7 @@ export default function HomeScreen() {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [trandinggMovies, setTrandingMovies] = useState([]);
   const [allChangedMovieIDS, setAllChangedMovieIDS] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
 
   const getMoviesData = () => {
     try {
@@ -181,12 +182,30 @@ export default function HomeScreen() {
     }
   };
 
+  const getNowPlayingMovies = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/movie/now_playing');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setNowPlayingMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getDataFormMB();
     getTopRatedMovies();
     getUpComingMovies();
     getTrandingMovies();
     getChangedMovies();
+    getNowPlayingMovies();
   }, []);
 
   const navigateToNextScreen = (index, item) => {
@@ -366,6 +385,37 @@ export default function HomeScreen() {
                   allChangedMovieIDS.length > 20
                     ? allChangedMovieIDS.slice(2, 20)
                     : allChangedMovieIDS
+                }
+                renderItem={({item, index}) => (
+                  <MovieDetailComponent movieId={item?.id} />
+                )}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal
+                // estimatedItemSize={40}
+              />
+            </View>
+
+            <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Now Playing Movies</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.Now_Playing_Movies_Screen,
+                  )
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{}}>
+              <FlatList
+                data={
+                  nowPlayingMovies.length > 20
+                    ? nowPlayingMovies.slice(2, 20)
+                    : nowPlayingMovies
                 }
                 renderItem={({item, index}) => (
                   <MovieDetailComponent movieId={item?.id} />

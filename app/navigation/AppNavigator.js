@@ -35,6 +35,7 @@ import ShowAllTradingMoviesScreen from '../screens/ShowAllTradingMoviesScreen';
 import TrendingTvSerialScreen from '../screens/TrendingTvSerialScreen';
 import AllUsersListScreen from '../screens/AllUsersListScreen';
 import ChatScreen from '../screens/Chat/ChatScreen';
+import NowPlayingMoviesScreen from '../screens/NowPlayingMoviesScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -294,6 +295,13 @@ function AppNavigator() {
       <Stack.Screen
         name="ChatScreen"
         component={ChatScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="NowPlayingMoviesScreen"
+        component={NowPlayingMoviesScreen}
         options={{
           headerShown: false,
         }}
