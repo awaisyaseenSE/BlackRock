@@ -13,7 +13,13 @@ import TestingScreen from './app/screens/TestingScreen';
 
 export default function App() {
   const [splashDone, setSplashDone] = useState(false);
-  LogBox.ignoreLogs(['ViewPropTypes']);
+  LogBox.ignoreLogs([
+    'ViewPropTypes',
+    'new NativeEventEmitter',
+    'FinishedLoading',
+    'FinishedLoadingURL',
+    'FinishedPlaying',
+  ]);
   useEffect(() => {
     checkOnBoarding();
     setTimeout(() => {

@@ -7,6 +7,9 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Alert,
+  Platform,
+  PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import React from 'react';
 import colors from '../../../styles/colors';
@@ -27,6 +30,47 @@ const AddNewMessageCompo = ({
   receiverName,
   setSelectAttachment,
 }) => {
+  const checkRecordingPermission = async () => {
+    try {
+      if (Platform.OS == 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          {
+            title: 'Recording Audio Permission Required',
+            message:
+              'App needs access to access Recording Audio Permission to record your voice!',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Recording Audio permission is granted');
+          setRecordingModal(true);
+        } else {
+          Alert.alert(
+            'Camera Permission Required!',
+            'Please enable camera permission to take picture.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'Enable',
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+          );
+          return null;
+        }
+      } else {
+        setRecordingModal(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <KeyboardAvoidingView
@@ -92,7 +136,8 @@ const AddNewMessageCompo = ({
                 <TouchableOpacity
                   style={styles.rightIconsContainer}
                   onPress={() => {
-                    setRecordingModal(true);
+                    // setRecordingModal(true);
+                    checkRecordingPermission();
                   }}>
                   <Image
                     source={require('../../../assets/microphone.png')}

@@ -26,7 +26,7 @@ const ShowReplyMessageCompo = ({senderId, messageSender, chatId, replyId}) => {
           .get()
           .then(snap => {
             var userData = snap.data();
-            var name = userData.firstName + ' ' + userData.lastName;
+            var name = userData.fullName;
             setUserName(name);
           });
       });

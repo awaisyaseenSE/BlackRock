@@ -16,6 +16,8 @@ import auth from '@react-native-firebase/auth';
 import SoundPlayer from 'react-native-sound-player';
 import BackgroundTimer from 'react-native-background-timer';
 import * as Progress from 'react-native-progress';
+import Video from 'react-native-video';
+import storage from '@react-native-firebase/storage';
 import {
   GestureHandlerRootView,
   FlingGestureHandler,
@@ -57,6 +59,7 @@ const ShowMessagesComponent = ({
   const [show, setShow] = useState(true);
   const [replyData, setReplyData] = useState(null);
   const [showFullImage, setShowFullImage] = useState(false);
+  const [pauseVideo, setPauseVideo] = useState(true);
 
   var isMounted = false;
   //   useEffect(() => {
@@ -148,6 +151,69 @@ const ShowMessagesComponent = ({
     };
   });
 
+  const getFilenameFromFirebaseUrl = url => {
+    const parts = url.split('/');
+
+    const filenameWithQuery = parts.pop();
+    const filenameParts = filenameWithQuery.split('?');
+    let filename = filenameParts[0];
+    if (filename.startsWith('chatMedia%2F')) {
+      filename = filename.substring(12);
+    }
+    filename = decodeURIComponent(filename);
+    return filename;
+  };
+
+  const deleteMessageHandler = async () => {
+    try {
+      if (item?.chatID !== undefined) {
+        await firestore()
+          .collection('chats')
+          .doc(item?.chatID)
+          .collection('messages')
+          .doc(item?._id)
+          .delete();
+
+        if (
+          item.type == 'image' ||
+          item.type == 'video' ||
+          item?.type?.startsWith('file') ||
+          item?.type == 'audio'
+        ) {
+          const imgRef = storage().refFromURL(item?.message);
+          await imgRef.delete();
+        }
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(
+        'Error while deleting message in Show Mwssages component: ',
+        error,
+      );
+    }
+  };
+
+  const handleDeleteMessage = () => {
+    try {
+      if (item?.senderID === auth().currentUser?.uid) {
+        Alert.alert('Warning', 'Are you sure to Delete this Message!', [
+          {
+            text: 'Yes',
+            onPress: deleteMessageHandler,
+          },
+          {
+            text: 'No',
+          },
+        ]);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log('Error while deleting message in chat screen: ', error);
+    }
+  };
+
   return (
     <>
       <GestureHandlerRootView>
@@ -191,7 +257,9 @@ const ShowMessagesComponent = ({
               ) : null}
               {item.type == 'image' ? (
                 <>
-                  <TouchableOpacity onPress={() => setShowFullImage(true)}>
+                  <TouchableOpacity
+                    onPress={() => setShowFullImage(true)}
+                    onLongPress={() => handleDeleteMessage()}>
                     <FastImage
                       source={{uri: item.message}}
                       style={[
@@ -218,7 +286,7 @@ const ShowMessagesComponent = ({
                   ) : null}
                 </>
               ) : null}
-              {item.type == 'file' ? (
+              {item.type == 'file/pdf' ? (
                 <TouchableOpacity
                   onPress={() => {
                     let properUrl = item.message;
@@ -234,7 +302,8 @@ const ShowMessagesComponent = ({
                   style={{
                     flexDirection: 'row',
                     paddingRight: 10,
-                  }}>
+                  }}
+                  onLongPress={() => handleDeleteMessage()}>
                   <Image
                     source={require('../../../assets/ic_document.png')}
                     style={[
@@ -262,26 +331,214 @@ const ShowMessagesComponent = ({
                       ]}>
                       {item.extraText}
                     </Text>
-                  ) : null}
+                  ) : (
+                    <Text style={{marginLeft: 6, color: colors.LightWhite}}>
+                      {getFilenameFromFirebaseUrl(item.message)}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null}
+
+              {item.type == 'file/doc' ? (
+                <TouchableOpacity
+                  onLongPress={() => handleDeleteMessage()}
+                  onPress={() => {
+                    let properUrl = item.message;
+
+                    if (!/^https?:\/\//i.test(item.message)) {
+                      properUrl = `http://${item.message}`;
+                    }
+
+                    Linking.openURL(properUrl).catch(error => {
+                      console.log(error);
+                    });
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    paddingRight: 10,
+                  }}>
+                  <Image
+                    source={require('../../../assets/ic_doc.png')}
+                    style={[styles.iconDocument]}
+                  />
+
+                  {item.extraText !== '' ? (
+                    <Text
+                      style={[
+                        styles.chatTextStyle,
+                        {
+                          color:
+                            item.senderID === senderId
+                              ? colors.white
+                              : colors.black,
+                          marginLeft: 6,
+                        },
+                      ]}>
+                      {item.extraText}
+                    </Text>
+                  ) : (
+                    <Text style={{marginLeft: 6, color: colors.LightWhite}}>
+                      {getFilenameFromFirebaseUrl(item.message)}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null}
+
+              {item.type == 'file/txt' ? (
+                <TouchableOpacity
+                  onLongPress={() => handleDeleteMessage()}
+                  onPress={() => {
+                    let properUrl = item.message;
+
+                    if (!/^https?:\/\//i.test(item.message)) {
+                      properUrl = `http://${item.message}`;
+                    }
+
+                    Linking.openURL(properUrl).catch(error => {
+                      console.log(error);
+                    });
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    paddingRight: 10,
+                  }}>
+                  <Image
+                    source={require('../../../assets/ic_txt.png')}
+                    style={[styles.iconDocument]}
+                  />
+
+                  {item.extraText !== '' ? (
+                    <Text
+                      style={[
+                        styles.chatTextStyle,
+                        {
+                          color:
+                            item.senderID === senderId
+                              ? colors.white
+                              : colors.black,
+                          marginLeft: 6,
+                        },
+                      ]}>
+                      {item.extraText}
+                    </Text>
+                  ) : (
+                    <Text style={{marginLeft: 6, color: colors.LightWhite}}>
+                      {getFilenameFromFirebaseUrl(item.message)}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null}
+
+              {item.type == 'file/pptx' ? (
+                <TouchableOpacity
+                  onLongPress={() => handleDeleteMessage()}
+                  onPress={() => {
+                    let properUrl = item.message;
+
+                    if (!/^https?:\/\//i.test(item.message)) {
+                      properUrl = `http://${item.message}`;
+                    }
+
+                    Linking.openURL(properUrl).catch(error => {
+                      console.log(error);
+                    });
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    paddingRight: 10,
+                  }}>
+                  <Image
+                    source={require('../../../assets/pptx-file.png')}
+                    style={[styles.iconDocument]}
+                  />
+
+                  {item.extraText !== '' ? (
+                    <Text
+                      style={[
+                        styles.chatTextStyle,
+                        {
+                          color:
+                            item.senderID === senderId
+                              ? colors.white
+                              : colors.black,
+                          marginLeft: 6,
+                        },
+                      ]}>
+                      {item.extraText}
+                    </Text>
+                  ) : (
+                    <Text style={{marginLeft: 6, color: colors.LightWhite}}>
+                      {getFilenameFromFirebaseUrl(item.message)}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ) : null}
+
+              {item.type == 'file/csv' ? (
+                <TouchableOpacity
+                  onLongPress={() => handleDeleteMessage()}
+                  onPress={() => {
+                    let properUrl = item.message;
+
+                    if (!/^https?:\/\//i.test(item.message)) {
+                      properUrl = `http://${item.message}`;
+                    }
+
+                    Linking.openURL(properUrl).catch(error => {
+                      console.log(error);
+                    });
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    paddingRight: 10,
+                  }}>
+                  <Image
+                    source={require('../../../assets/ic_csv.png')}
+                    style={[styles.iconDocument]}
+                  />
+
+                  {item.extraText !== '' ? (
+                    <Text
+                      style={[
+                        styles.chatTextStyle,
+                        {
+                          color:
+                            item.senderID === senderId
+                              ? colors.white
+                              : colors.black,
+                          marginLeft: 6,
+                        },
+                      ]}>
+                      {item.extraText}
+                    </Text>
+                  ) : (
+                    <Text style={{marginLeft: 6, color: colors.LightWhite}}>
+                      {getFilenameFromFirebaseUrl(item.message)}
+                    </Text>
+                  )}
                 </TouchableOpacity>
               ) : null}
 
               {item.type == 'text' ? (
-                <Text
-                  style={[
-                    styles.chatTextStyle,
-                    {
-                      color:
-                        item.senderID === senderId
-                          ? colors.white
-                          : colors.black,
-                    },
-                  ]}>
-                  {item.message}
-                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onLongPress={() => handleDeleteMessage()}>
+                  <Text
+                    style={[
+                      styles.chatTextStyle,
+                      {
+                        color:
+                          item.senderID === senderId
+                            ? colors.white
+                            : colors.black,
+                      },
+                    ]}>
+                    {item.message}
+                  </Text>
+                </TouchableOpacity>
               ) : null}
               {item.type === 'audio' ? (
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -292,9 +549,14 @@ const ShowMessagesComponent = ({
                     borderRadius: 6,
                     justifyContent: 'space-between',
                     width: screenWidth / 3,
-                  }}>
+                  }}
+                  onLongPress={() => handleDeleteMessage()}>
                   {item.isPlaying === false ? (
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
                       <TouchableOpacity
                         onPress={() => {
                           setIsAudioLoading(true);
@@ -396,7 +658,46 @@ const ShowMessagesComponent = ({
                     </View>
                     // <Text>progress bar {currentPlaying}</Text>
                   )}
-                </View>
+                </TouchableOpacity>
+              ) : null}
+
+              {item.type == 'video' && item.message ? (
+                <>
+                  <TouchableOpacity
+                    onPress={() => setShowFullImage(true)}
+                    onLongPress={() => handleDeleteMessage()}>
+                    {!!item?.message && (
+                      <Video
+                        style={[
+                          styles.imageStyle,
+                          {
+                            width: screenWidth / 2 - 20,
+                          },
+                        ]}
+                        source={{uri: item?.message}}
+                        resizeMode="cover"
+                        poster="https://e1.pxfuel.com/desktop-wallpaper/802/816/desktop-wallpaper-black-iphone-7-posted-by-michelle-mercado-black-ios.jpg"
+                        posterResizeMode="cover"
+                        repeat
+                        paused={pauseVideo}
+                      />
+                    )}
+                    <View style={styles.videoPlayBtnWrapepr}>
+                      <TouchableOpacity
+                        style={styles.videoPlayBtnIconContainer}
+                        onPress={() => setPauseVideo(!pauseVideo)}>
+                        <Image
+                          source={
+                            pauseVideo
+                              ? require('../../../assets/ic_play.png')
+                              : require('../../../assets/pause-button.png')
+                          }
+                          style={styles.videoPlayBtnIcon}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </TouchableOpacity>
+                </>
               ) : null}
 
               <Text
@@ -430,7 +731,7 @@ const ShowMessagesComponent = ({
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <FastImage
+            {/* <FastImage
               style={{
                 width: '100%',
                 height: '100%',
@@ -438,7 +739,55 @@ const ShowMessagesComponent = ({
               }}
               source={{uri: item.message}}
               resizeMode="contain"
-            />
+            /> */}
+
+            {item.type == 'image' && (
+              <FastImage
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: colors.moviesBg,
+                }}
+                source={{uri: item.message}}
+                resizeMode="contain"
+              />
+            )}
+            {item.type == 'video' && item.message && (
+              <TouchableOpacity
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: colors.black,
+                }}
+                onPress={() => setPauseVideo(!pauseVideo)}>
+                <Video
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: colors.moviesBg,
+                  }}
+                  source={{uri: item?.message}}
+                  resizeMode="contain"
+                  repeat
+                  paused={pauseVideo}
+                />
+                <View style={styles.videoPlayBtnWrapepr}>
+                  <TouchableOpacity
+                    style={styles.videoPlayBtnIconContainer}
+                    onPress={() => setPauseVideo(!pauseVideo)}>
+                    <Image
+                      source={
+                        pauseVideo
+                          ? require('../../../assets/ic_play.png')
+                          : require('../../../assets/pause-button.png')
+                      }
+                      style={styles.videoPlayBtnIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
               onPress={() => {
                 setShowFullImage(false);
@@ -522,6 +871,35 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     resizeMode: 'contain',
+  },
+  videoStyle: {
+    width: 230,
+    height: 120,
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  videoPlayBtnWrapepr: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  videoPlayBtnIconContainer: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 34,
+    height: 34,
+    borderRadius: 34 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  videoPlayBtnIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: 'contain',
+    tintColor: 'snow',
   },
 });
 
