@@ -36,6 +36,7 @@ import TrendingTvSerialScreen from '../screens/TrendingTvSerialScreen';
 import AllUsersListScreen from '../screens/AllUsersListScreen';
 import ChatScreen from '../screens/Chat/ChatScreen';
 import NowPlayingMoviesScreen from '../screens/NowPlayingMoviesScreen';
+import SearchMultiScreen from '../screens/SearchMultiScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -302,6 +303,13 @@ function AppNavigator() {
       <Stack.Screen
         name="NowPlayingMoviesScreen"
         component={NowPlayingMoviesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchMultiScreen"
+        component={SearchMultiScreen}
         options={{
           headerShown: false,
         }}

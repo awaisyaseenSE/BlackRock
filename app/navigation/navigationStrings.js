@@ -35,4 +35,5 @@ export default {
   All_Users_List_Screen: 'AllUsersListScreen',
   Chat_Screen: 'ChatScreen',
   Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
+  Search_Multi_Screen: 'SearchMultiScreen',
 };

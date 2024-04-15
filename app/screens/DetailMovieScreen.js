@@ -245,7 +245,6 @@ export default function DetailMovieScreen({route}) {
       );
     }
   };
-
   return (
     <>
       <ScrollView
@@ -304,23 +303,37 @@ export default function DetailMovieScreen({route}) {
             <Text style={styles.heading} selectable>
               {movieDetails?.title} {movieDetails?.name}
             </Text>
-            <View style={styles.contentContainer}>
-              <Text selectable style={[styles.grayText, {textAlign: 'center'}]}>
-                {movieDetails?.release_date
-                  ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
-                  : ''}
-                {movieDetails?.first_air_date
-                  ? 'First air date ' +
-                    getYear(movieDetails?.first_air_date) +
-                    ' - '
-                  : ''}
-                {movieDetails?.adult ? '18+' : '16+'}
-              </Text>
-              <Text style={[styles.grayText, {textAlign: 'center'}]}>
-                Language {movieDetails?.original_language}
-              </Text>
-              <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
-            </View>
+            {routeData?.movieDetail?.media_type !== 'person' && (
+              <View style={styles.contentContainer}>
+                <Text
+                  selectable
+                  style={[styles.grayText, {textAlign: 'center'}]}>
+                  {movieDetails?.release_date
+                    ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
+                    : ''}
+                  {movieDetails?.first_air_date
+                    ? 'First air date ' +
+                      getYear(movieDetails?.first_air_date) +
+                      ' - '
+                    : ''}
+                  {movieDetails?.adult ? '18+' : '16+'}
+                </Text>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Language {movieDetails?.original_language}
+                </Text>
+                <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
+              </View>
+            )}
+            {routeData?.movieDetail?.media_type == 'person' && (
+              <View style={styles.contentContainer}>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Known for: {routeData?.movieDetail?.known_for_department}
+                </Text>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Popularity: {routeData?.movieDetail?.popularity}
+                </Text>
+              </View>
+            )}
             {youtubeVideoID !== '' && (
               <View style={{alignItems: 'center', width: '100%', height: 220}}>
                 {youtubeLoading && (
