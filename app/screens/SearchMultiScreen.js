@@ -48,7 +48,7 @@ export default function SearchMultiScreen() {
 
     let myURL = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(
       searchText,
-    )}&include_adult=true&api_key=${
+    )}&include_adult=false&api_key=${
       constants.theMovieDb_API_KEY
     }&page=${currentPage}`;
 
