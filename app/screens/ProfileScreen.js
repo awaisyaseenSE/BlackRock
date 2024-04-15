@@ -279,51 +279,6 @@ export default function ProfileScreen() {
           </Text>
         </View>
 
-        {/* <ButtonComponent
-          title="region base data"
-          onPress={getTrandingMovies}
-          style={styles.btn}
-        /> */}
-        <ButtonComponent
-          title="Tv data"
-          onPress={() => getDetailByTv('138502')}
-          style={styles.btn}
-        />
-
-        {/* <ScrollView
-          style={styles.imageUploadContainer}
-          horizontal
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={styles.uploadImgContainer}
-            onPress={handleSelectImages}>
-            <Image
-              source={require('../assets/camera.png')}
-              style={styles.uploadImg}
-            />
-          </TouchableOpacity>
-          <FlatList
-            data={selectedImage}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
-          />
-        </ScrollView>
-        <View style={{flex: 1, paddingHorizontal: 40}}>
-          {selectedImage.length > 0 && (
-            <ButtonComponent
-              title="Uplaod Images"
-              onPress={() => uploadImages(selectedImage)}
-              loading={loading}
-              style={{marginBottom: 12}}
-            />
-          )}
-        </View> */}
-
-        {/* <View style={[styles.triangle, {alignSelf: 'center', marginTop: 12}]} /> */}
-
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
             activeOpacity={1}
