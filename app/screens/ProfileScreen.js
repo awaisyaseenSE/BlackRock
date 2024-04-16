@@ -12,8 +12,11 @@ import {
   Modal,
   Pressable,
   Linking,
+  Animated,
+  Easing,
+  TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -34,6 +37,7 @@ import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
 import navigationStrings from '../navigation/navigationStrings';
 import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
+import WebView from 'react-native-webview';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -224,6 +228,23 @@ export default function ProfileScreen() {
     }
   };
 
+  const [spinAnim, setSpinAnim] = useState(new Animated.Value(0));
+  const spin = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(spinAnim, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ).start();
+  });
+
   return (
     <>
       <View style={styles.container}>
@@ -277,6 +298,46 @@ export default function ProfileScreen() {
           <Text style={styles.profileTxt} selectable>
             {auth().currentUser?.email}
           </Text>
+          {/* <Text style={styles.profileTxt}>
+            Hello my name is awais and i am {'\n'}a react native student from{' '}
+            {'\n'}
+            sadiqabad i also study in kfueit.
+          </Text> */}
+          <TouchableOpacity>
+            {/* <FastImage
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 100,
+                marginTop: 20,
+              }}
+              source={{
+                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              }}
+            /> */}
+            <Animated.Image
+              style={{
+                height: 100,
+                width: 100,
+                marginVertical: 30,
+                transform: [{rotate: spin}],
+              }}
+              source={{
+                uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png',
+              }}
+            />
+            <Animated.Image
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 100,
+                transform: [{rotate: spin}],
+              }}
+              source={{
+                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              }}
+            />
+          </TouchableOpacity>
         </View>
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>

@@ -173,12 +173,7 @@ export default function SearchMultiScreen() {
             title="Multi Search"
             onPress={() => navigation.goBack()}
           />
-          {/* <ButtonComponent
-            title="go to Pixels collection"
-            onPress={() =>
-              navigation.navigate(navigationStrings.Pexel_Collection_Screen)
-            }
-          /> */}
+
           <TouchableWithoutFeedback
             style={{flex: 1}}
             onPress={() => Keyboard.dismiss()}>
