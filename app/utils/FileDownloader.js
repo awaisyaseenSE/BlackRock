@@ -142,10 +142,6 @@ const checkPermissionAndroid = async (url, setDownloadUrlLoading) => {
 export const handleDownload = async (url, setDownloadUrlLoading) => {
   if (Platform.OS === 'ios') {
     downloadIosFile(url, setDownloadUrlLoading);
-    // let downloadPermissionIos = await request(
-    //   PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY,
-    // );
-    // console.log('dowmload permission ios is: ', downloadPermissionIos);
   } else if (Platform.OS === 'android') {
     checkPermissionAndroid(url, setDownloadUrlLoading);
   } else {
