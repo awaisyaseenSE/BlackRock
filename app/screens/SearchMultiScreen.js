@@ -12,6 +12,7 @@ import {
   Keyboard,
   Modal,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,11 +20,12 @@ import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import constants from '../constants/constants';
 import FastImage from 'react-native-fast-image';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import navigationStrings from '../navigation/navigationStrings';
 import ScreenComponent from '../components/ScreenComponent';
 import TextInputWithLeftIconCompo from '../components/TextInputWithLeftIconCompo';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
+import ButtonComponent from '../components/ButtonComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -38,6 +40,14 @@ export default function SearchMultiScreen() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [endReached, setEndReached] = useState(false);
+  const isFocused = useIsFocused();
+
+  // useEffect(() => {
+  //   console.log('useEffect is called! and value of isFocused is: ', isFocused);
+  //   if (isFocused) {
+  //     Alert.alert('Focused!');
+  //   }
+  // }, [isFocused]);
 
   const handleSearchMovies = async () => {
     let url = `/search/movie?query=${encodeURIComponent(searchText)}`;
@@ -163,6 +173,12 @@ export default function SearchMultiScreen() {
             title="Multi Search"
             onPress={() => navigation.goBack()}
           />
+          {/* <ButtonComponent
+            title="go to Pixels collection"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pexel_Collection_Screen)
+            }
+          /> */}
           <TouchableWithoutFeedback
             style={{flex: 1}}
             onPress={() => Keyboard.dismiss()}>
