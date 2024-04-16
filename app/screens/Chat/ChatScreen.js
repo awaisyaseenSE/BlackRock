@@ -36,6 +36,7 @@ import firebase from '@react-native-firebase/app';
 import {pickImage} from '../../helper/mediaPicker';
 import RecordingComponent from './components/RecordingComponent';
 import {launchCamera} from 'react-native-image-picker';
+import {PERMISSIONS, request} from 'react-native-permissions';
 
 export default function ChatScreen({route}) {
   const routeData = route?.params;
@@ -403,6 +404,16 @@ export default function ChatScreen({route}) {
         return null;
       }
     }
+
+    if (Platform.OS === 'ios') {
+      let cameraIosPermission = await request(PERMISSIONS.IOS.CAMERA);
+      if (cameraIosPermission == 'granted') {
+        console.log('permission is ', cameraIosPermission);
+      } else {
+        return null;
+      }
+    }
+
     try {
       setLoading(true);
       const value = true;

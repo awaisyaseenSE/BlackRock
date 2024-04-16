@@ -14,6 +14,7 @@ import {
 import React from 'react';
 import colors from '../../../styles/colors';
 import ShowReplyCompo from './ShowReplyCompo';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 const AddNewMessageCompo = ({
   newTextMessage,
@@ -46,8 +47,55 @@ const AddNewMessageCompo = ({
           setRecordingModal(true);
         } else {
           Alert.alert(
-            'Camera Permission Required!',
-            'Please enable camera permission to take picture.',
+            'Microphone Permission Required!',
+            'Please enable micro phone permission to record audio.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'Enable',
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+          );
+          return null;
+        }
+      } else if (Platform.OS === 'ios') {
+        const iosMicroPhonePermission = await request(
+          PERMISSIONS.IOS.MICROPHONE,
+        );
+        console.log('iosMicroPhonePermission: ', iosMicroPhonePermission);
+        if (iosMicroPhonePermission == 'granted') {
+          setRecordingModal(true);
+        }
+      } else {
+        // setRecordingModal(true);
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const checkLibraryPermission = async () => {
+    try {
+      if (Platform.OS === 'ios') {
+        let libraryPermissionIos = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+        console.log('libray permission is: ', libraryPermissionIos);
+        if (
+          libraryPermissionIos == 'granted' ||
+          libraryPermissionIos == 'limited'
+        ) {
+          setSelectAttachment(true);
+        } else {
+          Alert.alert(
+            'Library Permission Required!',
+            'Please enable photo library permission to select photos.',
             [
               {
                 text: 'Cancel',
@@ -65,12 +113,13 @@ const AddNewMessageCompo = ({
           return null;
         }
       } else {
-        setRecordingModal(true);
+        setSelectAttachment(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <>
       <KeyboardAvoidingView
@@ -127,7 +176,8 @@ const AddNewMessageCompo = ({
 
                 <TouchableOpacity
                   style={[styles.rightIconsContainer, {marginLeft: 2}]}
-                  onPress={() => setSelectAttachment(true)}>
+                  onPress={() => checkLibraryPermission()}>
+                  {/* onPress={() => setSelectAttachment(true)}> */}
                   <Image
                     source={require('../../../assets/attach-file.png')}
                     style={[styles.rightIcons, {width: 24, height: 24}]}

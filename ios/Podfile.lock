@@ -1331,6 +1331,8 @@ PODS:
   - RNGestureHandler (2.14.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNReanimated (3.6.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1430,6 +1432,7 @@ DEPENDENCIES:
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSound (from `../node_modules/react-native-sound`)
@@ -1605,6 +1608,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1715,6 +1720,7 @@ SPEC CHECKSUMS:
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 16090ce1d186c348fb0595e03442843fa3b91565
+  RNPermissions: ec8dfde60b1614b46c77ef80dce4d194770009c5
   RNReanimated: 6cbeb21f7def739dd4eabc2bae634a2ff2539802
   RNScreens: 1c2444658fbb696a094272d946708167b1f63409
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
@@ -1726,6 +1732,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: b76f1acfda8212aa16b7e26bcce3983230c82603
 
-PODFILE CHECKSUM: d67a599b3c8bf8514d7471c66389d9ebe8ed7a26
+PODFILE CHECKSUM: 553220d17f41254ef16a23ed72957901b7a24650
 
 COCOAPODS: 1.14.2
