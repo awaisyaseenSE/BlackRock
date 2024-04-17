@@ -213,6 +213,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Pixabay Videos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pixabay_Search_Videos)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

@@ -43,4 +43,5 @@ export default {
 
   // below screens for pixabay photos
   Pixabay_Search_Screen: 'PixabaySearchScreen',
+  Pixabay_Search_Videos: 'PixabaySearchVideos',
 };
