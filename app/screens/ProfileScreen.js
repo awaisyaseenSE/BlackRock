@@ -286,11 +286,17 @@ export default function ProfileScreen() {
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => setShowImageModal(true)}>
-            <FastImage
+            {/* <FastImage
               source={
                 !!userImage ? {uri: userImage} : require('../assets/men.jpg')
               }
               style={styles.profileImage}
+            /> */}
+            <Animated.Image
+              style={[styles.profileImage, {transform: [{rotate: spin}]}]}
+              source={
+                !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+              }
             />
           </TouchableOpacity>
         </View>
@@ -315,7 +321,7 @@ export default function ProfileScreen() {
                 uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
               }}
             /> */}
-            <Animated.Image
+            {/* <Animated.Image
               style={{
                 height: 100,
                 width: 100,
@@ -325,8 +331,8 @@ export default function ProfileScreen() {
               source={{
                 uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png',
               }}
-            />
-            <Animated.Image
+            /> */}
+            {/* <Animated.Image
               style={{
                 height: 100,
                 width: 100,
@@ -336,7 +342,7 @@ export default function ProfileScreen() {
               source={{
                 uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
               }}
-            />
+            /> */}
           </TouchableOpacity>
         </View>
 

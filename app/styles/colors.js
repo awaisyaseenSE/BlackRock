@@ -41,4 +41,9 @@ export default {
   uploadModalBg: 'rgba(0,0,0,0.2)',
   lightRed: '#FD5C5C',
   chatBg: '#121212',
+  fitnessLightPurple: '#99C1FF',
+  fitnessDarkPurple: '#94A7FE',
+  fitnessWhite: '#FFFFFF',
+  fitnessLigthWhite: '#F8F8F8',
+  fitnessLigthWhite2: '#E9F2FF',
 };

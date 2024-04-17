@@ -195,6 +195,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Fitness X"
+            onPress={() =>
+              navigation.navigate(navigationStrings.FitnessX_Onboarding_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

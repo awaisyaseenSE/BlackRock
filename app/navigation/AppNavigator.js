@@ -37,6 +37,8 @@ import AllUsersListScreen from '../screens/AllUsersListScreen';
 import ChatScreen from '../screens/Chat/ChatScreen';
 import NowPlayingMoviesScreen from '../screens/NowPlayingMoviesScreen';
 import SearchMultiScreen from '../screens/SearchMultiScreen';
+import FitnessXOnboardingScreen from '../screens/Fitness/FitnessXOnboardingScreen';
+import FitnessXActivityTrackerScreen from '../screens/Fitness/FitnessXActivityTrackerScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -310,6 +312,20 @@ function AppNavigator() {
       <Stack.Screen
         name="SearchMultiScreen"
         component={SearchMultiScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FitnessXOnboardingScreen"
+        component={FitnessXOnboardingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FitnessXActivityTrackerScreen"
+        component={FitnessXActivityTrackerScreen}
         options={{
           headerShown: false,
         }}

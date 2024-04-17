@@ -36,4 +36,8 @@ export default {
   Chat_Screen: 'ChatScreen',
   Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
   Search_Multi_Screen: 'SearchMultiScreen',
+
+  // below screens for FitnessX
+  FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
+  FitnessX_Activity_Tracker_Screen: 'FitnessXActivityTrackerScreen',
 };
