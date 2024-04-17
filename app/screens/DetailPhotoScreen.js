@@ -132,6 +132,7 @@ export default function DetailPhotoScreen({route}) {
                   source={{
                     uri:
                       photoData?.src?.portrait ||
+                      photoData?.largeImageURL ||
                       'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
                   }}
                   style={{
@@ -147,12 +148,12 @@ export default function DetailPhotoScreen({route}) {
             </Animated.View>
           </PanGestureHandler>
           {/* <FastImage
-          source={{uri: photoData?.src?.portrait}}
-          style={styles.imageStyle}
-          resizeMode="contain"
-          onLoadStart={handleLoadStart}
-          onLoadEnd={handleLoadEnd}
-        /> */}
+            source={{uri: photoData?.src?.portrait || photoData?.largeImageURL}}
+            style={styles.imageStyle}
+            resizeMode="cover"
+            onLoadStart={handleLoadStart}
+            onLoadEnd={handleLoadEnd}
+          /> */}
           {isLoading && (
             <View style={styles.placeholder}>
               <ActivityIndicator size="large" color={colors.black} />
@@ -183,7 +184,10 @@ export default function DetailPhotoScreen({route}) {
               },
             ]}
             onPress={() =>
-              handleDownload(photoData?.src?.portrait, setDownloadUrlLoading)
+              handleDownload(
+                photoData?.src?.portrait || photoData?.largeImageURL,
+                setDownloadUrlLoading,
+              )
             }>
             {downloadUrlLoading ? (
               <ActivityIndicator size={'small'} color={colors.white} />

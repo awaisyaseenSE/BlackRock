@@ -40,4 +40,7 @@ export default {
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
   FitnessX_Activity_Tracker_Screen: 'FitnessXActivityTrackerScreen',
+
+  // below screens for pixabay photos
+  Pixabay_Search_Screen: 'PixabaySearchScreen',
 };

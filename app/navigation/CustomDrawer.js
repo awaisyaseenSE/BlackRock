@@ -195,11 +195,20 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
-          <DrawerItemListCompo
+          {/* <DrawerItemListCompo
             image={require('../assets/tab_search.png')}
             title="Fitness X"
             onPress={() =>
               navigation.navigate(navigationStrings.FitnessX_Onboarding_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          /> */}
+          <DrawerItemListCompo
+            image={require('../assets/tab_search.png')}
+            title="Pixabay Photos"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Pixabay_Search_Screen)
             }
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}

@@ -7,4 +7,6 @@ export default {
   theMovieDb_BASE_URL: 'https://api.themoviedb.org/3',
   image_poster_url: 'https://image.tmdb.org/t/p/original',
   youtube_API_KEY: 'AIzaSyBCg_RUmpA8P6w8aAEXgvH6_Xb2glB7ILs',
+  pixabay_API_KEY: '41131929-2125e78969612ea2538bbbfbd',
+  pixabay_BASE_URL: 'https://pixabay.com/api/',
 };
