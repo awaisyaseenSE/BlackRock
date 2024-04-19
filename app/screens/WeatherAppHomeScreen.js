@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -356,7 +357,10 @@ export default function WeatherAppHomeScreen() {
                   <Text
                     style={[
                       styles.cityNameStyle,
-                      {alignSelf: 'center', marginVertical: 20},
+                      {
+                        alignSelf: 'center',
+                        marginVertical: 10,
+                      },
                     ]}>
                     {weatherData?.name},{' '}
                     <Text style={{color: colors.whiteOpacity70}}>
@@ -463,6 +467,74 @@ export default function WeatherAppHomeScreen() {
                     </View>
                   </View>
                 )}
+                {weatherData !== null && (
+                  <View>
+                    <View
+                      style={{
+                        marginBottom: 4,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        paddingHorizontal: 2,
+                      }}>
+                      <Text style={[styles.txtGray, {flex: 1}]}>
+                        Feel Like:{' '}
+                        {(weatherData?.main?.feels_like - 273).toFixed(0)} &deg;
+                        C
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          flex: 1,
+                        }}>
+                        <Text style={styles.txtGray}>
+                          Min: {(weatherData?.main?.temp_min - 273).toFixed(0)}{' '}
+                          &deg; C
+                        </Text>
+                        <Text style={[styles.txtGray, {marginLeft: 10}]}>
+                          Max: {(weatherData?.main?.temp_max - 273).toFixed(0)}{' '}
+                          &deg; C
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: colors.weather_Search_Bg,
+                        borderStyle: 'dotted',
+                      }}
+                    />
+                    <View
+                      style={{
+                        marginTop: 6,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={[styles.txtGray, {flex: 1}]}>
+                        Pressure: {weatherData?.main?.pressure} hPa
+                      </Text>
+                      <Text style={[styles.txtGray, {flex: 1}]}>
+                        Weather: {weatherData?.weather[0]?.main}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        marginTop: 6,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={[styles.txtGray, {flex: 1}]}>
+                        Sunrise: {getTimeFormate(weatherData?.sys?.sunrise)}
+                      </Text>
+                      <Text style={[styles.txtGray, {flex: 1}]}>
+                        Sunset: {getTimeFormate(weatherData?.sys?.sunset)}
+                      </Text>
+                    </View>
+                  </View>
+                )}
               </View>
               <View
                 style={{
@@ -531,6 +603,7 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     alignItems: 'center',
+    marginTop: Platform.OS === 'android' ? 14 : 4,
   },
   inputStyle: {
     backgroundColor: colors.weather_Search_Bg,
@@ -546,7 +619,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 20,
-    marginTop: 20,
+    // marginTop: 20,
   },
   iconStyle: {
     width: 180,
@@ -595,7 +668,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20,
-    marginRight: 12,
+    marginRight: 8,
     tintColor: colors.LightWhite,
   },
   itemContainer: {
@@ -619,5 +692,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 14,
     paddingHorizontal: 20,
+  },
+  txtGray: {
+    color: colors.whiteOpacity70,
+    fontFamily: fontFamily.rubik_medium,
+    fontSize: 14,
+    // flex: 1,
   },
 });
