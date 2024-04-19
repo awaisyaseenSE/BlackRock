@@ -46,4 +46,7 @@ export default {
   fitnessWhite: '#FFFFFF',
   fitnessLigthWhite: '#F8F8F8',
   fitnessLigthWhite2: '#E9F2FF',
+
+  // weather app
+  weather_Search_Bg: 'rgba(255,255,255,0.2)',
 };

@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
@@ -26,14 +27,27 @@ const TextInputWithLeftIconCompo = ({
   placeholderTextColor = colors.grey,
   clearIcon = '',
   onPressClear = () => {},
+  closeIconStyle,
+  leftIconStyle,
+  onPress,
+  loading = false,
   ...props
 }) => {
   return (
     <View style={{...styles.inputStyle, ...inputStyle}}>
-      <Image
-        source={require('../assets/tab_search.png')}
-        style={styles.leftIcon}
-      />
+      <TouchableOpacity
+        style={{
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={onPress}
+        activeOpacity={0.6}>
+        <Image
+          source={require('../assets/tab_search.png')}
+          style={{...styles.leftIcon, ...leftIconStyle}}
+        />
+      </TouchableOpacity>
       <TextInput
         style={{...styles.textStyle, ...textStyle}}
         value={value}
@@ -56,11 +70,16 @@ const TextInputWithLeftIconCompo = ({
             paddingVertical: 6,
             // backgroundColor: 'pink',
             paddingHorizontal: 4,
-          }}>
-          <Image
-            source={require('../assets/close.png')}
-            style={styles.closeIcon}
-          />
+          }}
+          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator size={'small'} color={colors.LightWhite} />
+          ) : (
+            <Image
+              source={require('../assets/close.png')}
+              style={{...styles.closeIcon, ...closeIconStyle}}
+            />
+          )}
         </TouchableOpacity>
       ) : null}
     </View>

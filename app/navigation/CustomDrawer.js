@@ -222,6 +222,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/weather_media/cloud.png')}
+            title="Weather App"
+            onPress={() =>
+              navigation.navigate(navigationStrings.WeatherAppHomeScreen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

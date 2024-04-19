@@ -36,6 +36,7 @@ export default {
   Chat_Screen: 'ChatScreen',
   Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
   Search_Multi_Screen: 'SearchMultiScreen',
+  WeatherAppHomeScreen: 'WeatherAppHomeScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',

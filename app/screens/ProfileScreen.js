@@ -245,6 +245,53 @@ export default function ProfileScreen() {
     ).start();
   });
 
+  const handleQuery = async () => {
+    try {
+      let today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let temArr = [];
+      let ref = firestore().collection('testFirestore');
+      const query = await ref
+        .where('age', '==', 12)
+        // .where('time', '<=', today)
+        // .where('time', '<', new Date(today.getTime() + 86400000))
+        .get();
+      if (query.size > 0) {
+        query.docs.forEach(doc => {
+          let data = {id: doc.id, ...doc.data()};
+          temArr.push(data);
+        });
+        if (temArr.length > 0) {
+          console.log(
+            'Total users is: ',
+            temArr.length,
+            ' and Final data of user is: ',
+            temArr,
+          );
+        }
+      } else {
+        console.log('data not found!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCityWeatherData = async cityName => {
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${constants.open_Weather_API_KEY}`;
+      let response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('data is: ', result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -463,7 +510,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     borderRadius: 22,
-    backgroundColor: '#12213F',
+    backgroundColor: colors.blue2,
   },
   modalStyle: {
     width: screenWidth,

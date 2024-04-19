@@ -9,4 +9,6 @@ export default {
   youtube_API_KEY: 'AIzaSyBCg_RUmpA8P6w8aAEXgvH6_Xb2glB7ILs',
   pixabay_API_KEY: '41131929-2125e78969612ea2538bbbfbd',
   pixabay_BASE_URL: 'https://pixabay.com/api/',
+  omdb_Movie_API_KEY: '5a217070',
+  open_Weather_API_KEY: 'b1a0913118e89073df370e8bc80df6bb',
 };

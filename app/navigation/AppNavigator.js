@@ -41,6 +41,7 @@ import FitnessXOnboardingScreen from '../screens/Fitness/FitnessXOnboardingScree
 import FitnessXActivityTrackerScreen from '../screens/Fitness/FitnessXActivityTrackerScreen';
 import PixabaySearchScreen from '../screens/PixabaySearchScreen';
 import PixabaySearchVideos from '../screens/PixabaySearchVideos';
+import WeatherAppHomeScreen from '../screens/WeatherAppHomeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -342,6 +343,13 @@ function AppNavigator() {
       <Stack.Screen
         name="PixabaySearchVideos"
         component={PixabaySearchVideos}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="WeatherAppHomeScreen"
+        component={WeatherAppHomeScreen}
         options={{
           headerShown: false,
         }}
