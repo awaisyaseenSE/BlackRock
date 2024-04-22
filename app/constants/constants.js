@@ -11,4 +11,6 @@ export default {
   pixabay_BASE_URL: 'https://pixabay.com/api/',
   omdb_Movie_API_KEY: '5a217070',
   open_Weather_API_KEY: 'b1a0913118e89073df370e8bc80df6bb',
+  guardian_News_API_KEY: '64211995-09bc-4d07-808c-291c22132a37',
+  news_Api_Org: '31f9ee786fc34f3bb1d34a8a57ce284b',
 };

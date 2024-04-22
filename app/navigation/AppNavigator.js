@@ -42,6 +42,9 @@ import FitnessXActivityTrackerScreen from '../screens/Fitness/FitnessXActivityTr
 import PixabaySearchScreen from '../screens/PixabaySearchScreen';
 import PixabaySearchVideos from '../screens/PixabaySearchVideos';
 import WeatherAppHomeScreen from '../screens/WeatherAppHomeScreen';
+import TopNewsScreen from '../screens/TopNewsScreen';
+import DetailNewsScreen from '../screens/DetailNewsScreen';
+import SearchNewsScreen from '../screens/SearchNewsScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -350,6 +353,27 @@ function AppNavigator() {
       <Stack.Screen
         name="WeatherAppHomeScreen"
         component={WeatherAppHomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TopNewsScreen"
+        component={TopNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailNewsScreen"
+        component={DetailNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchNewsScreen"
+        component={SearchNewsScreen}
         options={{
           headerShown: false,
         }}

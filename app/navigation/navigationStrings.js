@@ -37,6 +37,9 @@ export default {
   Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
   Search_Multi_Screen: 'SearchMultiScreen',
   WeatherAppHomeScreen: 'WeatherAppHomeScreen',
+  Top_News_Screen: 'TopNewsScreen',
+  Detail_News_Screen: 'DetailNewsScreen',
+  Search_News_Screen: 'SearchNewsScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
