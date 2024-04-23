@@ -49,4 +49,10 @@ export default {
 
   // weather app
   weather_Search_Bg: 'rgba(255,255,255,0.2)',
+  food_white: '#FBFEFB',
+  food_yellow: '#F3920B',
+  food_Light_yellow: '#E4B644',
+  food_gray: '#DDE0DE',
+  food_light_black: '#757876',
+  food_light_black2: '#454846',
 };

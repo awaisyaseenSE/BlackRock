@@ -46,6 +46,7 @@ import TopNewsScreen from '../screens/TopNewsScreen';
 import DetailNewsScreen from '../screens/DetailNewsScreen';
 import SearchNewsScreen from '../screens/SearchNewsScreen';
 import RottonTomatosScreen from '../screens/RottonTomatosScreen';
+import FoodRecipeHomeScreen from '../screens/Food/FoodRecipeHomeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -382,6 +383,13 @@ function AppNavigator() {
       <Stack.Screen
         name="RottonTomatosScreen"
         component={RottonTomatosScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FoodRecipeHomeScreen"
+        component={FoodRecipeHomeScreen}
         options={{
           headerShown: false,
         }}

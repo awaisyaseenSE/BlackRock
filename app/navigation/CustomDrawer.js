@@ -232,6 +232,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
+            image={require('../assets/weather_media/cloud.png')}
+            title="Food Recepie"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Food_Recipe_Home_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/news-1.png')}
             title="Top News"
             onPress={() =>
