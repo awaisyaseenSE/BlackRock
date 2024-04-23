@@ -9,6 +9,7 @@ import SearchScreen from '../screens/SearchScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Animated, {Value3D} from 'react-native-reanimated';
+import {CachedImage} from '../utils/CachedImage';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -99,22 +100,45 @@ const BottomTabNavigator = () => {
           tabBarLabel: 'Profile',
           tabBarIcon: ({focused}) => {
             return (
-              <Image
-                source={
-                  !!auth()?.currentUser?.photoURL
-                    ? {uri: auth()?.currentUser?.photoURL}
-                    : require('../assets/user.png')
-                }
-                style={
-                  !!auth()?.currentUser?.photoURL
-                    ? styles.profileImageStyle
-                    : [
-                        styles.iconStyle,
-                        {tintColor: focused ? colors.lineColor : colors.gray},
-                      ]
-                }
-                defaultSource={require('../assets/avatar.png')}
-              />
+              // <Image
+              //   source={
+              //     !!auth()?.currentUser?.photoURL
+              //       ? {uri: auth()?.currentUser?.photoURL}
+              //       : require('../assets/user.png')
+              //   }
+              //   style={
+              //     !!auth()?.currentUser?.photoURL
+              //       ? styles.profileImageStyle
+              //       : [
+              //           styles.iconStyle,
+              //           {tintColor: focused ? colors.lineColor : colors.gray},
+              //         ]
+              //   }
+              //   defaultSource={require('../assets/avatar.png')}
+              // />
+
+              !!auth()?.currentUser?.photoURL ? (
+                <CachedImage
+                  uri={auth()?.currentUser?.photoURL}
+                  style={
+                    !!auth()?.currentUser?.photoURL
+                      ? styles.profileImageStyle
+                      : [
+                          styles.iconStyle,
+                          {tintColor: focused ? colors.lineColor : colors.gray},
+                        ]
+                  }
+                  defaultSource={require('../assets/avatar.png')}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/user.png')}
+                  style={[
+                    styles.iconStyle,
+                    {tintColor: focused ? colors.lineColor : colors.gray},
+                  ]}
+                />
+              )
             );
           },
         }}

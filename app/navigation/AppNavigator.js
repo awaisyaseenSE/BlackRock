@@ -45,6 +45,7 @@ import WeatherAppHomeScreen from '../screens/WeatherAppHomeScreen';
 import TopNewsScreen from '../screens/TopNewsScreen';
 import DetailNewsScreen from '../screens/DetailNewsScreen';
 import SearchNewsScreen from '../screens/SearchNewsScreen';
+import RottonTomatosScreen from '../screens/RottonTomatosScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -374,6 +375,13 @@ function AppNavigator() {
       <Stack.Screen
         name="SearchNewsScreen"
         component={SearchNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RottonTomatosScreen"
+        component={RottonTomatosScreen}
         options={{
           headerShown: false,
         }}

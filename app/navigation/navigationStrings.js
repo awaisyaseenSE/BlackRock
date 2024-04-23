@@ -40,6 +40,7 @@ export default {
   Top_News_Screen: 'TopNewsScreen',
   Detail_News_Screen: 'DetailNewsScreen',
   Search_News_Screen: 'SearchNewsScreen',
+  Rotton_Tomatos_Screen: 'RottonTomatosScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',

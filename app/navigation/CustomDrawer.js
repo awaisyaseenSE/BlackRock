@@ -240,6 +240,15 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
+          <DrawerItemListCompo
+            image={require('../assets/find-movie.png')}
+            title="Rotton Tomatos Movies"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Rotton_Tomatos_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
         </View>
       </DrawerContentScrollView>
       <View

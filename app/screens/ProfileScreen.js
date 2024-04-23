@@ -38,6 +38,7 @@ import navigationStrings from '../navigation/navigationStrings';
 import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import WebView from 'react-native-webview';
+import {CachedImage} from '../utils/CachedImage';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -286,9 +287,54 @@ export default function ProfileScreen() {
       }
 
       const result = await response.json();
-      console.log('data is: ', result);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const fetchMovieDetails = async () => {
+    const url =
+      'https://ott-details.p.rapidapi.com/advancedsearch?warstart_year=1970&end_year=2024&min_imdb=5&type=movie&sort=latest&page=1';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Host': 'ott-details.p.rapidapi.com',
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await fetch(url, options);
+      const result = await response.json();
+      if (!!result) {
+        console.log('data results is: ', result?.results?.length);
+        console.log(result);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const foodRecipeApp = async () => {
+    const url =
+      'https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=italian%20wedding%20soup';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Host': 'recipe-by-api-ninjas.p.rapidapi.com',
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -339,12 +385,13 @@ export default function ProfileScreen() {
               }
               style={styles.profileImage}
             /> */}
-            <Animated.Image
+            {/* <Animated.Image
               style={[styles.profileImage, {transform: [{rotate: spin}]}]}
               source={
                 !!userImage ? {uri: userImage} : require('../assets/men.jpg')
               }
-            />
+            /> */}
+            <CachedImage uri={userImage} style={styles.profileImage} />
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center', marginTop: 20}}>
@@ -391,6 +438,11 @@ export default function ProfileScreen() {
               }}
             /> */}
           </TouchableOpacity>
+          <ButtonComponent
+            title="get food"
+            style={styles.btn}
+            onPress={foodRecipeApp}
+          />
         </View>
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
