@@ -8,6 +8,8 @@ import {
   Image,
   FlatList,
   Dimensions,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../components/ScreenComponent';
@@ -16,8 +18,10 @@ import FoodTopHomeCompo from './components/FoodTopHomeCompo';
 import auth from '@react-native-firebase/auth';
 import fontFamily from '../../styles/fontFamily';
 import {useNavigation} from '@react-navigation/native';
-import CachedImage from '../../utils/CachedImage';
+import {CachedImage} from '../../utils/CachedImage';
 import FastImage from 'react-native-fast-image';
+import Animated, {FadeInDown} from 'react-native-reanimated';
+import navigationStrings from '../../navigation/navigationStrings';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -98,6 +102,10 @@ export default function FoodRecipeHomeScreen() {
             source={{uri: item?.strCategoryThumb}}
             style={[styles.categoryImageStyle]}
           />
+          {/* <CachedImage
+            uri={item?.strCategoryThumb}
+            style={[styles.categoryImageStyle]}
+          /> */}
         </View>
         <Text
           style={[
@@ -118,29 +126,50 @@ export default function FoodRecipeHomeScreen() {
   const renderItem = ({item, index}) => {
     let isEven = index % 2 == 0;
     return (
-      <TouchableOpacity
-        style={[
-          styles.recipeDataContainer,
-          {
-            paddingLeft: isEven ? 0 : 6,
-            paddingRight: isEven ? 6 : 0,
-          },
-        ]}
-        activeOpacity={0.8}>
-        <FastImage
-          source={{uri: item?.strMealThumb}}
+      <Animated.View
+        entering={FadeInDown.delay(index * 100)
+          .duration(600)
+          .springify()
+          .damping(12)}>
+        <TouchableOpacity
           style={[
-            styles.recipeDataImage,
+            styles.recipeDataContainer,
             {
-              marginTop: index % 3 == 0 ? 20 : 0,
-              backgroundColor: colors.food_gray,
+              paddingLeft: isEven ? 0 : 6,
+              paddingRight: isEven ? 6 : 0,
             },
           ]}
-        />
-        <Text numberOfLines={1} style={styles.txt}>
-          {item?.strMeal}
-        </Text>
-      </TouchableOpacity>
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate(navigationStrings.Detail_Food_Recipe_Screen, {
+              data: item,
+            });
+          }}>
+          <FastImage
+            source={{uri: item?.strMealThumb}}
+            style={[
+              styles.recipeDataImage,
+              {
+                marginTop: index % 3 == 0 ? 20 : 0,
+                backgroundColor: colors.food_gray,
+              },
+            ]}
+          />
+          {/* <CachedImage
+            uri={item?.strMealThumb}
+            style={[
+              styles.recipeDataImage,
+              {
+                marginTop: index % 3 == 0 ? 20 : 0,
+                backgroundColor: colors.food_gray,
+              },
+            ]}
+          /> */}
+          <Text numberOfLines={1} style={styles.txt}>
+            {item?.strMeal}
+          </Text>
+        </TouchableOpacity>
+      </Animated.View>
     );
   };
 
@@ -152,59 +181,66 @@ export default function FoodRecipeHomeScreen() {
           barStyle={'dark-content'}
         />
         <FoodTopHomeCompo />
-        <View style={styles.container}>
-          <View style={{paddingHorizontal: 20}}>
-            <Text style={[styles.subHeading, {marginBottom: 4}]}>
-              Hello, {auth()?.currentUser?.displayName}
-            </Text>
-            <Text style={styles.heading}>
-              Make your own food,{'\n'}stay at{' '}
-              <Text style={{color: colors.food_Light_yellow}}>home</Text>
-            </Text>
-            <View style={styles.textInputConatiner}>
-              <TextInput
-                value={searchText}
-                onChangeText={text => {
-                  if (text.trim().length) {
-                    setSearchText(text);
-                  } else {
-                    setSearchText('');
-                  }
-                }}
-                maxLength={40}
-                style={styles.inputStyle}
-                placeholder="Search any recipe"
-                placeholderTextColor={colors.food_light_black}
-              />
-              <TouchableOpacity style={styles.searchIconContainer}>
-                <Image
-                  source={require('../../assets/food/search.png')}
-                  style={styles.searchIcon}
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <View style={{paddingHorizontal: 20}}>
+              <Text style={[styles.subHeading, {marginBottom: 4}]}>
+                Hello, {auth()?.currentUser?.displayName}
+              </Text>
+              <Text style={styles.heading}>
+                Make your own food,{'\n'}stay at{' '}
+                <Text style={{color: colors.food_Light_yellow}}>home</Text>
+              </Text>
+              <View style={styles.textInputConatiner}>
+                <TextInput
+                  value={searchText}
+                  onChangeText={text => {
+                    if (text.trim().length) {
+                      setSearchText(text);
+                    } else {
+                      setSearchText('');
+                    }
+                  }}
+                  maxLength={40}
+                  style={styles.inputStyle}
+                  placeholder="Search any recipe"
+                  placeholderTextColor={colors.food_light_black}
                 />
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.searchIconContainer}>
+                  <Image
+                    source={require('../../assets/food/search.png')}
+                    style={styles.searchIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{paddingLeft: 20}}>
+              <FlatList
+                data={categoryData}
+                renderItem={renderCategories}
+                keyExtractor={(item, index) => index.toString()}
+                showsHorizontalScrollIndicator={false}
+                horizontal
+              />
+            </View>
+            <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
+              <Text style={[styles.heading, {marginBottom: 10}]}>Recipes</Text>
+              {loading ? (
+                <ActivityIndicator size={'large'} color={colors.food_yellow} />
+              ) : (
+                <FlatList
+                  data={recipeData}
+                  renderItem={renderItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsVerticalScrollIndicator={false}
+                  numColumns={2}
+                  onEndReachedThreshold={0.1}
+                  scrollEnabled={false}
+                />
+              )}
             </View>
           </View>
-          <View style={{paddingLeft: 20}}>
-            <FlatList
-              data={categoryData}
-              renderItem={renderCategories}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-              horizontal
-            />
-          </View>
-          <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
-            <Text style={[styles.heading, {marginBottom: 10}]}>Recipes</Text>
-            <FlatList
-              data={recipeData}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              showsVerticalScrollIndicator={false}
-              numColumns={2}
-              onEndReachedThreshold={0.1}
-            />
-          </View>
-        </View>
+        </ScrollView>
       </ScreenComponent>
     </>
   );
@@ -282,7 +318,7 @@ const styles = StyleSheet.create({
   recipeDataImage: {
     width: '100%',
     height: screenHeight / 3.5,
-    borderRadius: 16,
+    borderRadius: 22,
   },
   recipeDataContainer: {
     width: screenWidth / 2 - 12,

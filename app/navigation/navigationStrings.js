@@ -42,6 +42,7 @@ export default {
   Search_News_Screen: 'SearchNewsScreen',
   Rotton_Tomatos_Screen: 'RottonTomatosScreen',
   Food_Recipe_Home_Screen: 'FoodRecipeHomeScreen',
+  Detail_Food_Recipe_Screen: 'DetailFoodRecipeScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
