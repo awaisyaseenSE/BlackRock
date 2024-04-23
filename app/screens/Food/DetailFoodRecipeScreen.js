@@ -24,6 +24,7 @@ import FastImage from 'react-native-fast-image';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import navigationStrings from '../../navigation/navigationStrings';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -81,6 +82,15 @@ export default function DetailFoodRecipeScreen({route}) {
       }
     }
     return indexs;
+  };
+
+  const getYoutubeVideoId = url => {
+    const regex = /[?&]v=([^&]+)/;
+    const match = url.match(regex);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return null;
   };
 
   return (
@@ -208,7 +218,7 @@ export default function DetailFoodRecipeScreen({route}) {
                 <View
                   style={{
                     marginTop: 12,
-                    marginBottom: 20,
+                    marginBottom: 10,
                     alignItems: 'center',
                     width: '100%',
                     height: 220,
@@ -221,12 +231,24 @@ export default function DetailFoodRecipeScreen({route}) {
                   <YoutubePlayer
                     height={220}
                     play={false}
-                    videoId={fullData?.strYoutube}
+                    videoId={getYoutubeVideoId(fullData?.strYoutube)}
                     width={'100%'}
                     allowWebViewZoom
                     onReady={() => setYoutubeLoading(false)}
                   />
                 </View>
+              )}
+              {!!fullData?.strSource && (
+                <TouchableOpacity
+                  style={styles.btn}
+                  activeOpacity={0.6}
+                  onPress={() =>
+                    navigation.navigate(navigationStrings.Read_Articel_Screen, {
+                      link: fullData?.strSource,
+                    })
+                  }>
+                  <Text style={styles.btnTxt}>Read Article</Text>
+                </TouchableOpacity>
               )}
             </View>
           </View>
@@ -337,5 +359,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  btn: {
+    backgroundColor: colors.food_yellow,
+    marginBottom: 20,
+    width: '60%',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  btnTxt: {
+    color: colors.white,
+    fontFamily: fontFamily.rubik_medium,
+    fontSize: 14,
   },
 });

@@ -232,7 +232,7 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
-            image={require('../assets/weather_media/cloud.png')}
+            image={require('../assets/food/food.png')}
             title="Food Recepie"
             onPress={() =>
               navigation.navigate(navigationStrings.Food_Recipe_Home_Screen)
