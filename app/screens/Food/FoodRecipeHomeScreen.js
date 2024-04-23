@@ -33,6 +33,7 @@ export default function FoodRecipeHomeScreen() {
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Beef');
   const [recipeData, setRecipeData] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
 
   const getFoodCategories = async () => {
     try {
@@ -46,6 +47,7 @@ export default function FoodRecipeHomeScreen() {
       const result = await response.json();
       if (!!result) {
         setCategoryData(result?.categories);
+        setShowSearch(false);
       }
       setLoading(false);
     } catch (error) {
@@ -66,11 +68,40 @@ export default function FoodRecipeHomeScreen() {
       const result = await response.json();
       if (!!result) {
         setRecipeData(result?.meals);
+        setShowSearch(false);
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log('Error in filterCatoryByName fun: ', error);
+    }
+  };
+
+  const handleSearchReceipe = async () => {
+    if (!searchText) {
+      return null;
+    }
+    let url_first_letter = `https://themealdb.com/api/json/v1/1/search.php?f=${searchText}`;
+    let url = `https://themealdb.com/api/json/v1/1/search.php?s=${searchText}`;
+    let finalUlr = searchText.length == 1 ? url_first_letter : url;
+    try {
+      setLoading(true);
+      const response = await fetch(finalUlr);
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (!!result) {
+        console.log('search result: ', result?.meals?.length);
+        setSelectedCategory('');
+        setRecipeData(result?.meals);
+        setShowSearch(true);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('Error in handle Search Receipe fun: ', error);
     }
   };
 
@@ -206,7 +237,13 @@ export default function FoodRecipeHomeScreen() {
                   placeholder="Search any recipe"
                   placeholderTextColor={colors.food_light_black}
                 />
-                <TouchableOpacity style={styles.searchIconContainer}>
+                <TouchableOpacity
+                  style={styles.searchIconContainer}
+                  onPress={() => {
+                    if (searchText.length > 0) {
+                      handleSearchReceipe();
+                    }
+                  }}>
                   <Image
                     source={require('../../assets/food/search.png')}
                     style={styles.searchIcon}
@@ -224,7 +261,9 @@ export default function FoodRecipeHomeScreen() {
               />
             </View>
             <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
-              <Text style={[styles.heading, {marginBottom: 10}]}>Recipes</Text>
+              <Text style={[styles.heading, {marginBottom: 10}]}>
+                Recipes {showSearch ? `(${recipeData?.length})` : ''}
+              </Text>
               {loading ? (
                 <ActivityIndicator size={'large'} color={colors.food_yellow} />
               ) : (
