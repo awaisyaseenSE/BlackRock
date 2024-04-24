@@ -195,6 +195,7 @@ export default function FoodRecipeHomeScreen() {
                 backgroundColor: colors.food_gray,
               },
             ]}
+            defaultSource={require('../../assets/food/picture.png')}
           />
           <Text numberOfLines={1} style={styles.txt}>
             {item?.strMeal}
