@@ -149,7 +149,7 @@ export default function DetailFoodRecipeScreen({route}) {
         )}
         {fullData !== null && (
           <View style={styles.contentContainer}>
-            <Text style={styles.heading} numberOfLines={1}>
+            <Text style={styles.heading} numberOfLines={2}>
               {fullData?.strMeal}
             </Text>
             <Text style={styles.subheading} numberOfLines={1}>

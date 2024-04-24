@@ -10,6 +10,8 @@ import {
   Dimensions,
   ScrollView,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../components/ScreenComponent';
@@ -34,6 +36,7 @@ export default function FoodRecipeHomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('Beef');
   const [recipeData, setRecipeData] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [exploreLoading, setExploreLoading] = useState(false);
 
   const getFoodCategories = async () => {
     try {
@@ -110,7 +113,9 @@ export default function FoodRecipeHomeScreen() {
   }, []);
 
   useEffect(() => {
-    filterCatoryByName();
+    if (selectedCategory !== '') {
+      filterCatoryByName();
+    }
   }, [selectedCategory]);
 
   const renderCategories = ({item}) => {
@@ -204,81 +209,118 @@ export default function FoodRecipeHomeScreen() {
     );
   };
 
+  const handleExploreRecipe = async () => {
+    try {
+      setExploreLoading(true);
+      let url = `https://themealdb.com/api/json/v1/1/random.php`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        setExploreLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (!!result) {
+        setExploreLoading(false);
+        let finalData = {
+          idMeal: result?.meals[0]?.idMeal,
+          strMealThumb: result?.meals[0]?.strMealThumb,
+        };
+        navigation.navigate(navigationStrings.Detail_Food_Recipe_Screen, {
+          data: finalData,
+        });
+      }
+      setExploreLoading(false);
+    } catch (error) {
+      setExploreLoading(false);
+      console.log('Error in handleExploreRecipe function: ', error);
+    }
+  };
+
   return (
     <>
       <ScreenComponent style={{backgroundColor: colors.food_white}}>
-        <StatusBar
-          backgroundColor={colors.lightOffWhite}
-          barStyle={'dark-content'}
+        <FoodTopHomeCompo
+          onPress={handleExploreRecipe}
+          loading={exploreLoading}
         />
-        <FoodTopHomeCompo />
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            <View style={{paddingHorizontal: 20}}>
-              <Text style={[styles.subHeading, {marginBottom: 4}]}>
-                Hello, {auth()?.currentUser?.displayName}
-              </Text>
-              <Text style={styles.heading}>
-                Make your own food,{'\n'}stay at{' '}
-                <Text style={{color: colors.food_Light_yellow}}>home</Text>
-              </Text>
-              <View style={styles.textInputConatiner}>
-                <TextInput
-                  value={searchText}
-                  onChangeText={text => {
-                    if (text.trim().length) {
-                      setSearchText(text);
-                    } else {
-                      setSearchText('');
-                    }
-                  }}
-                  maxLength={40}
-                  style={styles.inputStyle}
-                  placeholder="Search any recipe"
-                  placeholderTextColor={colors.food_light_black}
-                />
-                <TouchableOpacity
-                  style={styles.searchIconContainer}
-                  onPress={() => {
-                    if (searchText.length > 0) {
-                      handleSearchReceipe();
-                    }
-                  }}>
-                  <Image
-                    source={require('../../assets/food/search.png')}
-                    style={styles.searchIcon}
+          <StatusBar
+            backgroundColor={colors.lightOffWhite}
+            barStyle={'dark-content'}
+          />
+          <TouchableWithoutFeedback
+            style={{flex: 1}}
+            onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+              <View style={{paddingHorizontal: 20}}>
+                <Text style={[styles.subHeading, {marginBottom: 4}]}>
+                  Hello, {auth()?.currentUser?.displayName}
+                </Text>
+                <Text style={styles.heading}>
+                  Make your own food,{'\n'}stay at{' '}
+                  <Text style={{color: colors.food_Light_yellow}}>home</Text>
+                </Text>
+                <View style={styles.textInputConatiner}>
+                  <TextInput
+                    value={searchText}
+                    onChangeText={text => {
+                      if (text.trim().length) {
+                        setSearchText(text);
+                      } else {
+                        setSearchText('');
+                      }
+                    }}
+                    maxLength={40}
+                    style={styles.inputStyle}
+                    placeholder="Search any recipe"
+                    placeholderTextColor={colors.food_light_black}
                   />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.searchIconContainer}
+                    onPress={() => {
+                      if (searchText.length > 0) {
+                        handleSearchReceipe();
+                      }
+                    }}>
+                    <Image
+                      source={require('../../assets/food/search.png')}
+                      style={styles.searchIcon}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{paddingLeft: 20}}>
+                <FlatList
+                  data={categoryData}
+                  renderItem={renderCategories}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                />
+              </View>
+              <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
+                <Text style={[styles.heading, {marginBottom: 10}]}>
+                  Recipes {showSearch ? `(${recipeData?.length})` : ''}
+                </Text>
+                {loading ? (
+                  <ActivityIndicator
+                    size={'large'}
+                    color={colors.food_yellow}
+                  />
+                ) : (
+                  <FlatList
+                    data={recipeData}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    showsVerticalScrollIndicator={false}
+                    numColumns={2}
+                    onEndReachedThreshold={0.1}
+                    scrollEnabled={false}
+                  />
+                )}
               </View>
             </View>
-            <View style={{paddingLeft: 20}}>
-              <FlatList
-                data={categoryData}
-                renderItem={renderCategories}
-                keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-              />
-            </View>
-            <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
-              <Text style={[styles.heading, {marginBottom: 10}]}>
-                Recipes {showSearch ? `(${recipeData?.length})` : ''}
-              </Text>
-              {loading ? (
-                <ActivityIndicator size={'large'} color={colors.food_yellow} />
-              ) : (
-                <FlatList
-                  data={recipeData}
-                  renderItem={renderItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  showsVerticalScrollIndicator={false}
-                  numColumns={2}
-                  onEndReachedThreshold={0.1}
-                  scrollEnabled={false}
-                />
-              )}
-            </View>
-          </View>
+          </TouchableWithoutFeedback>
         </ScrollView>
       </ScreenComponent>
     </>

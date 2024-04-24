@@ -1,18 +1,31 @@
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import colors from '../../../styles/colors';
 
-const FoodTopHomeCompo = () => {
+const FoodTopHomeCompo = ({onPress, loading = false}) => {
   return (
     <View style={styles.container}>
       <Image
         source={require('../../../assets/food/man.png')}
         style={styles.leftIcon}
       />
-      <Image
-        source={require('../../../assets/food/notification.png')}
-        style={styles.rightIcon}
-      />
+      <TouchableOpacity onPress={onPress} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size={'small'} color={colors.food_yellow} />
+        ) : (
+          <Image
+            source={require('../../../assets/explore.png')}
+            style={styles.rightIcon}
+          />
+        )}
+      </TouchableOpacity>
     </View>
   );
 };
