@@ -7,12 +7,12 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  StatusBar,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../../components/ScreenComponent';
 import colors from '../../../styles/colors';
 import fontFamily from '../../../styles/fontFamily';
+import FastImage from 'react-native-fast-image';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -94,9 +94,12 @@ const ShowReceipeModalComponent = ({
           handleGetRecipeByIngredient(item?.strIngredient);
           setShowModal(false);
         }}>
-        <Image
-          source={require('../../../assets/food/ingredients.png')}
+        <FastImage
+          source={{
+            uri: `https://themealdb.com/images/ingredients/${item?.strIngredient}.png`,
+          }}
           style={styles.icon2}
+          defaultSource={require('../../../assets/food/ingredients.png')}
         />
         <Text style={styles.countryName}>{item?.strIngredient}</Text>
       </TouchableOpacity>
@@ -245,10 +248,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon2: {
-    width: 18,
-    height: 18,
+    width: 24,
+    height: 24,
     tintColor: colors.food_yellow,
-    marginRight: 12,
+    marginRight: 10,
   },
 });
 
