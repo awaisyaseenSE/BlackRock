@@ -338,6 +338,30 @@ export default function ProfileScreen() {
     }
   };
 
+  const fetchImages = async query => {
+    const SHUTTERSTOCK_API_ENDPOINT = 'https://api.shutterstock.com/v2';
+    try {
+      const response = await fetch(
+        `${SHUTTERSTOCK_API_ENDPOINT}/images/search?query=${query}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${constants.shutterstock_Token}`,
+          },
+        },
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch images');
+      }
+      const data = await response.json();
+      if (!!data) {
+        console.log('data: ', data?.data[0]?.assets);
+      }
+    } catch (error) {
+      console.log('Error fetching images:', error);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -441,7 +465,7 @@ export default function ProfileScreen() {
           <ButtonComponent
             title="get food"
             style={styles.btn}
-            onPress={foodRecipeApp}
+            onPress={() => fetchImages('shine')}
           />
         </View>
 
