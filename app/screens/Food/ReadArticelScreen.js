@@ -11,7 +11,13 @@ export default function ReadArticelScreen({route}) {
   const articleLink = route?.params?.link;
   const [laoding, setLoading] = useState(true);
   return (
-    <ScreenComponent style={{backgroundColor: colors.weather_Search_Bg}}>
+    <ScreenComponent
+      style={{
+        backgroundColor:
+          Platform.OS === 'android'
+            ? colors.food_Light_yellow
+            : colors.weather_Search_Bg,
+      }}>
       <StatusBar
         backgroundColor={colors.black}
         barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}

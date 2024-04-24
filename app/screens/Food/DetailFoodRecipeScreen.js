@@ -174,10 +174,10 @@ export default function DetailFoodRecipeScreen({route}) {
                   <View key={i} style={styles.gredientContainer}>
                     <View style={styles.dot} />
                     <View style={styles.row}>
-                      <Text style={styles.boldTxt}>
+                      <Text numberOfLines={2} style={styles.boldTxt}>
                         {fullData['strMeasure' + i]}
                       </Text>
-                      <Text style={styles.ubboldTxt}>
+                      <Text numberOfLines={2} style={styles.ubboldTxt}>
                         {fullData['strIngredient' + i]}
                       </Text>
                     </View>
@@ -322,6 +322,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 12,
+    flex: 1,
   },
   gredientContainer: {
     marginBottom: 12,

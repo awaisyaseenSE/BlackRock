@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../../components/ScreenComponent';
@@ -20,10 +21,10 @@ import FoodTopHomeCompo from './components/FoodTopHomeCompo';
 import auth from '@react-native-firebase/auth';
 import fontFamily from '../../styles/fontFamily';
 import {useNavigation} from '@react-navigation/native';
-import {CachedImage} from '../../utils/CachedImage';
 import FastImage from 'react-native-fast-image';
 import Animated, {FadeInDown} from 'react-native-reanimated';
 import navigationStrings from '../../navigation/navigationStrings';
+import ShowReceipeModalComponent from './components/ShowReceipeModalComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -37,6 +38,9 @@ export default function FoodRecipeHomeScreen() {
   const [recipeData, setRecipeData] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
   const [exploreLoading, setExploreLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedArea, setSelectedArea] = useState('');
+  const [selectedIngredient, setSelectedIngredient] = useState('');
 
   const getFoodCategories = async () => {
     try {
@@ -72,6 +76,8 @@ export default function FoodRecipeHomeScreen() {
       if (!!result) {
         setRecipeData(result?.meals);
         setShowSearch(false);
+        setSelectedArea('');
+        setSelectedIngredient('');
       }
       setLoading(false);
     } catch (error) {
@@ -100,6 +106,8 @@ export default function FoodRecipeHomeScreen() {
         setSelectedCategory('');
         setRecipeData(result?.meals);
         setShowSearch(true);
+        setSelectedArea('');
+        setSelectedIngredient('');
       }
       setLoading(false);
     } catch (error) {
@@ -137,11 +145,8 @@ export default function FoodRecipeHomeScreen() {
           <FastImage
             source={{uri: item?.strCategoryThumb}}
             style={[styles.categoryImageStyle]}
+            defaultSource={require('../../assets/food/image.png')}
           />
-          {/* <CachedImage
-            uri={item?.strCategoryThumb}
-            style={[styles.categoryImageStyle]}
-          /> */}
         </View>
         <Text
           style={[
@@ -191,16 +196,6 @@ export default function FoodRecipeHomeScreen() {
               },
             ]}
           />
-          {/* <CachedImage
-            uri={item?.strMealThumb}
-            style={[
-              styles.recipeDataImage,
-              {
-                marginTop: index % 3 == 0 ? 20 : 0,
-                backgroundColor: colors.food_gray,
-              },
-            ]}
-          /> */}
           <Text numberOfLines={1} style={styles.txt}>
             {item?.strMeal}
           </Text>
@@ -236,16 +231,76 @@ export default function FoodRecipeHomeScreen() {
     }
   };
 
+  const handleOnPressFilter = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleGetRecipeByArea = async area => {
+    if (!area) {
+      return null;
+    }
+    try {
+      setLoading(true);
+      let url = `https://themealdb.com/api/json/v1/1/filter.php?a=${area}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (!!result) {
+        setSelectedCategory('');
+        setRecipeData(result?.meals);
+        setShowSearch(false);
+        setSelectedIngredient('');
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('Error in getting Food Categories: ', error);
+    }
+  };
+
+  const handleGetRecipeByIngredient = async ingredient => {
+    if (!ingredient) {
+      return null;
+    }
+    try {
+      setLoading(true);
+      let url = `https://themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (!!result) {
+        setSelectedCategory('');
+        setRecipeData(result?.meals);
+        setShowSearch(false);
+        setSelectedArea('');
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('Error in getting Food Categories: ', error);
+    }
+  };
+
   return (
     <>
-      <ScreenComponent style={{backgroundColor: colors.food_white}}>
+      <ScreenComponent
+        style={{
+          backgroundColor: colors.food_white,
+        }}>
         <FoodTopHomeCompo
           onPress={handleExploreRecipe}
           loading={exploreLoading}
+          onPressFilter={handleOnPressFilter}
         />
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <StatusBar
-            backgroundColor={colors.lightOffWhite}
+            backgroundColor={colors.food_white}
             barStyle={'dark-content'}
           />
           <TouchableWithoutFeedback
@@ -300,7 +355,10 @@ export default function FoodRecipeHomeScreen() {
               </View>
               <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
                 <Text style={[styles.heading, {marginBottom: 10}]}>
-                  Recipes {showSearch ? `(${recipeData?.length})` : ''}
+                  {selectedArea !== '' && selectedArea + ' '}
+                  {selectedIngredient !== '' &&
+                    selectedIngredient + ' '}Recipes{' '}
+                  {showSearch ? `(${recipeData?.length})` : ''}
                 </Text>
                 {loading ? (
                   <ActivityIndicator
@@ -322,6 +380,16 @@ export default function FoodRecipeHomeScreen() {
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
+        {showModal && (
+          <ShowReceipeModalComponent
+            showModal={showModal}
+            setShowModal={setShowModal}
+            handleGetRecipeByArea={handleGetRecipeByArea}
+            setSelectedArea={setSelectedArea}
+            setSelectedIngredient={setSelectedIngredient}
+            handleGetRecipeByIngredient={handleGetRecipeByIngredient}
+          />
+        )}
       </ScreenComponent>
     </>
   );
@@ -369,7 +437,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     borderRadius: 22,
-    paddingVertical: 10,
+    paddingVertical: Platform.OS === 'ios' ? 10 : 2,
     marginTop: 20,
     marginBottom: 14,
   },
