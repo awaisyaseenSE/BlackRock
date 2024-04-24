@@ -354,7 +354,8 @@ export default function FoodRecipeHomeScreen() {
                 />
               </View>
               <View style={{paddingHorizontal: 12, marginTop: 16, flex: 1}}>
-                <Text style={[styles.heading, {marginBottom: 10}]}>
+                <Text
+                  style={[styles.heading, {marginBottom: 10, fontSize: 20}]}>
                   {selectedArea !== '' && selectedArea + ' '}
                   {selectedIngredient !== '' &&
                     selectedIngredient + ' '}Recipes{' '}
