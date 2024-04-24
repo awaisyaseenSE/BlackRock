@@ -40,4 +40,19 @@ export default {
   todoGreen: '#32B791',
   uploadModalBg: 'rgba(0,0,0,0.2)',
   lightRed: '#FD5C5C',
+  chatBg: '#121212',
+  fitnessLightPurple: '#99C1FF',
+  fitnessDarkPurple: '#94A7FE',
+  fitnessWhite: '#FFFFFF',
+  fitnessLigthWhite: '#F8F8F8',
+  fitnessLigthWhite2: '#E9F2FF',
+
+  // weather app
+  weather_Search_Bg: 'rgba(255,255,255,0.2)',
+  food_white: '#FBFEFB',
+  food_yellow: '#F3920B',
+  food_Light_yellow: '#E4B644',
+  food_gray: '#DDE0DE',
+  food_light_black: '#757876',
+  food_light_black2: '#454846',
 };

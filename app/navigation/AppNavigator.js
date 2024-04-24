@@ -30,6 +30,25 @@ import PexelsVideosScreen from '../screens/PexelsVideosScreen';
 import ShowVideoScreen from '../screens/ShowVideoScreen';
 import PexelCollectionScreen from '../screens/PexelCollectionScreen';
 import PhotoEditingScreen from '../screens/PhotoEditingScreen';
+import FavoriteMovieScreen from '../screens/FavoriteMovieScreen';
+import ShowAllTradingMoviesScreen from '../screens/ShowAllTradingMoviesScreen';
+import TrendingTvSerialScreen from '../screens/TrendingTvSerialScreen';
+import AllUsersListScreen from '../screens/AllUsersListScreen';
+import ChatScreen from '../screens/Chat/ChatScreen';
+import NowPlayingMoviesScreen from '../screens/NowPlayingMoviesScreen';
+import SearchMultiScreen from '../screens/SearchMultiScreen';
+import FitnessXOnboardingScreen from '../screens/Fitness/FitnessXOnboardingScreen';
+import FitnessXActivityTrackerScreen from '../screens/Fitness/FitnessXActivityTrackerScreen';
+import PixabaySearchScreen from '../screens/PixabaySearchScreen';
+import PixabaySearchVideos from '../screens/PixabaySearchVideos';
+import WeatherAppHomeScreen from '../screens/WeatherAppHomeScreen';
+import TopNewsScreen from '../screens/TopNewsScreen';
+import DetailNewsScreen from '../screens/DetailNewsScreen';
+import SearchNewsScreen from '../screens/SearchNewsScreen';
+import RottonTomatosScreen from '../screens/RottonTomatosScreen';
+import FoodRecipeHomeScreen from '../screens/Food/FoodRecipeHomeScreen';
+import DetailFoodRecipeScreen from '../screens/Food/DetailFoodRecipeScreen';
+import ReadArticelScreen from '../screens/Food/ReadArticelScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -254,6 +273,139 @@ function AppNavigator() {
       <Stack.Screen
         name="PhotoEditingScreen"
         component={PhotoEditingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FavoriteMovieScreen"
+        component={FavoriteMovieScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ShowAllTradingMoviesScreen"
+        component={ShowAllTradingMoviesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TrendingTvSerialScreen"
+        component={TrendingTvSerialScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AllUsersListScreen"
+        component={AllUsersListScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="NowPlayingMoviesScreen"
+        component={NowPlayingMoviesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchMultiScreen"
+        component={SearchMultiScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FitnessXOnboardingScreen"
+        component={FitnessXOnboardingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FitnessXActivityTrackerScreen"
+        component={FitnessXActivityTrackerScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PixabaySearchScreen"
+        component={PixabaySearchScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="PixabaySearchVideos"
+        component={PixabaySearchVideos}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="WeatherAppHomeScreen"
+        component={WeatherAppHomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TopNewsScreen"
+        component={TopNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailNewsScreen"
+        component={DetailNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SearchNewsScreen"
+        component={SearchNewsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RottonTomatosScreen"
+        component={RottonTomatosScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="FoodRecipeHomeScreen"
+        component={FoodRecipeHomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="DetailFoodRecipeScreen"
+        component={DetailFoodRecipeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ReadArticelScreen"
+        component={ReadArticelScreen}
         options={{
           headerShown: false,
         }}

@@ -9,6 +9,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -26,6 +27,8 @@ import MyIndicator from '../components/MyIndicator';
 import navigationStrings from '../navigation/navigationStrings';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {ActivityIndicator} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -45,11 +48,35 @@ export default function DetailMovieScreen({route}) {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [youtubeVideoID, setYoutubeVideoID] = useState('');
   const [youtubeLoading, setYoutubeLoading] = useState(true);
+  const [favoriteMovie, setFavoriteMovie] = useState(false);
+  const [recommendationsMovies, setRecommendationsMovies] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = firestore()
+      .collection('users')
+      .doc(auth().currentUser?.uid)
+      .onSnapshot(snap => {
+        if (snap.exists) {
+          var data = snap.data();
+          if (data.hasOwnProperty('favMovies')) {
+            const isFavorites =
+              data.favMovies.includes(movieDetails?.id) || false;
+            setFavoriteMovie(isFavorites);
+          }
+          setLoading(false);
+        } else {
+          setLoading(false);
+        }
+      });
+    return () => unsubscribe();
+  }, []);
 
   const getSimilarMovies = async () => {
     try {
+      let type = movieDetails?.title ? 'movie' : 'tv';
       setLoading(true);
-      let res = await getApi(`/movie/${movieDetails?.id}/similar`);
+      let res = await getApi(`/${type}/${movieDetails?.id}/similar`);
       if (!!res) {
         setLoading(false);
         let finalData = res?.results;
@@ -62,12 +89,36 @@ export default function DetailMovieScreen({route}) {
       setLoading(false);
     }
   };
+  const getRecommendationMovies = async () => {
+    try {
+      let type = movieDetails?.title ? 'movie' : 'tv';
+      setLoading(true);
+      let res = await getApi(`/${type}/${movieDetails?.id}/recommendations`);
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        // console.log(
+        //   `Total length of Recommendations ${type}: `,
+        //   finalData?.length,
+        // );
+        setRecommendationsMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   const getYoutubeVideoLink = async () => {
     // getApi('/movie/157336/videos');
+    let type = movieDetails?.title ? 'movie' : 'tv';
     try {
       setLoading(true);
-      let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+      // let data = await getApi(`/movie/${movieDetails?.id}/videos`);
+      let data = await getApi(`/${type}/${movieDetails?.id}/videos`);
+      // https://api.themoviedb.org/3/tv/{series_id}/videos
 
       if (data?.results && data?.results?.length > 0) {
         // Find the trailer video key
@@ -94,15 +145,21 @@ export default function DetailMovieScreen({route}) {
   useEffect(() => {
     getSimilarMovies();
     getYoutubeVideoLink();
+    getRecommendationMovies();
   }, [routeData]);
 
   const PopularMovieCompo = ({data, id}) => {
     let postURL = `${constants.image_poster_url}${data.backdrop_path}`;
-
+    const [fastImgLoading, setFastImgLoading] = useState(true);
     return (
       <TouchableOpacity
         style={{marginLeft: 12}}
         onPress={() => handleSimilarDetailScreenNavi(data, postURL)}>
+        {fastImgLoading && (
+          <View style={styles.fastImageLoadingStyle}>
+            <ActivityIndicator size={20} color={colors.gray} />
+          </View>
+        )}
         <FastImage
           // source={{uri: postURL}}
           source={
@@ -113,11 +170,16 @@ export default function DetailMovieScreen({route}) {
               : {uri: postURL}
           }
           style={styles.newposterImageStyle}
+          onLoadStart={() => setFastImgLoading(true)}
+          onLoadEnd={() => setFastImgLoading(false)}
         />
         <Text numberOfLines={1} style={styles.newsubHeading}>
           {data?.title?.length > 18
             ? data?.title.slice(0, 18) + '...'
             : data?.title}
+          {data?.name?.length > 18
+            ? data?.name.slice(0, 18) + '...'
+            : data?.name}
         </Text>
       </TouchableOpacity>
     );
@@ -131,6 +193,58 @@ export default function DetailMovieScreen({route}) {
     });
   };
 
+  const handleAddToFavoriteMovie = async () => {
+    const userId = auth()?.currentUser?.uid;
+    const movieId = movieDetails?.id;
+    if (!userId || !movieId) {
+      Alert.alert('Something went wrong.', 'Please try again later!');
+      return;
+    }
+    try {
+      const userRef = firestore().collection('users').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (!userDoc.exists) {
+        Alert.alert('user not found!');
+        throw new Error('User not found');
+        return null;
+      }
+
+      const userData = userDoc.data();
+
+      // Ensure favMovies field exists in userData
+      if (!userData.hasOwnProperty('favMovies')) {
+        // If favMovies doesn't exist, create it as an empty array
+        await userRef.set(
+          {
+            favMovies: [movieId],
+          },
+          {merge: true},
+        );
+        // console.log('Favorite movie created and updated successfully');
+        return null;
+      }
+
+      if (userData.hasOwnProperty('favMovies')) {
+        let updatedFavUsersMovies = [...userData.favMovies]; // Create a new array
+        if (userData.favMovies.includes(movieId)) {
+          updatedFavUsersMovies = updatedFavUsersMovies.filter(
+            id => id !== movieId,
+          ); // Remove User id
+        } else {
+          updatedFavUsersMovies.push(movieId); // Add User id
+        }
+        await userRef.update({favMovies: updatedFavUsersMovies}); // Update the User id
+        // console.log('Favorite movie only updated successfully');
+      }
+    } catch (error) {
+      console.log('Error updating favorite movie:', error);
+      Alert.alert(
+        'Movie is not added.',
+        'Something went wrong. Please try again later!',
+      );
+    }
+  };
   return (
     <>
       <ScrollView
@@ -162,27 +276,64 @@ export default function DetailMovieScreen({route}) {
               style={styles.icon}
             />
           </TouchableOpacity>
+          {movieDetails?.title && (
+            <TouchableOpacity
+              style={[
+                styles.hearticonContainer,
+                {
+                  top: Platform.OS === 'ios' ? insets.top - 6 : 8,
+                },
+              ]}
+              onPress={() => handleAddToFavoriteMovie()}
+              activeOpacity={0.6}>
+              <Image
+                source={require('../assets/heart-fill.png')}
+                style={[
+                  styles.hearticon,
+                  {
+                    tintColor: favoriteMovie
+                      ? colors.yellow
+                      : colors.LightWhite,
+                  },
+                ]}
+              />
+            </TouchableOpacity>
+          )}
           <View style={{backgroundColor: colors.moviesBg}}>
-            <Text style={styles.heading}>
+            <Text style={styles.heading} selectable>
               {movieDetails?.title} {movieDetails?.name}
             </Text>
-            <View style={styles.contentContainer}>
-              <Text style={[styles.grayText, {textAlign: 'center'}]}>
-                {movieDetails?.release_date
-                  ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
-                  : ''}
-                {movieDetails?.first_air_date
-                  ? 'First air date ' +
-                    getYear(movieDetails?.first_air_date) +
-                    ' - '
-                  : ''}
-                {movieDetails?.adult ? '18+' : '16+'}
-              </Text>
-              <Text style={[styles.grayText, {textAlign: 'center'}]}>
-                Language {movieDetails?.original_language}
-              </Text>
-              <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
-            </View>
+            {routeData?.movieDetail?.media_type !== 'person' && (
+              <View style={styles.contentContainer}>
+                <Text
+                  selectable
+                  style={[styles.grayText, {textAlign: 'center'}]}>
+                  {movieDetails?.release_date
+                    ? 'Year ' + getYear(movieDetails?.release_date) + ' - '
+                    : ''}
+                  {movieDetails?.first_air_date
+                    ? 'First air date ' +
+                      getYear(movieDetails?.first_air_date) +
+                      ' - '
+                    : ''}
+                  {movieDetails?.adult ? '18+' : '16+'}
+                </Text>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Language {movieDetails?.original_language}
+                </Text>
+                <Text style={styles.subHeading}>{movieDetails?.overview}</Text>
+              </View>
+            )}
+            {routeData?.movieDetail?.media_type == 'person' && (
+              <View style={styles.contentContainer}>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Known for: {routeData?.movieDetail?.known_for_department}
+                </Text>
+                <Text style={[styles.grayText, {textAlign: 'center'}]}>
+                  Popularity: {routeData?.movieDetail?.popularity}
+                </Text>
+              </View>
+            )}
             {youtubeVideoID !== '' && (
               <View style={{alignItems: 'center', width: '100%', height: 220}}>
                 {youtubeLoading && (
@@ -200,10 +351,44 @@ export default function DetailMovieScreen({route}) {
                 />
               </View>
             )}
+
+            {recommendationsMovies?.length > 1 && (
+              <View style={[styles.newheadingContainer, {marginTop: 12}]}>
+                <Text style={styles.newheading}>
+                  Recommendated {movieDetails?.title ? 'Movies' : 'Tv Series'}
+                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate(
+                      navigationStrings.All_Similar_Movies_Screen,
+                      {
+                        data: recommendationsMovies,
+                      },
+                    )
+                  }>
+                  <Text style={[styles.newheading, {color: colors.yellow}]}>
+                    See All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <FlatList
+              data={recommendationsMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+
             <View style={{marginVertical: 10}} />
             {similarMovies?.length > 1 && (
-              <View style={styles.newheadingContainer}>
-                <Text style={styles.newheading}>Similar Movie</Text>
+              <View style={[styles.newheadingContainer, {marginTop: 12}]}>
+                <Text style={styles.newheading}>
+                  Similar {movieDetails?.title ? 'Movies' : 'Tv Series'}
+                </Text>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate(
@@ -229,7 +414,11 @@ export default function DetailMovieScreen({route}) {
               keyExtractor={(item, index) => index.toString()}
               horizontal
             />
-            {similarMovies?.length > 1 && <View style={{height: 80}} />}
+
+            {(similarMovies?.length > 1 ||
+              recommendationsMovies?.length > 1) && (
+              <View style={{height: 80}} />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -318,6 +507,26 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   youtubeLoadingStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  hearticonContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 8,
+    padding: 8,
+  },
+  hearticon: {
+    width: 26,
+    height: 26,
+    tintColor: colors.LightWhite,
+  },
+  fastImageLoadingStyle: {
     position: 'absolute',
     top: 0,
     left: 0,

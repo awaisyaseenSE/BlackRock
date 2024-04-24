@@ -1,5 +1,6 @@
 import {Linking, PermissionsAndroid, Platform, Alert} from 'react-native';
 import RNFS from 'react-native-fs';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import RNFetchBlob from 'rn-fetch-blob';
 
 const getFileNameFromUrl = url => {
@@ -138,7 +139,7 @@ const checkPermissionAndroid = async (url, setDownloadUrlLoading) => {
   }
 };
 
-export const handleDownload = (url, setDownloadUrlLoading) => {
+export const handleDownload = async (url, setDownloadUrlLoading) => {
   if (Platform.OS === 'ios') {
     downloadIosFile(url, setDownloadUrlLoading);
   } else if (Platform.OS === 'android') {

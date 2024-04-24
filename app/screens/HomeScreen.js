@@ -33,7 +33,9 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [popularMovies, setPopularMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [trandinggMovies, setTrandingMovies] = useState([]);
   const [allChangedMovieIDS, setAllChangedMovieIDS] = useState([]);
+  const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
 
   const getMoviesData = () => {
     try {
@@ -154,11 +156,56 @@ export default function HomeScreen() {
     }
   };
 
+  const getTrandingMovies = async () => {
+    let url = 'https://api.themoviedb.org/3/trending/movie/week';
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/trending/movie/week?api_key=${constants.theMovieDb_API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        setTrandingMovies(res?.results);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getNowPlayingMovies = async () => {
+    try {
+      setLoading(true);
+      let res = await getApi('/movie/now_playing');
+      if (!!res) {
+        setLoading(false);
+        let finalData = res?.results;
+        setNowPlayingMovies(finalData);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getDataFormMB();
     getTopRatedMovies();
     getUpComingMovies();
+    getTrandingMovies();
     getChangedMovies();
+    getNowPlayingMovies();
   }, []);
 
   const navigateToNextScreen = (index, item) => {
@@ -241,7 +288,7 @@ export default function HomeScreen() {
               sliderWidth={screenWidth}
               itemWidth={screenWidth * 0.62}
               slideStyle={{alignItems: 'center'}}
-              firstItem={2}
+              firstItem={1}
               inactiveSlideOpacity={0.6}
             />
             <View style={{marginVertical: 18}} />
@@ -295,6 +342,31 @@ export default function HomeScreen() {
 
             <View style={{marginVertical: 18}} />
             <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Trending</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.Show_All_Trading_Movies_Screen,
+                  )
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={trandinggMovies}
+              renderItem={({item, index}) => (
+                <PopularMovieCompo data={item} id={index} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+              // estimatedItemSize={40}
+            />
+
+            <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
               <Text style={styles.heading}>All Time</Text>
               <TouchableOpacity
                 onPress={() =>
@@ -313,6 +385,37 @@ export default function HomeScreen() {
                   allChangedMovieIDS.length > 20
                     ? allChangedMovieIDS.slice(2, 20)
                     : allChangedMovieIDS
+                }
+                renderItem={({item, index}) => (
+                  <MovieDetailComponent movieId={item?.id} />
+                )}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal
+                // estimatedItemSize={40}
+              />
+            </View>
+
+            <View style={{marginVertical: 18}} />
+            <View style={styles.headingContainer}>
+              <Text style={styles.heading}>Now Playing Movies</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.Now_Playing_Movies_Screen,
+                  )
+                }>
+                <Text style={[styles.heading, {color: colors.yellow}]}>
+                  See All
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{}}>
+              <FlatList
+                data={
+                  nowPlayingMovies.length > 20
+                    ? nowPlayingMovies.slice(2, 20)
+                    : nowPlayingMovies
                 }
                 renderItem={({item, index}) => (
                   <MovieDetailComponent movieId={item?.id} />

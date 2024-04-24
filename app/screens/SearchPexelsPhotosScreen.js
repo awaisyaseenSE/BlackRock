@@ -37,12 +37,14 @@ export default function SearchPexelsPhotosScreen() {
     let url;
 
     if (call == 'btnCall') {
-      url = `https://pexelsdimasv1.p.rapidapi.com/v1/search?query=${searchText}&locale=en-US&per_page=${perPage}&page=1`;
+      url = `https://api.pexels.com/v1/search?query=${searchText}&per_page=${perPage}&per_page=1`;
+      // url = `https://pexelsdimasv1.p.rapidapi.com/v1/search?query=${searchText}&locale=en-US&per_page=${perPage}&page=1`;
     } else {
       url =
         nextPage === ''
-          ? `https://pexelsdimasv1.p.rapidapi.com/v1/search?query=${searchText}&locale=en-US&per_page=${perPage}&page=1`
-          : nextPage.length > 10
+          ? `https://api.pexels.com/v1/search?query=${searchText}&per_page=${perPage}&per_page=1`
+          : // `https://pexelsdimasv1.p.rapidapi.com/v1/search?query=${searchText}&locale=en-US&per_page=${perPage}&page=1`
+          nextPage.length > 10
           ? nextPage
           : null;
     }
@@ -62,8 +64,9 @@ export default function SearchPexelsPhotosScreen() {
 
     try {
       setLoading(true);
+      console.log('Url is: ', url);
       const response = await fetch(url, options);
-
+      const MAX_RETRY_COUNT = 3;
       if (response.status === 504 && retryCount < MAX_RETRY_COUNT) {
         const waitTime = retryCount * 1000; // Adjust wait time as needed
         await new Promise(resolve => setTimeout(resolve, waitTime));

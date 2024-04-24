@@ -23,6 +23,7 @@ const TopCompoWithHeading = ({
   backIconStyle,
   rightIconContainerStyle,
   loading = false,
+  rightTxtStyle,
 }) => {
   return (
     <View style={{...styles.container, ...style}}>
@@ -62,7 +63,7 @@ const TopCompoWithHeading = ({
             paddingVertical: 6,
           }}
           onPress={onPressRightTitle}>
-          <Text style={[styles.righttext]}>{rightTitle}</Text>
+          <Text style={[styles.righttext, rightTxtStyle]}>{rightTitle}</Text>
         </TouchableOpacity>
       )}
     </View>

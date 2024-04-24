@@ -10,8 +10,13 @@ import {
   Alert,
   Platform,
   Modal,
+  Pressable,
+  Linking,
+  Animated,
+  Easing,
+  TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -32,6 +37,8 @@ import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
 import navigationStrings from '../navigation/navigationStrings';
 import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
+import WebView from 'react-native-webview';
+import {CachedImage} from '../utils/CachedImage';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -137,9 +144,16 @@ export default function ProfileScreen() {
   const handleFinishOnBoarding = async () => {
     try {
       console.log('Finish on boarding func is called!');
-      let key = 'todoItems';
-      await removeItemValue(key);
-      // navigation.navigate('MainTabRoutes');
+      let key = 'onBoarding';
+      let res = await removeItemValue(key);
+      if (res) {
+        Alert.alert('Onboarding is Removed Successfully!');
+      } else {
+        Alert.alert(
+          'Something went wrong.',
+          'Onboarding screens is not Removed!',
+        );
+      }
     } catch (error) {
       console.log('Error in finish on boarding screen function: ', error);
     }
@@ -152,6 +166,176 @@ export default function ProfileScreen() {
       .padStart(6, '0');
     setColor(`#${randomColor}`);
     // return `#${randomColor}`;
+  };
+
+  const openDialScreen = () => {
+    let number = '';
+    if (Platform.OS === 'ios') {
+      number = 'tel:${091123456789}';
+    } else {
+      number = 'tel:${03085449343}';
+    }
+    Linking.openURL(number);
+  };
+
+  const getTrandingMovies = async () => {
+    let url = 'https://api.themoviedb.org/3/trending/movie/week';
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/trending/tv/week?api_key=${constants.theMovieDb_API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        console.log(res);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getDetailByTv = async id => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${constants.theMovieDb_API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      let res = await response.json();
+      if (!!res) {
+        setLoading(false);
+        console.log('TV data.......  :   ', res);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const [spinAnim, setSpinAnim] = useState(new Animated.Value(0));
+  const spin = spinAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(spinAnim, {
+        toValue: 1,
+        duration: 3000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ).start();
+  });
+
+  const handleQuery = async () => {
+    try {
+      let today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let temArr = [];
+      let ref = firestore().collection('testFirestore');
+      const query = await ref
+        .where('age', '==', 12)
+        // .where('time', '<=', today)
+        // .where('time', '<', new Date(today.getTime() + 86400000))
+        .get();
+      if (query.size > 0) {
+        query.docs.forEach(doc => {
+          let data = {id: doc.id, ...doc.data()};
+          temArr.push(data);
+        });
+        if (temArr.length > 0) {
+          console.log(
+            'Total users is: ',
+            temArr.length,
+            ' and Final data of user is: ',
+            temArr,
+          );
+        }
+      } else {
+        console.log('data not found!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCityWeatherData = async cityName => {
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${constants.open_Weather_API_KEY}`;
+      let response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMovieDetails = async () => {
+    const url =
+      'https://ott-details.p.rapidapi.com/advancedsearch?warstart_year=1970&end_year=2024&min_imdb=5&type=movie&sort=latest&page=1';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Host': 'ott-details.p.rapidapi.com',
+      },
+    };
+
+    try {
+      setLoading(true);
+      const response = await fetch(url, options);
+      const result = await response.json();
+      if (!!result) {
+        console.log('data results is: ', result?.results?.length);
+        console.log(result);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const foodRecipeApp = async () => {
+    const url =
+      'https://recipe-by-api-ninjas.p.rapidapi.com/v1/recipe?query=italian%20wedding%20soup';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Host': 'recipe-by-api-ninjas.p.rapidapi.com',
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -195,65 +379,71 @@ export default function ProfileScreen() {
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={() => setShowImageModal(true)}>
-            <FastImage
+            {/* <FastImage
               source={
                 !!userImage ? {uri: userImage} : require('../assets/men.jpg')
               }
               style={styles.profileImage}
-            />
+            /> */}
+            {/* <Animated.Image
+              style={[styles.profileImage, {transform: [{rotate: spin}]}]}
+              source={
+                !!userImage ? {uri: userImage} : require('../assets/men.jpg')
+              }
+            /> */}
+            <CachedImage uri={userImage} style={styles.profileImage} />
           </TouchableOpacity>
         </View>
         <View style={{alignItems: 'center', marginTop: 20}}>
-          <Text style={styles.profileTxt}>{auth().currentUser?.email}</Text>
-        </View>
-
-        {/* <ScrollView
-          style={styles.imageUploadContainer}
-          horizontal
-          showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={styles.uploadImgContainer}
-            onPress={handleSelectImages}>
-            <Image
-              source={require('../assets/camera.png')}
-              style={styles.uploadImg}
-            />
-          </TouchableOpacity>
-          <FlatList
-            data={selectedImage}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
-          />
-        </ScrollView>
-        <View style={{flex: 1, paddingHorizontal: 40}}>
-          {selectedImage.length > 0 && (
-            <ButtonComponent
-              title="Uplaod Images"
-              onPress={() => uploadImages(selectedImage)}
-              loading={loading}
-              style={{marginBottom: 12}}
-            />
-          )}
-        </View> */}
-
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 12,
-            backgroundColor: color,
-            alignSelf: 'center',
-            marginTop: 30,
-            borderRadius: 8,
-          }}
-          activeOpacity={0.8}
-          onPress={generateColor}>
-          <Text style={{fontSize: 14, color: colors.white}}>
-            generate Color
+          <Text style={styles.profileTxt} selectable>
+            {auth().currentUser?.email}
           </Text>
-        </TouchableOpacity>
+          {/* <Text style={styles.profileTxt}>
+            Hello my name is awais and i am {'\n'}a react native student from{' '}
+            {'\n'}
+            sadiqabad i also study in kfueit.
+          </Text> */}
+          <TouchableOpacity>
+            {/* <FastImage
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 100,
+                marginTop: 20,
+              }}
+              source={{
+                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              }}
+            /> */}
+            {/* <Animated.Image
+              style={{
+                height: 100,
+                width: 100,
+                marginVertical: 30,
+                transform: [{rotate: spin}],
+              }}
+              source={{
+                uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png',
+              }}
+            /> */}
+            {/* <Animated.Image
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 100,
+                transform: [{rotate: spin}],
+              }}
+              source={{
+                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              }}
+            /> */}
+          </TouchableOpacity>
+          <ButtonComponent
+            title="get food"
+            style={styles.btn}
+            onPress={foodRecipeApp}
+          />
+        </View>
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
@@ -265,7 +455,6 @@ export default function ProfileScreen() {
             }}
             onPress={() => setShowImageModal(false)}>
             <TouchableOpacity activeOpacity={1} style={styles.modalStyle}>
-              {/* <Sepia> */}
               <FastImage
                 source={
                   !!userImage ? {uri: userImage} : require('../assets/men.jpg')
@@ -273,7 +462,6 @@ export default function ProfileScreen() {
                 style={styles.modalImageStyle}
                 resizeMode="contain"
               />
-              {/* </Sepia> */}
             </TouchableOpacity>
           </TouchableOpacity>
         </Modal>
@@ -370,17 +558,40 @@ const styles = StyleSheet.create({
     right: 4,
   },
   btn: {
-    width: '60%',
+    width: '40%',
     alignSelf: 'center',
     marginTop: 20,
-    borderRadius: 8,
+    borderRadius: 22,
+    backgroundColor: colors.blue2,
   },
   modalStyle: {
     width: screenWidth,
-    // height: screenHeight / 2,
+    paddingVertical: 10,
+    shadowColor: '#ffff',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+
+    elevation: 12,
   },
   modalImageStyle: {
     width: '100%',
     height: screenHeight * 0.26,
+    borderRadius: 12,
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 50,
+    borderRightWidth: 50,
+    borderBottomWidth: 100,
+    borderStyle: 'solid',
+    borderBottomColor: 'green',
+    backgroundColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
   },
 });

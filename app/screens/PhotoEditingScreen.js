@@ -12,6 +12,7 @@ import {
   Modal,
   FlatList,
   PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import colors from '../styles/colors';
@@ -38,6 +39,18 @@ import {
   brightness,
   contrast,
   temperature,
+  kodachrome,
+  toBGR,
+  lsd,
+  deuteranomaly,
+  deuteranopia,
+  achromatopsia,
+  achromatomaly,
+  protanopia,
+  tritanopia,
+  technicolor,
+  predator,
+  luminanceToAlpha,
 } from 'react-native-color-matrix-image-filters';
 import ScreenComponent from '../components/ScreenComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
@@ -132,6 +145,66 @@ export default function PhotoEditingScreen() {
       title: 'Night Vision',
       filter: nightvision(),
     },
+    {
+      id: 13,
+      title: 'Koda Chrome',
+      filter: kodachrome(),
+    },
+    {
+      id: 14,
+      title: 'To BGR',
+      filter: toBGR(),
+    },
+    {
+      id: 15,
+      title: 'LSD',
+      filter: lsd(),
+    },
+    {
+      id: 16,
+      title: 'Deuteranomaly',
+      filter: deuteranomaly(),
+    },
+    {
+      id: 17,
+      title: 'Deuteranopia',
+      filter: deuteranopia(),
+    },
+    {
+      id: 18,
+      title: 'Achromatopsia',
+      filter: achromatopsia(),
+    },
+    {
+      id: 18,
+      title: 'Achromatomaly',
+      filter: achromatomaly(),
+    },
+    {
+      id: 19,
+      title: 'Protanopia',
+      filter: protanopia(),
+    },
+    {
+      id: 20,
+      title: 'Tritanopia',
+      filter: tritanopia(),
+    },
+    {
+      id: 21,
+      title: 'Technicolor',
+      filter: technicolor(),
+    },
+    {
+      id: 22,
+      title: 'Predator',
+      filter: predator(),
+    },
+    {
+      id: 23,
+      title: 'LuminanceToAlpha',
+      filter: luminanceToAlpha(),
+    },
   ];
 
   const handleBrightnessChange = value => {
@@ -172,7 +245,7 @@ export default function PhotoEditingScreen() {
     try {
       let res = await pickImage();
       if (!!res) {
-        setSelectedPhoto(res);
+        setSelectedPhoto(res?.uri);
       }
     } catch (error) {
       console.error('Error picking image:', error);
@@ -191,7 +264,18 @@ export default function PhotoEditingScreen() {
           <ColorMatrix matrix={item.filter}>
             <Image source={{uri: selectedPhoto}} style={styles.flatlistImg} />
           </ColorMatrix>
-          <Text style={styles.textStyle1} numberOfLines={1}>
+          <Text
+            style={[
+              styles.textStyle1,
+              {
+                color:
+                  item.filter == selectedFilter ||
+                  (item.title == 'Original' && selectedFilter == null)
+                    ? colors.white
+                    : colors.gray,
+              },
+            ]}
+            numberOfLines={1}>
             {item?.title}
           </Text>
         </View>
@@ -215,8 +299,6 @@ export default function PhotoEditingScreen() {
       error => console.log('Snapshot failed', error),
     );
   };
-  let id = Date.now();
-  let fileName = `${id}_editedPhoto`;
 
   const moveImageToDownloads = async sourceUri => {
     console.log('URI is: ', sourceUri);
@@ -266,22 +348,43 @@ export default function PhotoEditingScreen() {
 
   const requestStoragePermission = async () => {
     try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'App needs access to your storage to save images.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('Storage permission granted');
-        return true;
+      if (Platform.Version < 30) {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to your storage to save images.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Storage permission granted');
+          return true;
+        } else {
+          console.log('Storage permission denied');
+          Alert.alert(
+            'Storage Permission Required!',
+            'Please enable storage permission to save photo.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'Enable',
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+          );
+          return false;
+        }
       } else {
-        console.log('Storage permission denied');
-        return false;
+        return true;
       }
     } catch (err) {
       console.log(err);
@@ -292,10 +395,13 @@ export default function PhotoEditingScreen() {
   return (
     <ScreenComponent style={{backgroundColor: colors.moviesBg}}>
       <TopCompoWithHeading
-        title="Photo Editing"
+        title="Edit your Photo"
         onPress={() => navigation.goBack()}
-        rightTitle="Save"
-        onPressRightTitle={() => handleSaveEditedPhoto()}
+        rightTitle={selectedPhoto !== '' ? 'Save' : ''}
+        onPressRightTitle={() => {
+          selectedPhoto !== '' ? handleSaveEditedPhoto() : null;
+        }}
+        rightTxtStyle={{color: colors.yellow}}
       />
       <View style={styles.container}>
         {selectedPhoto !== '' ? (
@@ -314,7 +420,13 @@ export default function PhotoEditingScreen() {
             <TouchableOpacity
               activeOpacity={0.6}
               style={styles.crossContainer}
-              onPress={() => setSelectedPhoto('')}>
+              onPress={() => {
+                setSelectedFilter(null);
+                setBrightnessValue(null);
+                setContrastValue(null);
+                setTemperatureValue(null);
+                setSelectedPhoto('');
+              }}>
               <Image
                 source={require('../assets/close.png')}
                 style={styles.cross}
@@ -338,7 +450,9 @@ export default function PhotoEditingScreen() {
         {selectedPhoto !== '' && (
           <View style={{flex: 1, marginTop: 12}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.editProTxt}>Brightness</Text>
+              <Text numberOfLines={2} style={styles.editProTxt}>
+                Brightness
+              </Text>
               <Slider
                 style={{flex: 1, marginLeft: 12}}
                 minimumValue={0}
@@ -501,9 +615,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   textStyle1: {
-    fontSize: 14,
+    fontSize: 10,
     fontFamily: fontFamily.rubik_regular,
-    color: colors.white,
+    color: colors.gray,
     marginTop: 4,
     alignSelf: 'center',
   },

@@ -29,4 +29,27 @@ export default {
   Show_Video_Screen: 'ShowVideoScreen',
   Pexel_Collection_Screen: 'PexelCollectionScreen',
   Photo_Editing_Screen: 'PhotoEditingScreen',
+  Favorite_Movie_Screen: 'FavoriteMovieScreen',
+  Show_All_Trading_Movies_Screen: 'ShowAllTradingMoviesScreen',
+  Trending_Tv_Serial_Screen: 'TrendingTvSerialScreen',
+  All_Users_List_Screen: 'AllUsersListScreen',
+  Chat_Screen: 'ChatScreen',
+  Now_Playing_Movies_Screen: 'NowPlayingMoviesScreen',
+  Search_Multi_Screen: 'SearchMultiScreen',
+  WeatherAppHomeScreen: 'WeatherAppHomeScreen',
+  Top_News_Screen: 'TopNewsScreen',
+  Detail_News_Screen: 'DetailNewsScreen',
+  Search_News_Screen: 'SearchNewsScreen',
+  Rotton_Tomatos_Screen: 'RottonTomatosScreen',
+  Food_Recipe_Home_Screen: 'FoodRecipeHomeScreen',
+  Detail_Food_Recipe_Screen: 'DetailFoodRecipeScreen',
+  Read_Articel_Screen: 'ReadArticelScreen',
+
+  // below screens for FitnessX
+  FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
+  FitnessX_Activity_Tracker_Screen: 'FitnessXActivityTrackerScreen',
+
+  // below screens for pixabay photos
+  Pixabay_Search_Screen: 'PixabaySearchScreen',
+  Pixabay_Search_Videos: 'PixabaySearchVideos',
 };
