@@ -126,10 +126,15 @@ export default function FoodRecipeHomeScreen() {
     }
   }, [selectedCategory]);
 
-  const renderCategories = ({item}) => {
+  const renderCategories = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={[styles.categoryImageContainer]}
+        style={[
+          styles.categoryImageContainer,
+          {
+            paddingLeft: index === 0 ? 12 : 0,
+          },
+        ]}
         activeOpacity={0.8}
         onPress={() => setSelectedCategory(item?.strCategory)}>
         <View
@@ -345,7 +350,7 @@ export default function FoodRecipeHomeScreen() {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{paddingLeft: 20}}>
+              <View style={{}}>
                 <FlatList
                   data={categoryData}
                   renderItem={renderCategories}
