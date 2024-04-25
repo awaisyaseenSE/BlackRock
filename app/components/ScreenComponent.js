@@ -7,10 +7,14 @@ import {
 } from 'react-native';
 import React from 'react';
 
-export default function ScreenComponent({style, children}) {
+export default function ScreenComponent({
+  style,
+  children,
+  backgroundColor = 'black',
+}) {
   return (
     <>
-      <StatusBar barStyle={'light-content'} backgroundColor={'black'} />
+      <StatusBar barStyle={'light-content'} backgroundColor={backgroundColor} />
       {Platform.OS === 'ios' ? (
         <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>
       ) : (

@@ -44,6 +44,9 @@ export default {
   Food_Recipe_Home_Screen: 'FoodRecipeHomeScreen',
   Detail_Food_Recipe_Screen: 'DetailFoodRecipeScreen',
   Read_Articel_Screen: 'ReadArticelScreen',
+  Coffee_GetStarted_Screen: 'CoffeeGetStartedScreen',
+  Coffee_Home_Screen: 'CoffeeHomeScreen',
+  Detail_Coffee_Screen: 'DetailCoffeeScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',

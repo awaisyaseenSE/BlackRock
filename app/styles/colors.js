@@ -55,4 +55,10 @@ export default {
   food_gray: '#DDE0DE',
   food_light_black: '#757876',
   food_light_black2: '#454846',
+
+  // coffee app
+  coffee_primary: '#855F46',
+  coffee_Light_White: '#F6F5F1',
+  coffee_Light_Brown: '#CC9B69',
+  coffee_Dark_Brown: '#814919',
 };

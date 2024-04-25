@@ -241,6 +241,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
+            image={require('../assets/coffee/coffee-cup.png')}
+            title="Coffee"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Coffee_GetStarted_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/news-1.png')}
             title="Top News"
             onPress={() =>
