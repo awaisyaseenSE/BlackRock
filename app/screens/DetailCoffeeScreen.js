@@ -3,21 +3,20 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  ImageBackground,
   Platform,
   TouchableOpacity,
   Image,
-  TextInput,
-  FlatList,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ScreenComponent from '../components/ScreenComponent';
 import FastImage from 'react-native-fast-image';
+import navigationStrings from '../navigation/navigationStrings';
+import ButtonComponent from '../components/ButtonComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -28,167 +27,243 @@ export default function DetailCoffeeScreen({route}) {
   const insets = useSafeAreaInsets();
   const [selectedSize, setSelectedSize] = useState(0);
   const [isFav, setIsFav] = useState(false);
+  const [noOfCoffee, setNoOfCoffee] = useState(1);
+
+  const handleAddCoffee = (operation = '') => {
+    if (operation == 'add') {
+      setNoOfCoffee(noOfCoffee + 1);
+    } else if (operation == 'remove') {
+      if (noOfCoffee !== 0) {
+        setNoOfCoffee(noOfCoffee - 1);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  const handleBuyNow = () => {
+    let size =
+      selectedSize === 0 ? 'small' : selectedSize === 1 ? 'medium' : 'large';
+    let finalData = {...data, size, noOfCoffee};
+    navigation.navigate(navigationStrings.Buy_Now_Coffee_Screen, {
+      orderData: finalData,
+    });
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar
-        backgroundColor={colors.coffee_Dark_Brown}
-        barStyle={'light-content'}
-      />
-      <Image
-        source={require('../assets/coffee/coffee-banner-1.png')}
-        style={styles.bannerStyle}
-        blurRadius={1}
-      />
-      <View
-        style={[
-          styles.row,
-          {
-            marginTop: Platform.OS === 'ios' ? insets.top : 14,
-          },
-        ]}>
-        <TouchableOpacity
-          style={styles.backIconContainer}
-          activeOpacity={0.6}
-          onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../assets/back.png')}
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.backIconContainer}
-          activeOpacity={0.6}
-          onPress={() => setIsFav(!isFav)}>
-          <Image
-            source={require('../assets/coffee/heart-fill.png')}
-            style={[
-              styles.backIcon,
-              {
-                tintColor: isFav ? colors.red : colors.white,
-              },
-            ]}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.imageStyle1Conatainer}>
-        <FastImage source={{uri: data?.image}} style={styles.imageStyle1} />
-      </View>
-      <View style={styles.mainContainer}>
-        <View style={styles.starConatiner}>
-          <Image
-            source={require('../assets/coffee/star.png')}
-            style={styles.starIcon}
-          />
-          <Text style={styles.starTxt}>{data?.stars}</Text>
-        </View>
-        <View style={styles.row2}>
-          <Text style={styles.heading}>{data?.name}</Text>
-          <Text style={styles.subheading}>$ {data?.price}</Text>
-        </View>
-        <Text
+    <ScrollView
+      style={{flex: 1, backgroundColor: colors.coffee_Light_White}}
+      showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <StatusBar
+          backgroundColor={colors.coffee_Dark_Brown}
+          barStyle={'light-content'}
+        />
+        <Image
+          source={require('../assets/coffee/coffee-banner-1.png')}
+          style={styles.bannerStyle}
+          blurRadius={1}
+        />
+        <View
           style={[
-            styles.heading,
+            styles.row,
             {
-              fontFamily: fontFamily.lato_bold,
-              fontSize: 18,
-              marginBottom: 10,
+              marginTop: Platform.OS === 'ios' ? insets.top : 14,
             },
           ]}>
-          Coffee Size
-        </Text>
-        <View style={styles.row2}>
           <TouchableOpacity
-            style={[
-              styles.btn,
-              {
-                backgroundColor:
-                  selectedSize === 0
-                    ? colors.coffee_Light_Brown
-                    : colors.food_gray,
-              },
-            ]}
+            style={styles.backIconContainer}
             activeOpacity={0.6}
-            onPress={() => setSelectedSize(0)}>
-            <Text
-              style={[
-                styles.btnTxt,
-                {
-                  color:
-                    selectedSize === 0
-                      ? colors.coffee_Light_White
-                      : colors.food_light_black2,
-                },
-              ]}>
-              Small
-            </Text>
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/back.png')}
+              style={styles.backIcon}
+            />
           </TouchableOpacity>
           <TouchableOpacity
-            style={[
-              styles.btn,
-              {
-                backgroundColor:
-                  selectedSize === 1
-                    ? colors.coffee_Light_Brown
-                    : colors.food_gray,
-                marginHorizontal: 10,
-              },
-            ]}
+            style={styles.backIconContainer}
             activeOpacity={0.6}
-            onPress={() => setSelectedSize(1)}>
-            <Text
+            onPress={() => setIsFav(!isFav)}>
+            <Image
+              source={require('../assets/coffee/heart-fill.png')}
               style={[
-                styles.btnTxt,
+                styles.backIcon,
                 {
-                  color:
-                    selectedSize === 1
-                      ? colors.coffee_Light_White
-                      : colors.food_light_black2,
+                  tintColor: isFav ? colors.red : colors.white,
                 },
-              ]}>
-              Medium
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.btn,
-              {
-                backgroundColor:
-                  selectedSize === 2
-                    ? colors.coffee_Light_Brown
-                    : colors.food_gray,
-              },
-            ]}
-            activeOpacity={0.6}
-            onPress={() => setSelectedSize(2)}>
-            <Text
-              style={[
-                styles.btnTxt,
-                {
-                  color:
-                    selectedSize === 2
-                      ? colors.coffee_Light_White
-                      : colors.food_light_black2,
-                },
-              ]}>
-              Large
-            </Text>
+              ]}
+            />
           </TouchableOpacity>
         </View>
-        <View style={{marginTop: 8}}>
+        <View style={styles.imageStyle1Conatainer}>
+          <FastImage source={{uri: data?.image}} style={styles.imageStyle1} />
+        </View>
+        <View style={styles.mainContainer}>
+          <View style={styles.starConatiner}>
+            <Image
+              source={require('../assets/coffee/star.png')}
+              style={styles.starIcon}
+            />
+            <Text style={styles.starTxt}>{data?.stars}</Text>
+          </View>
+          <View style={styles.row2}>
+            <Text style={styles.heading}>{data?.name}</Text>
+            <Text style={styles.subheading}>$ {data?.price}</Text>
+          </View>
           <Text
             style={[
               styles.heading,
               {
-                fontFamily: fontFamily.rubik_medium,
+                fontFamily: fontFamily.lato_bold,
                 fontSize: 18,
+                marginBottom: 10,
               },
             ]}>
-            About
+            Coffee Size
           </Text>
-          <Text style={styles.descTxt}>{data?.desc}</Text>
+          <View style={styles.row2}>
+            <TouchableOpacity
+              style={[
+                styles.btn,
+                {
+                  backgroundColor:
+                    selectedSize === 0
+                      ? colors.coffee_Light_Brown
+                      : colors.food_gray,
+                },
+              ]}
+              activeOpacity={0.6}
+              onPress={() => setSelectedSize(0)}>
+              <Text
+                style={[
+                  styles.btnTxt,
+                  {
+                    color:
+                      selectedSize === 0
+                        ? colors.coffee_Light_White
+                        : colors.food_light_black2,
+                  },
+                ]}>
+                Small
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btn,
+                {
+                  backgroundColor:
+                    selectedSize === 1
+                      ? colors.coffee_Light_Brown
+                      : colors.food_gray,
+                  marginHorizontal: 10,
+                },
+              ]}
+              activeOpacity={0.6}
+              onPress={() => setSelectedSize(1)}>
+              <Text
+                style={[
+                  styles.btnTxt,
+                  {
+                    color:
+                      selectedSize === 1
+                        ? colors.coffee_Light_White
+                        : colors.food_light_black2,
+                  },
+                ]}>
+                Medium
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.btn,
+                {
+                  backgroundColor:
+                    selectedSize === 2
+                      ? colors.coffee_Light_Brown
+                      : colors.food_gray,
+                },
+              ]}
+              activeOpacity={0.6}
+              onPress={() => setSelectedSize(2)}>
+              <Text
+                style={[
+                  styles.btnTxt,
+                  {
+                    color:
+                      selectedSize === 2
+                        ? colors.coffee_Light_White
+                        : colors.food_light_black2,
+                  },
+                ]}>
+                Large
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{marginTop: 8}}>
+            <Text
+              style={[
+                styles.heading,
+                {
+                  fontFamily: fontFamily.rubik_medium,
+                  fontSize: 18,
+                },
+              ]}>
+              About
+            </Text>
+            <Text style={styles.descTxt}>{data?.desc}</Text>
+          </View>
+          <View style={[styles.row2, {marginTop: 20}]}>
+            <Text style={styles.volumeTxt}>
+              <Text style={{color: colors.gray}}>Volume</Text>{' '}
+              {' ' + data?.volume} ml
+            </Text>
+            <View style={styles.myRow}>
+              <TouchableOpacity
+                style={styles.insideRow}
+                onPress={() => handleAddCoffee('remove')}
+                activeOpacity={0.8}>
+                <Image
+                  source={require('../assets/coffee/minus.png')}
+                  style={styles.minusIcon}
+                />
+              </TouchableOpacity>
+              <Text style={styles.myTxt}>{noOfCoffee}</Text>
+              <TouchableOpacity
+                style={styles.insideRow}
+                onPress={() => handleAddCoffee('add')}
+                activeOpacity={0.8}>
+                <Image
+                  source={require('../assets/coffee/plus.png')}
+                  style={styles.minusIcon}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={[
+              styles.row2,
+              {
+                marginTop: 10,
+                marginBottom: 20,
+              },
+            ]}>
+            <TouchableOpacity
+              style={styles.orderIconContainer}
+              activeOpacity={0.6}>
+              <Image
+                source={require('../assets/coffee/order.png')}
+                style={styles.orderIcon}
+              />
+            </TouchableOpacity>
+            <ButtonComponent
+              title="Buy Now"
+              style={styles.btn1}
+              onPress={handleBuyNow}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -196,6 +271,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.coffee_Light_White,
+  },
+  orderIconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.food_light_black,
+  },
+  orderIcon: {
+    width: 26,
+    height: 26,
+    tintColor: colors.food_light_black,
   },
   mainContainer: {
     paddingHorizontal: 20,
@@ -301,5 +390,40 @@ const styles = StyleSheet.create({
     color: colors.lightBlack,
     lineHeight: 16,
     marginTop: 8,
+  },
+  volumeTxt: {
+    fontSize: 16,
+    color: colors.black,
+    fontWeight: '600',
+  },
+  myRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 6,
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 28,
+    width: '34%',
+  },
+  insideRow: {
+    width: 30,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  minusIcon: {
+    width: 16,
+    height: 16,
+  },
+  myTxt: {
+    fontSize: 18,
+    color: colors.black,
+    fontFamily: fontFamily.rubik_semi_bold,
+  },
+  btn1: {
+    width: '80%',
+    backgroundColor: colors.coffee_Light_Brown,
+    height: 52,
   },
 });
