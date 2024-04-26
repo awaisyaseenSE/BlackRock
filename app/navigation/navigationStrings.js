@@ -47,6 +47,7 @@ export default {
   Coffee_GetStarted_Screen: 'CoffeeGetStartedScreen',
   Coffee_Home_Screen: 'CoffeeHomeScreen',
   Detail_Coffee_Screen: 'DetailCoffeeScreen',
+  Add_Coffee_Screen: 'AddCoffeeScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',

@@ -52,6 +52,7 @@ import ReadArticelScreen from '../screens/Food/ReadArticelScreen';
 import CoffeeGetStartedScreen from '../screens/CoffeeGetStartedScreen';
 import CoffeeHomeScreen from '../screens/CoffeeHomeScreen';
 import DetailCoffeeScreen from '../screens/DetailCoffeeScreen';
+import AddCoffeeScreen from '../screens/AddCoffeeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -430,6 +431,13 @@ function AppNavigator() {
       <Stack.Screen
         name="DetailCoffeeScreen"
         component={DetailCoffeeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddCoffeeScreen"
+        component={AddCoffeeScreen}
         options={{
           headerShown: false,
         }}

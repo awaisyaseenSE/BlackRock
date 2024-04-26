@@ -11,10 +11,11 @@ export default function ScreenComponent({
   style,
   children,
   backgroundColor = 'black',
+  content = 'light-content',
 }) {
   return (
     <>
-      <StatusBar barStyle={'light-content'} backgroundColor={backgroundColor} />
+      <StatusBar barStyle={content} backgroundColor={backgroundColor} />
       {Platform.OS === 'ios' ? (
         <SafeAreaView style={[styles.screen, style]}>{children}</SafeAreaView>
       ) : (

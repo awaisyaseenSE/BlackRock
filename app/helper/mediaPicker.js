@@ -1,7 +1,7 @@
 import {Alert} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-export const pickImage = () => {
+export const pickImage = (mediaType = 'mixed') => {
   return new Promise((resolve, reject) => {
     const options = {
       title: 'Select Photo',
@@ -9,7 +9,7 @@ export const pickImage = () => {
         skipBackup: true,
         path: 'images',
       },
-      mediaType: 'mixed',
+      mediaType: mediaType,
     };
 
     launchImageLibrary(options, response => {

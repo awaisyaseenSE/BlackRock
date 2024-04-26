@@ -11,7 +11,7 @@ import {
   FlatList,
   StatusBar,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import ScreenComponent from '../components/ScreenComponent';
@@ -22,6 +22,8 @@ import auth from '@react-native-firebase/auth';
 import {coffeeCategory, coffeeCategoryItems} from '../utils/coffeeDummyData';
 import Carousel from 'react-native-snap-carousel';
 import CoffeeCardCompo from '../components/CoffeeCardCompo';
+import firestore from '@react-native-firebase/firestore';
+import MyIndicatorLoader from '../components/MyIndicatorLoader';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -32,6 +34,34 @@ export default function CoffeeHomeScreen() {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedTab, setSelectedTab] = useState(0);
+  const [coffeeData, setCoffeeData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getCoffeeData = async () => {
+    try {
+      setLoading(true);
+      firestore()
+        .collection('coffee')
+        .onSnapshot(snap => {
+          const allCoffeeData = snap.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          // console.log('........................');
+          // console.log('all data: ', allCoffeeData);
+          // console.log('........................');
+          setCoffeeData(allCoffeeData);
+        });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log('Error in getting coffee data from firestore: ', error);
+    }
+  };
+
+  useEffect(() => {
+    getCoffeeData();
+  }, []);
 
   const renderCoffeCategoryData = ({item}) => {
     return (
@@ -69,166 +99,182 @@ export default function CoffeeHomeScreen() {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingBottom: Platform.OS === 'ios' ? insets.bottom : 30,
-        },
-      ]}>
-      <StatusBar
-        backgroundColor={colors.coffee_Dark_Brown}
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
-      />
-      <ImageBackground
-        style={styles.imgBgStyle}
-        source={require('../assets/coffee/coffee-bg-5.jpg')}>
-        <View
-          style={[
-            styles.bannerView,
-            {
-              paddingTop: Platform.OS === 'ios' ? insets.top : 14,
-            },
-          ]}>
-          <View style={styles.topHeaderContainer}>
-            <Image
-              source={require('../assets/food/man.png')}
-              style={styles.menIcon}
-            />
-            <Text style={styles.txt}>{auth()?.currentUser?.displayName}</Text>
-            <Image
-              source={require('../assets/food/notification.png')}
-              style={styles.notifiIcon}
-            />
-          </View>
-          <View style={styles.textInputConatiner}>
-            <TextInput
-              value={searchText}
-              onChangeText={text => {
-                if (text.trim().length) {
-                  setSearchText(text);
-                } else {
-                  setSearchText('');
-                }
-              }}
-              maxLength={40}
-              style={styles.inputStyle}
-              placeholder="Search any recipe"
-              placeholderTextColor={colors.food_light_black}
-            />
-            <TouchableOpacity
-              style={styles.searchIconContainer}
-              onPress={() => {}}>
+    <>
+      <View
+        style={[
+          styles.container,
+          {
+            paddingBottom: Platform.OS === 'ios' ? insets.bottom : 30,
+          },
+        ]}>
+        <StatusBar
+          backgroundColor={colors.coffee_Dark_Brown}
+          barStyle={
+            Platform.OS === 'android' ? 'light-content' : 'dark-content'
+          }
+        />
+        <ImageBackground
+          style={styles.imgBgStyle}
+          source={require('../assets/coffee/coffee-bg-5.jpg')}>
+          <View
+            style={[
+              styles.bannerView,
+              {
+                paddingTop: Platform.OS === 'ios' ? insets.top : 14,
+              },
+            ]}>
+            <View style={styles.topHeaderContainer}>
               <Image
-                source={require('../assets/food/search.png')}
-                style={styles.searchIcon}
+                source={require('../assets/food/man.png')}
+                style={styles.menIcon}
+              />
+              <Text style={styles.txt}>{auth()?.currentUser?.displayName}</Text>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() =>
+                  navigation.navigate(navigationStrings.Add_Coffee_Screen)
+                }>
+                <Image
+                  source={require('../assets/add-todo.png')}
+                  style={styles.notifiIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.textInputConatiner}>
+              <TextInput
+                value={searchText}
+                onChangeText={text => {
+                  if (text.trim().length) {
+                    setSearchText(text);
+                  } else {
+                    setSearchText('');
+                  }
+                }}
+                maxLength={40}
+                style={styles.inputStyle}
+                placeholder="Search any recipe"
+                placeholderTextColor={colors.food_light_black}
+              />
+              <TouchableOpacity
+                style={styles.searchIconContainer}
+                onPress={() => {}}>
+                <Image
+                  source={require('../assets/food/search.png')}
+                  style={styles.searchIcon}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ImageBackground>
+        <View style={{marginTop: 14}}>
+          <FlatList
+            data={coffeeCategory}
+            renderItem={renderCoffeCategoryData}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+          />
+        </View>
+        <View style={{marginTop: 40, paddingVertical: 20}}>
+          {coffeeData.length > 0 && (
+            <Carousel
+              data={coffeeData}
+              renderItem={({item}) => (
+                <CoffeeCardCompo
+                  item={item}
+                  onPress={() => handleOnPress(item)}
+                />
+              )}
+              contentContainerStyle={{overflow: 'visible'}}
+              firstItem={1}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth * 0.62}
+              slideStyle={{alignItems: 'center'}}
+              inactiveSlideOpacity={0.75}
+              inactiveSlideScale={0.77}
+            />
+          )}
+        </View>
+        <View style={styles.footer}>
+          <View style={styles.bottomTabContainer}>
+            <TouchableOpacity
+              style={[
+                styles.bottomTabIconContainer,
+                {
+                  backgroundColor:
+                    selectedTab === 0 ? colors.coffee_Light_White : null,
+                },
+              ]}
+              onPress={() => setSelectedTab(0)}
+              activeOpacity={0.8}>
+              <Image
+                source={require('../assets/coffee/home.png')}
+                style={[
+                  styles.bottomTabIcon,
+                  {
+                    tintColor:
+                      selectedTab === 0
+                        ? colors.coffee_Light_Brown
+                        : colors.coffee_Light_White,
+                  },
+                ]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.bottomTabIconContainer,
+                {
+                  backgroundColor:
+                    selectedTab === 1 ? colors.coffee_Light_White : null,
+                },
+              ]}
+              onPress={() => setSelectedTab(1)}
+              activeOpacity={0.8}>
+              <Image
+                source={
+                  selectedTab === 1
+                    ? require('../assets/coffee/heart-fill.png')
+                    : require('../assets/coffee/heart-empty.png')
+                }
+                style={[
+                  styles.bottomTabIcon,
+                  {
+                    tintColor:
+                      selectedTab === 1
+                        ? colors.coffee_Light_Brown
+                        : colors.coffee_Light_White,
+                  },
+                ]}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.bottomTabIconContainer,
+                {
+                  backgroundColor:
+                    selectedTab === 2 ? colors.coffee_Light_White : null,
+                },
+              ]}
+              onPress={() => setSelectedTab(2)}
+              activeOpacity={0.8}>
+              <Image
+                source={require('../assets/coffee/order.png')}
+                style={[
+                  styles.bottomTabIcon,
+                  {
+                    tintColor:
+                      selectedTab === 2
+                        ? colors.coffee_Light_Brown
+                        : colors.coffee_Light_White,
+                  },
+                ]}
               />
             </TouchableOpacity>
           </View>
         </View>
-      </ImageBackground>
-      <View style={{marginTop: 14}}>
-        <FlatList
-          data={coffeeCategory}
-          renderItem={renderCoffeCategoryData}
-          keyExtractor={(item, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          horizontal
-        />
       </View>
-      <View style={{marginTop: 40, paddingVertical: 20}}>
-        <Carousel
-          data={coffeeCategoryItems}
-          renderItem={({item}) => (
-            <CoffeeCardCompo item={item} onPress={() => handleOnPress(item)} />
-          )}
-          contentContainerStyle={{overflow: 'visible'}}
-          firstItem={1}
-          sliderWidth={screenWidth}
-          itemWidth={screenWidth * 0.62}
-          slideStyle={{alignItems: 'center'}}
-          inactiveSlideOpacity={0.75}
-          inactiveSlideScale={0.77}
-        />
-      </View>
-      <View style={styles.footer}>
-        <View style={styles.bottomTabContainer}>
-          <TouchableOpacity
-            style={[
-              styles.bottomTabIconContainer,
-              {
-                backgroundColor:
-                  selectedTab === 0 ? colors.coffee_Light_White : null,
-              },
-            ]}
-            onPress={() => setSelectedTab(0)}
-            activeOpacity={0.8}>
-            <Image
-              source={require('../assets/coffee/home.png')}
-              style={[
-                styles.bottomTabIcon,
-                {
-                  tintColor:
-                    selectedTab === 0
-                      ? colors.coffee_Light_Brown
-                      : colors.coffee_Light_White,
-                },
-              ]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.bottomTabIconContainer,
-              {
-                backgroundColor:
-                  selectedTab === 1 ? colors.coffee_Light_White : null,
-              },
-            ]}
-            onPress={() => setSelectedTab(1)}
-            activeOpacity={0.8}>
-            <Image
-              source={
-                selectedTab === 1
-                  ? require('../assets/coffee/heart-fill.png')
-                  : require('../assets/coffee/heart-empty.png')
-              }
-              style={[
-                styles.bottomTabIcon,
-                {
-                  tintColor:
-                    selectedTab === 1
-                      ? colors.coffee_Light_Brown
-                      : colors.coffee_Light_White,
-                },
-              ]}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.bottomTabIconContainer,
-              {
-                backgroundColor:
-                  selectedTab === 2 ? colors.coffee_Light_White : null,
-              },
-            ]}
-            onPress={() => setSelectedTab(2)}
-            activeOpacity={0.8}>
-            <Image
-              source={require('../assets/coffee/order.png')}
-              style={[
-                styles.bottomTabIcon,
-                {
-                  tintColor:
-                    selectedTab === 2
-                      ? colors.coffee_Light_Brown
-                      : colors.coffee_Light_White,
-                },
-              ]}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+      <MyIndicatorLoader visible={loading} />
+    </>
   );
 }
 

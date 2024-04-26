@@ -25,7 +25,7 @@ const CoffeeCardCompo = ({item, onPress}) => {
         </View>
         <Text style={styles.volumeTxt}>
           <Text style={{color: colors.whiteOpacity70}}>Volume</Text>{' '}
-          {' ' + item?.volume}
+          {' ' + item?.volume} ml
         </Text>
       </View>
       <View style={styles.bottomView}>
