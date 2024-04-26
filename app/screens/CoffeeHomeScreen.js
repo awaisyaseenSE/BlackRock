@@ -10,6 +10,7 @@ import {
   TextInput,
   FlatList,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
@@ -47,9 +48,6 @@ export default function CoffeeHomeScreen() {
             ...doc.data(),
             id: doc.id,
           }));
-          // console.log('........................');
-          // console.log('all data: ', allCoffeeData);
-          // console.log('........................');
           setCoffeeData(allCoffeeData);
         });
       setLoading(false);
@@ -129,6 +127,7 @@ export default function CoffeeHomeScreen() {
                 style={styles.menIcon}
               />
               <Text style={styles.txt}>{auth()?.currentUser?.displayName}</Text>
+
               <TouchableOpacity
                 activeOpacity={0.6}
                 onPress={() =>
@@ -273,7 +272,7 @@ export default function CoffeeHomeScreen() {
           </View>
         </View>
       </View>
-      <MyIndicatorLoader visible={loading} />
+      <MyIndicatorLoader visible={loading} color={colors.coffee_Light_Brown} />
     </>
   );
 }

@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   btn: {
-    backgroundColor: colors.coffee_Light_Brown,
+    backgroundColor: colors.coffee_Dark_Brown,
     width: '80%',
     alignSelf: 'center',
     marginTop: 12,
