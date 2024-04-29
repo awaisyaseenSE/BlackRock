@@ -39,6 +39,7 @@ import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import WebView from 'react-native-webview';
 import {CachedImage} from '../utils/CachedImage';
+import {apiCallOpenAi} from '../utils/aiChatAssistance';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -462,10 +463,14 @@ export default function ProfileScreen() {
               }}
             /> */}
           </TouchableOpacity>
-          <ButtonComponent
-            title="get food"
+          {/* <ButtonComponent
+            title="chat gpt"
             style={styles.btn}
-            onPress={() => fetchImages('shine')}
+            onPress={() => apiCallOpenAi('how are you')}
+          /> */}
+          <FastImage
+            source={{uri: 'https://v2.exercisedb.io/image/I4XMjCBFhqaGoJ'}}
+            style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}
           />
         </View>
 

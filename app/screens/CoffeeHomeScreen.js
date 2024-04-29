@@ -191,6 +191,18 @@ export default function CoffeeHomeScreen() {
               slideStyle={{alignItems: 'center'}}
               inactiveSlideOpacity={0.75}
               inactiveSlideScale={0.77}
+              ListEmptyComponent={() => (
+                <ActivityIndicator
+                  size={'large'}
+                  color={colors.coffee_Dark_Brown}
+                />
+              )}
+            />
+          )}
+          {coffeeData.length === 0 && (
+            <ActivityIndicator
+              size={'large'}
+              color={colors.coffee_Dark_Brown}
             />
           )}
         </View>

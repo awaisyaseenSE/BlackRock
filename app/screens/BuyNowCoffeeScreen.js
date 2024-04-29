@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 12,
     backgroundColor: colors.coffee_Dark_Brown,
-    width: '80%',
+    width: '100%',
   },
   insideRow: {
     width: 30,

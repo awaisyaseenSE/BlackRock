@@ -93,157 +93,162 @@ const ShowAddressModal = ({
           onPress={() => setShowModal(false)}
         />
         <View style={styles.container}>
-          <TouchableWithoutFeedback
+          <ScrollView
             style={{flex: 1}}
-            onPress={Keyboard.dismiss}>
-            <KeyboardAvoidingView
-              style={{
-                flex: 1,
-                width: '100%',
-              }}
-              behavior={Platform.OS === 'ios' ? 'padding' : null}
-              enabled
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}>
-              <ScrollView
-                style={{flex: 1}}
-                showsVerticalScrollIndicator={false}>
-                <View style={{}}>
-                  <View style={styles.topContainer}>
-                    <TouchableOpacity
-                      style={styles.closeIconContainer}
-                      activeOpacity={0.8}
-                      onPress={() => setShowModal(false)}>
-                      <Image
-                        source={require('../assets/close.png')}
-                        style={styles.closeIcon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.row}>
-                    <TouchableOpacity
-                      style={styles.countrySelectContainer}
-                      activeOpacity={0.8}
-                      onPress={() => {
-                        setSelectCity(!selectCity);
-                        if (searchBoxShow) {
-                          setSearchBoxShow(false);
-                        }
-                      }}>
-                      <Image
-                        source={require('../assets/coffee/town-hall.png')}
-                        style={[styles.icon, {marginRight: 8}]}
-                      />
-                      <Text style={styles.heading}>Select City</Text>
-                      <Image
-                        source={
-                          selectCity
-                            ? require('../assets/food/upward-arrow.png')
-                            : require('../assets/food/downward-arrow.png')
-                        }
-                        style={[styles.icon, {marginLeft: 10}]}
-                      />
-                    </TouchableOpacity>
-                    {searchBoxShow && (
-                      <TextInput
-                        style={styles.inputStyle}
-                        placeholder="Search City.."
-                        value={searchCity}
-                        onChangeText={text => {
-                          if (text.trim().length) {
-                            setSearchCity(text);
-                          } else {
-                            setSearchCity('');
-                          }
-                        }}
-                        maxLength={40}
-                      />
-                    )}
-                    {selectCity && !searchBoxShow && (
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{flex: 1}}>
+            <TouchableWithoutFeedback
+              style={{flex: 1}}
+              onPress={Keyboard.dismiss}>
+              <KeyboardAvoidingView
+                style={{
+                  flex: 1,
+                  width: '100%',
+                }}
+                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                enabled
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}>
+                <ScrollView
+                  style={{flex: 1}}
+                  showsVerticalScrollIndicator={false}>
+                  <View style={{}}>
+                    <View style={styles.topContainer}>
                       <TouchableOpacity
-                        style={styles.seachIconContainer}
-                        onPress={() => setSearchBoxShow(true)}>
+                        style={styles.closeIconContainer}
+                        activeOpacity={0.8}
+                        onPress={() => setShowModal(false)}>
                         <Image
-                          source={require('../assets/food/search.png')}
-                          style={styles.seachIcon}
+                          source={require('../assets/close.png')}
+                          style={styles.closeIcon}
                         />
                       </TouchableOpacity>
+                    </View>
+                    <View style={styles.row}>
+                      <TouchableOpacity
+                        style={styles.countrySelectContainer}
+                        activeOpacity={0.8}
+                        onPress={() => {
+                          setSelectCity(!selectCity);
+                          if (searchBoxShow) {
+                            setSearchBoxShow(false);
+                          }
+                        }}>
+                        <Image
+                          source={require('../assets/coffee/town-hall.png')}
+                          style={[styles.icon, {marginRight: 8}]}
+                        />
+                        <Text style={styles.heading}>Select City</Text>
+                        <Image
+                          source={
+                            selectCity
+                              ? require('../assets/food/upward-arrow.png')
+                              : require('../assets/food/downward-arrow.png')
+                          }
+                          style={[styles.icon, {marginLeft: 10}]}
+                        />
+                      </TouchableOpacity>
+                      {searchBoxShow && (
+                        <TextInput
+                          style={styles.inputStyle}
+                          placeholder="Search City.."
+                          value={searchCity}
+                          onChangeText={text => {
+                            if (text.trim().length) {
+                              setSearchCity(text);
+                            } else {
+                              setSearchCity('');
+                            }
+                          }}
+                          maxLength={40}
+                        />
+                      )}
+                      {selectCity && !searchBoxShow && (
+                        <TouchableOpacity
+                          style={styles.seachIconContainer}
+                          onPress={() => setSearchBoxShow(true)}>
+                          <Image
+                            source={require('../assets/food/search.png')}
+                            style={styles.seachIcon}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    {userCity?.length > 0 && (
+                      <TextInputCompo
+                        value={userCity}
+                        inputStyle={styles.addressInputStyle}
+                        textStyle={{color: colors.food_light_black2}}
+                        editable={false}
+                      />
+                    )}
+
+                    {selectCity && (
+                      <View
+                        style={{flex: 1, paddingHorizontal: 12, marginTop: 8}}>
+                        <FlatList
+                          data={cityData}
+                          renderItem={renderItem}
+                          keyExtractor={(item, index) => index.toString()}
+                          showsVerticalScrollIndicator={false}
+                          scrollEnabled={false}
+                        />
+                      </View>
+                    )}
+                    {!selectCity && (
+                      <View>
+                        <Text style={styles.heading}>Address</Text>
+                        <TextInputCompo
+                          value={userAddress}
+                          onChangeText={text => {
+                            if (text.trim().length) {
+                              setUserAddress(text);
+                            } else {
+                              setUserAddress('');
+                            }
+                          }}
+                          placeholder="Enter your address"
+                          inputStyle={styles.addressInputStyle}
+                          textStyle={{color: colors.food_light_black2}}
+                        />
+                        <Text style={styles.heading}>Postal Code</Text>
+                        <TextInputCompo
+                          value={userPostalCode}
+                          onChangeText={text => {
+                            if (text.trim().length) {
+                              setUserPostalCode(text);
+                            } else {
+                              setUserPostalCode('');
+                            }
+                          }}
+                          placeholder="Enter postal code"
+                          inputStyle={styles.addressInputStyle}
+                          textStyle={{color: colors.food_light_black2}}
+                          maxLength={10}
+                          keyboardType="number-pad"
+                        />
+                        <Text style={styles.heading}>Phone Number</Text>
+                        <TextInputCompo
+                          value={userPhoneNumber}
+                          onChangeText={text => {
+                            if (text.trim().length) {
+                              setUserPhoneNumber(text);
+                            } else {
+                              setUserPhoneNumber('');
+                            }
+                          }}
+                          placeholder="Enter Phone Number"
+                          inputStyle={styles.addressInputStyle}
+                          textStyle={{color: colors.food_light_black2}}
+                          maxLength={15}
+                          keyboardType="phone-pad"
+                        />
+                      </View>
                     )}
                   </View>
-                  {userCity?.length > 0 && (
-                    <TextInputCompo
-                      value={userCity}
-                      inputStyle={styles.addressInputStyle}
-                      textStyle={{color: colors.food_light_black2}}
-                      editable={false}
-                    />
-                  )}
-
-                  {selectCity && (
-                    <View
-                      style={{flex: 1, paddingHorizontal: 12, marginTop: 8}}>
-                      <FlatList
-                        data={cityData}
-                        renderItem={renderItem}
-                        keyExtractor={(item, index) => index.toString()}
-                        showsVerticalScrollIndicator={false}
-                        scrollEnabled={false}
-                      />
-                    </View>
-                  )}
-                  {!selectCity && (
-                    <View>
-                      <Text style={styles.heading}>Address</Text>
-                      <TextInputCompo
-                        value={userAddress}
-                        onChangeText={text => {
-                          if (text.trim().length) {
-                            setUserAddress(text);
-                          } else {
-                            setUserAddress('');
-                          }
-                        }}
-                        placeholder="Enter your address"
-                        inputStyle={styles.addressInputStyle}
-                        textStyle={{color: colors.food_light_black2}}
-                      />
-                      <Text style={styles.heading}>Postal Code</Text>
-                      <TextInputCompo
-                        value={userPostalCode}
-                        onChangeText={text => {
-                          if (text.trim().length) {
-                            setUserPostalCode(text);
-                          } else {
-                            setUserPostalCode('');
-                          }
-                        }}
-                        placeholder="Enter postal code"
-                        inputStyle={styles.addressInputStyle}
-                        textStyle={{color: colors.food_light_black2}}
-                        maxLength={10}
-                        keyboardType="number-pad"
-                      />
-                      <Text style={styles.heading}>Phone Number</Text>
-                      <TextInputCompo
-                        value={userPhoneNumber}
-                        onChangeText={text => {
-                          if (text.trim().length) {
-                            setUserPhoneNumber(text);
-                          } else {
-                            setUserPhoneNumber('');
-                          }
-                        }}
-                        placeholder="Enter Phone Number"
-                        inputStyle={styles.addressInputStyle}
-                        textStyle={{color: colors.food_light_black2}}
-                        maxLength={15}
-                        keyboardType="phone-pad"
-                      />
-                    </View>
-                  )}
-                </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+          </ScrollView>
         </View>
         <TouchableOpacity
           style={{flex: 1}}
