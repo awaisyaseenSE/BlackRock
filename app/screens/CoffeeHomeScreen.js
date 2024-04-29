@@ -15,7 +15,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
-import ScreenComponent from '../components/ScreenComponent';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import navigationStrings from '../navigation/navigationStrings';
