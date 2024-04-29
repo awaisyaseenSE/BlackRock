@@ -8,6 +8,7 @@ import {
   Image,
   StatusBar,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
@@ -249,7 +250,8 @@ export default function DetailCoffeeScreen({route}) {
             ]}>
             <TouchableOpacity
               style={styles.orderIconContainer}
-              activeOpacity={0.6}>
+              activeOpacity={0.6}
+              onPress={handleBuyNow}>
               <Image
                 source={require('../assets/coffee/order.png')}
                 style={styles.orderIcon}
@@ -258,7 +260,16 @@ export default function DetailCoffeeScreen({route}) {
             <ButtonComponent
               title="Buy Now"
               style={styles.btn1}
-              onPress={handleBuyNow}
+              onPress={() => {
+                if (noOfCoffee > 0) {
+                  handleBuyNow();
+                } else {
+                  Alert.alert(
+                    'Atleast 1 Coffee is requried!',
+                    'Please select atleast one coffee to place order.',
+                  );
+                }
+              }}
             />
           </View>
         </View>

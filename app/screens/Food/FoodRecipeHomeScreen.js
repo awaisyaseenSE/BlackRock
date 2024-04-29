@@ -365,7 +365,9 @@ export default function FoodRecipeHomeScreen() {
                   {selectedArea !== '' && selectedArea + ' '}
                   {selectedIngredient !== '' &&
                     selectedIngredient + ' '}Recipes{' '}
-                  {showSearch ? `(${recipeData?.length})` : ''}
+                  {showSearch && recipeData?.length > 0
+                    ? `(${recipeData?.length})`
+                    : ''}
                 </Text>
                 {loading ? (
                   <ActivityIndicator

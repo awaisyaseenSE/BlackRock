@@ -2,26 +2,23 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   Platform,
   TouchableOpacity,
   Image,
-  StatusBar,
-  ScrollView,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import colors from '../styles/colors';
 import fontFamily from '../styles/fontFamily';
 import {useNavigation} from '@react-navigation/native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import FastImage from 'react-native-fast-image';
 import ButtonComponent from '../components/ButtonComponent';
 import ScreenComponent from '../components/ScreenComponent';
 import TopCompoWithHeading from '../components/TopCompoWithHeading';
 import ShowAddressModal from '../components/ShowAddressModal';
-
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import CoffeeOrderSuccessMoal from '../components/CoffeeOrderSuccessMoal';
 
 export default function BuyNowCoffeeScreen({route}) {
   const orderData = route?.params?.orderData;
@@ -33,6 +30,8 @@ export default function BuyNowCoffeeScreen({route}) {
   const [userAddress, setUserAddress] = useState('');
   const [userPostalCode, setUserPostalCode] = useState('');
   const [userPhoneNumber, setUserPhoneNumber] = useState('');
+  const [addressError, setAddressError] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const handleAddCoffee = (operation = '') => {
     if (operation == 'add') {
@@ -43,6 +42,90 @@ export default function BuyNowCoffeeScreen({route}) {
       }
     } else {
       return null;
+    }
+  };
+
+  const handleUploadData = () => {
+    try {
+      setLoading(true);
+      let finalOrderPrice = (noOfCoffee * orderData?.price + 2.5 + 1.2).toFixed(
+        2,
+      );
+      let finalOrderData = {
+        noOfCoffee: noOfCoffee,
+        coffeeName: orderData?.name,
+        coffeeSize: orderData?.size,
+        user: auth()?.currentUser?.uid,
+        totalPrice: finalOrderPrice,
+        userAddressDetails: {
+          city: userCity,
+          address: userAddress,
+          postal_code: userPostalCode,
+          phone_number: userPhoneNumber,
+        },
+      };
+      firestore()
+        .collection('coffeeOrders')
+        .add(finalOrderData)
+        .then(() => {
+          setLoading(false);
+          setOrderSuccess(true);
+          console.log('order is place successfully!');
+        })
+        .catch(err => {
+          setLoading(false);
+          console.log(
+            'error while uploading coffee order data in firestore: ',
+            err,
+          );
+          Alert.alert(
+            'Order Placement Failed',
+            'We encountered an issue while processing your order. Please try again later.',
+          );
+        });
+    } catch (error) {
+      setLoading(false);
+      console.log('Error in uplaoding order data: ', error);
+      Alert.alert(
+        'Error! Order Placement Failed',
+        'We encountered an issue while processing your order. Please try again later.',
+      );
+    }
+  };
+
+  const handlePlaceOrder = () => {
+    if (userCity === '') {
+      setAddressError(true);
+    } else {
+      setAddressError(false);
+    }
+    if (userAddress === '') {
+      setAddressError(true);
+    } else {
+      setAddressError(false);
+    }
+    if (userPostalCode === '') {
+      setAddressError(true);
+    } else {
+      setAddressError(false);
+    }
+    if (userPhoneNumber === '') {
+      setAddressError(true);
+    } else {
+      setAddressError(false);
+    }
+    if (
+      userAddress.length > 4 &&
+      userCity.length > 2 &&
+      userPostalCode.length > 1 &&
+      userPhoneNumber.length > 9
+    ) {
+      handleUploadData();
+    } else {
+      Alert.alert(
+        'Address Details Required',
+        'Please ensure you provide complete and accurate address details to proceed.',
+      );
     }
   };
 
@@ -140,7 +223,13 @@ export default function BuyNowCoffeeScreen({route}) {
           <TouchableOpacity
             style={[
               styles.row,
-              {marginTop: 20, marginHorizontal: 22, paddingVertical: 10},
+              {
+                marginTop: 20,
+                marginHorizontal: 22,
+                paddingVertical: 10,
+                borderTopColor: addressError ? colors.red : colors.food_gray,
+                borderBottomColor: addressError ? colors.red : colors.food_gray,
+              },
             ]}
             activeOpacity={0.8}
             onPress={() => setShowAdressModal(true)}>
@@ -148,7 +237,10 @@ export default function BuyNowCoffeeScreen({route}) {
               source={require('../assets/coffee/location.png')}
               style={{width: 24, height: 24, marginRight: 12}}
             />
-            <Text>Add Address</Text>
+            <Text>
+              Add Address
+              {userCity !== '' && `  (${userCity})`}
+            </Text>
           </TouchableOpacity>
 
           <View style={styles.mainContainer}>
@@ -189,7 +281,12 @@ export default function BuyNowCoffeeScreen({route}) {
             </View>
           </View>
           <View style={styles.btnContainer}>
-            <ButtonComponent title="Place Order" style={styles.btn} />
+            <ButtonComponent
+              title="Place Order"
+              style={styles.btn}
+              onPress={handlePlaceOrder}
+              loading={loading}
+            />
           </View>
         </View>
       </ScreenComponent>
@@ -205,6 +302,12 @@ export default function BuyNowCoffeeScreen({route}) {
           setUserPostalCode={setUserPostalCode}
           userPhoneNumber={userPhoneNumber}
           setUserPhoneNumber={setUserPhoneNumber}
+        />
+      )}
+      {orderSuccess && (
+        <CoffeeOrderSuccessMoal
+          orderSuccess={orderSuccess}
+          setOrderSuccess={setOrderSuccess}
         />
       )}
     </>
