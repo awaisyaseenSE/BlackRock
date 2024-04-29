@@ -25,19 +25,16 @@ import {
   getResponsiveHeight,
   getResponsiveWidth,
 } from '../utils/getResponsiveMarginPadding';
-import {launchImageLibrary} from 'react-native-image-picker';
 import {pickImage} from '../helper/mediaPicker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import ButtonComponent from '../components/ButtonComponent';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {removeItemValue} from '../helper/storeAndGetAsyncStorageValue';
 import navigationStrings from '../navigation/navigationStrings';
 import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
-import WebView from 'react-native-webview';
 import {CachedImage} from '../utils/CachedImage';
 
 const screenWidth = Dimensions.get('window').width;
