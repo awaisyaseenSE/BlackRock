@@ -29,6 +29,10 @@ export default function BuyNowCoffeeScreen({route}) {
   const [loading, setLoading] = useState(false);
   const [noOfCoffee, setNoOfCoffee] = useState(orderData?.noOfCoffee);
   const [showAdressModal, setShowAdressModal] = useState(false);
+  const [userCity, setUserCity] = useState('');
+  const [userAddress, setUserAddress] = useState('');
+  const [userPostalCode, setUserPostalCode] = useState('');
+  const [userPhoneNumber, setUserPhoneNumber] = useState('');
 
   const handleAddCoffee = (operation = '') => {
     if (operation == 'add') {
@@ -193,6 +197,14 @@ export default function BuyNowCoffeeScreen({route}) {
         <ShowAddressModal
           showModal={showAdressModal}
           setShowModal={setShowAdressModal}
+          userCity={userCity}
+          setUserCity={setUserCity}
+          userAddress={userAddress}
+          setUserAddress={setUserAddress}
+          userPostalCode={userPostalCode}
+          setUserPostalCode={setUserPostalCode}
+          userPhoneNumber={userPhoneNumber}
+          setUserPhoneNumber={setUserPhoneNumber}
         />
       )}
     </>
