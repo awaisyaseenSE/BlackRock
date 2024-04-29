@@ -39,7 +39,6 @@ import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import WebView from 'react-native-webview';
 import {CachedImage} from '../utils/CachedImage';
-import {apiCallOpenAi} from '../utils/aiChatAssistance';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
