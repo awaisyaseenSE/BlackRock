@@ -49,6 +49,8 @@ export default {
   Detail_Coffee_Screen: 'DetailCoffeeScreen',
   Add_Coffee_Screen: 'AddCoffeeScreen',
   Buy_Now_Coffee_Screen: 'BuyNowCoffeeScreen',
+  WorkOut_Home_Screen: 'WorkOutHomeScreen',
+  WorkOut_Detail_Screen: 'WorkOutDetailScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
