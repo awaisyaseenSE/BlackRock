@@ -5,8 +5,10 @@ import {
   Platform,
   Dimensions,
   FlatList,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import fontFamily from '../../styles/fontFamily';
 import colors from '../../styles/colors';
@@ -18,12 +20,23 @@ import {bodyParts, sliderImgsData} from './components/workOutData';
 import BodyPartCard from './components/BodyPartCard';
 import {ScrollView} from 'react-native';
 import navigationStrings from '../../navigation/navigationStrings';
+import OptionModal from './components/OptionModal';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function WorkOutHomeScreen() {
   const navigation = useNavigation();
+  const ref = useRef(null);
+  const [position, setPosition] = useState({x: 0, y: 0});
+  const [optionModal, setOptionModal] = useState(false);
+
+  const handleOnPressOptionModal = event => {
+    ref.current.measure((x, y, width, height, pageX, pageY) => {
+      setPosition({x: pageX, y: pageY});
+    });
+    setOptionModal(!optionModal);
+  };
   return (
     <>
       <ScreenComponent
@@ -57,7 +70,18 @@ export default function WorkOutHomeScreen() {
               />
             </View>
             <View style={{flex: 1, marginTop: 20, paddingHorizontal: 16}}>
-              <Text style={styles.heading2}>Exercises</Text>
+              <View style={styles.row}>
+                <Text style={styles.heading2}>Exercises</Text>
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  ref={ref}
+                  onPress={handleOnPressOptionModal}>
+                  <Image
+                    source={require('../../assets/more.png')}
+                    style={styles.optionIcon}
+                  />
+                </TouchableOpacity>
+              </View>
               <FlatList
                 data={bodyParts}
                 renderItem={({item, index}) => (
@@ -73,6 +97,39 @@ export default function WorkOutHomeScreen() {
                 scrollEnabled={false}
               />
             </View>
+            {optionModal && (
+              <TouchableOpacity
+                style={[
+                  styles.optionModalStyle,
+                  {
+                    top: position.x + 20,
+                  },
+                ]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(navigationStrings.Workout_List_Screen, {
+                      name: 'equipmentList',
+                    });
+                    setOptionModal(!optionModal);
+                  }}>
+                  <Text style={styles.heading}>Equipment List</Text>
+                </TouchableOpacity>
+                <View style={{marginVertical: 6}} />
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(navigationStrings.Workout_List_Screen, {
+                      name: 'targetList',
+                    });
+                    setOptionModal(!optionModal);
+                  }}>
+                  <Text style={styles.heading}>Target List</Text>
+                </TouchableOpacity>
+                <View style={{marginVertical: 6}} />
+                <TouchableOpacity>
+                  <Text style={styles.heading}>Best Exercises</Text>
+                </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
         </ScrollView>
       </ScreenComponent>
@@ -110,15 +167,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   heading: {
-    fontSize: 26,
+    fontSize: 30,
     color: colors.black,
     textTransform: 'uppercase',
     fontFamily: fontFamily.rubik_medium,
+    marginBottom: 16,
   },
   userImage: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   heading2: {
     fontSize: 20,
@@ -126,5 +184,33 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     fontFamily: fontFamily.rubik_medium,
     marginBottom: 8,
+  },
+  optionIcon: {
+    width: 24,
+    height: 24,
+    tintColor: colors.black,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  optionModalStyle: {
+    backgroundColor: colors.white,
+    right: 10,
+    position: 'absolute',
+    zIndex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.food_gray,
+    minWidth: screenWidth / 2,
+    minHeight: screenHeight / 8,
+  },
+  heading: {
+    fontSize: 14,
+    color: colors.black,
+    fontFamily: fontFamily.rubik_medium,
   },
 });

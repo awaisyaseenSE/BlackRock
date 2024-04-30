@@ -56,6 +56,7 @@ import AddCoffeeScreen from '../screens/AddCoffeeScreen';
 import BuyNowCoffeeScreen from '../screens/BuyNowCoffeeScreen';
 import WorkOutHomeScreen from '../screens/Fitness/WorkOutHomeScreen';
 import WorkOutDetailScreen from '../screens/Fitness/WorkOutDetailScreen';
+import WorkoutListScreen from '../screens/Fitness/WorkoutListScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -462,6 +463,13 @@ function AppNavigator() {
       <Stack.Screen
         name="WorkOutDetailScreen"
         component={WorkOutDetailScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="WorkoutListScreen"
+        component={WorkoutListScreen}
         options={{
           headerShown: false,
         }}

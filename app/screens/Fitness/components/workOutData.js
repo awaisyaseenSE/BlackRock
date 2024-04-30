@@ -76,3 +76,49 @@ export const bodyParts = [
       'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zml0bmVzcyUyMHRyYWluaW5nfGVufDB8fDB8fHww',
   },
 ];
+
+export const targetList = [
+  {
+    name: 'abductors',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbfnOGS6tG1t1bELbf-uFc9nRlqXJ1-2SDkg&s',
+  },
+  {
+    name: 'abs',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGqHikfhMbGfBp1N2FwDXhSNpn3CfDOemWKQ&s',
+  },
+  {
+    name: 'adductors',
+    image:
+      'https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2019/08/Showing-Off-Quads-Leg-Lunge-Bench.jpg?quality=86&strip=all',
+  },
+  {
+    name: 'biceps',
+    image:
+      'https://barbend.com/wp-content/uploads/2023/02/Barbend-Featured-Image-1600x900-A-person-performing-cable-biceps-curls.jpg',
+  },
+  {
+    name: 'calves',
+    image:
+      'https://i0.wp.com/www.muscleandfitness.com/wp-content/uploads/2017/06/1109-seated-calf-raise.jpg?quality=86&strip=all',
+  },
+  {
+    name: 'cardiovascular system',
+    image:
+      'https://www.shutterstock.com/image-photo/young-man-sportswear-running-on-600nw-435565456.jpg',
+  },
+  {name: 'delts', image: ''},
+  {name: 'forearms', image: ''},
+  {name: 'glutes', image: ''},
+  {name: 'hamstrings', image: ''},
+  {name: 'lats', image: ''},
+  {name: 'levator scapulae', image: ''},
+  {name: 'pectorals'},
+  {name: 'quads', image: ''},
+  {name: 'serratus anterior', image: ''},
+  {name: 'spine', image: ''},
+  {name: 'traps', image: ''},
+  {name: 'triceps', image: ''},
+  {name: 'upper back', image: ''},
+];
