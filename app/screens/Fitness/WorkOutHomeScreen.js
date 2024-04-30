@@ -52,7 +52,7 @@ export default function WorkOutHomeScreen() {
                 sliderWidth={screenWidth}
                 firstItem={1}
                 autoplayInterval={4000}
-                itemWidth={screenWidth - 50}
+                itemWidth={screenWidth - 80}
                 slideStyle={{display: 'flex', alignItems: 'center'}}
               />
             </View>
@@ -84,13 +84,14 @@ const itemCard = ({item, index}, parallaxProps) => {
   return (
     <View
       style={{
-        width: screenWidth - 50,
+        width: screenWidth - 80,
         height: screenHeight / 4,
       }}>
       <ParallaxImage
         source={item}
         containerStyle={{borderRadius: 30, flex: 1}}
         parallaxFactor={1}
+        style={{resizeMode: 'contain'}}
         {...parallaxProps}
       />
     </View>
