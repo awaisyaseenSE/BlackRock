@@ -232,10 +232,10 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.lineColor}}
           />
           <DrawerItemListCompo
-            image={require('../assets/weather_media/cloud.png')}
+            image={require('../assets/muscle.png')}
             title="Work Out"
             onPress={() =>
-              navigation.navigate(navigationStrings.WorkOut_Home_Screen)
+              navigation.navigate(navigationStrings.FitnessX_Onboarding_Screen)
             }
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}

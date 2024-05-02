@@ -33,6 +33,8 @@ export default {
   yellow: '#FEDD00',
   bottomTabBg: '#121212',
   todoPink: '#D4CCFF',
+  // todoPink: '#B24AF4',
+  // todoBlue: '#D4CCFF',
   todoBlue: '#2B1887',
   todoWhite: '#F5F2FF',
   todoRed: '#E42B5F',

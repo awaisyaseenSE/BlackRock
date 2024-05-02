@@ -39,7 +39,8 @@ export default function WorkOutListDetailScreen({route}) {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        // 'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
         'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
       },
     };

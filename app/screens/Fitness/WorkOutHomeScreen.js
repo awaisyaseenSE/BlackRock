@@ -40,7 +40,7 @@ export default function WorkOutHomeScreen() {
   return (
     <>
       <ScreenComponent
-        style={{backgroundColor: colors.LightWhite}}
+        style={{backgroundColor: colors.food_gray}}
         content={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
@@ -49,11 +49,18 @@ export default function WorkOutHomeScreen() {
                 Ready to{'\n'}
                 <Text style={{color: colors.dark_Red}}>Workout</Text>
               </Text>
-              <FastImage
-                source={{uri: auth()?.currentUser?.photoURL}}
-                defaultSource={require('../../assets/avatar.png')}
-                style={styles.userImage}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    navigationStrings.FitnessX_Onboarding_Screen,
+                  )
+                }>
+                <FastImage
+                  source={{uri: auth()?.currentUser?.photoURL}}
+                  defaultSource={require('../../assets/avatar.png')}
+                  style={styles.userImage}
+                />
+              </TouchableOpacity>
             </View>
             <View>
               <Carousel

@@ -29,9 +29,9 @@ export default function WorkOutAllExercisesScreen() {
   const insets = useSafeAreaInsets();
   const [showModal, setShowModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
-  const [limit, setLimit] = useState(50);
+  const [limit, setLimit] = useState(10);
   const totalDataCount = 1400;
-  const perPage = 50;
+  const perPage = 10;
 
   const getAllExercises = async () => {
     setLoading(true);
@@ -39,7 +39,8 @@ export default function WorkOutAllExercisesScreen() {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        // 'X-RapidAPI-Key': '5f75410f4emshf143142155a6dd7p101489jsn46223137d60a',
+        'X-RapidAPI-Key': '002c32715dmshd97fa28dbb46d29p102420jsnfddbf1201a7d',
         'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
       },
     };

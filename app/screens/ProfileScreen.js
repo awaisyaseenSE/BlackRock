@@ -36,6 +36,7 @@ import navigationStrings from '../navigation/navigationStrings';
 import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import {CachedImage} from '../utils/CachedImage';
+import ButtonComponent from '../components/ButtonComponent';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -459,11 +460,7 @@ export default function ProfileScreen() {
               }}
             /> */}
           </TouchableOpacity>
-          {/* <ButtonComponent
-            title="chat gpt"
-            style={styles.btn}
-            onPress={() => apiCallOpenAi('how are you')}
-          /> */}
+          {/* <ButtonComponent title="chat gpt" style={styles.btn} onPress={{}} /> */}
           {/* <FastImage
             source={{uri: 'https://v2.exercisedb.io/image/I4XMjCBFhqaGoJ'}}
             style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}
