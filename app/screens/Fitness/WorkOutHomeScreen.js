@@ -125,7 +125,13 @@ export default function WorkOutHomeScreen() {
                   <Text style={styles.heading}>Target List</Text>
                 </TouchableOpacity>
                 <View style={{marginVertical: 6}} />
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(
+                      navigationStrings.WorkOut_All_Exercises_Screen,
+                    );
+                    setOptionModal(!optionModal);
+                  }}>
                   <Text style={styles.heading}>Best Exercises</Text>
                 </TouchableOpacity>
               </TouchableOpacity>

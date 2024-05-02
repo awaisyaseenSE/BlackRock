@@ -53,6 +53,7 @@ export default {
   WorkOut_Detail_Screen: 'WorkOutDetailScreen',
   Workout_List_Screen: 'WorkoutListScreen',
   Work_Out_List_Detail_Screen: 'WorkOutListDetailScreen',
+  WorkOut_All_Exercises_Screen: 'WorkOutAllExercisesScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
