@@ -54,7 +54,9 @@ export default function WorkoutListScreen({route}) {
             end={{x: 0.5, y: 1}}
             colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.4)']}
             style={styles.linearGradientStyle}>
-            <Text style={styles.heading}>{item?.name}</Text>
+            <Text numberOfLines={1} style={styles.heading}>
+              {item?.name}
+            </Text>
           </LinearGradient>
         </View>
       </TouchableOpacity>
@@ -64,7 +66,7 @@ export default function WorkoutListScreen({route}) {
   return (
     <>
       <ScreenComponent
-        style={{backgroundColor: colors.LightWhite}}
+        style={{backgroundColor: colors.food_gray}}
         content={Platform.OS === 'ios' ? 'dark-content' : 'light-content'}>
         <TopCompoWithHeading
           title={name + ' Exercises'}
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   heading: {
-    fontSize: 16,
+    fontSize: 12,
     color: colors.LightWhite,
     textTransform: 'capitalize',
     fontFamily: fontFamily.rubik_medium,

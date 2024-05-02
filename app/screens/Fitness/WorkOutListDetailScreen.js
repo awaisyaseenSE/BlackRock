@@ -145,6 +145,7 @@ export default function WorkOutListDetailScreen({route}) {
 const styles = StyleSheet.create({
   conatiner: {
     flex: 1,
+    backgroundColor: colors.food_gray,
   },
   flatlistItemContainer: {
     width: screenWidth / 2 - 20,

@@ -29,10 +29,13 @@ export default function WorkOutAllExercisesScreen() {
   const insets = useSafeAreaInsets();
   const [showModal, setShowModal] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
+  const [limit, setLimit] = useState(50);
+  const totalDataCount = 1400;
+  const perPage = 50;
 
   const getAllExercises = async () => {
     setLoading(true);
-    const url = `https://exercisedb.p.rapidapi.com/exercises?limit=50`;
+    const url = `https://exercisedb.p.rapidapi.com/exercises?limit=${limit}`;
     const options = {
       method: 'GET',
       headers: {
@@ -56,7 +59,21 @@ export default function WorkOutAllExercisesScreen() {
 
   useEffect(() => {
     getAllExercises();
-  }, []);
+  }, [limit]);
+
+  const handleLoadMore = () => {
+    if (limit < totalDataCount) {
+      setLimit(limit + perPage);
+    }
+  };
+
+  const handleListFooterComponent = () => {
+    if (loading) {
+      return <ActivityIndicator size={'large'} color={colors.dark_Red} />;
+    } else {
+      return null;
+    }
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -106,11 +123,14 @@ export default function WorkOutAllExercisesScreen() {
               columnWrapperStyle={{
                 justifyContent: 'space-between',
               }}
-              ListEmptyComponent={
-                loading && (
-                  <ActivityIndicator size={'large'} color={colors.dark_Red} />
-                )
-              }
+              //   ListEmptyComponent={
+              //     loading && (
+              //       <ActivityIndicator size={'large'} color={colors.dark_Red} />
+              //     )
+              //   }
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={handleListFooterComponent}
             />
           </View>
         </View>
