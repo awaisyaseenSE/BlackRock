@@ -122,3 +122,121 @@ export const targetList = [
   {name: 'triceps', image: ''},
   {name: 'upper back', image: ''},
 ];
+
+export const equipmentList = [
+  {
+    name: 'assisted',
+    image:
+      'https://watsongym.co.uk/wp-content/uploads/2023/03/Assisted-Chin-Dip-1-1.jpg',
+  },
+  {
+    name: 'band',
+    image:
+      'https://exandnext.com/wp-content/uploads/2022/04/ee34fc13-3271-4f3d-a93a-9796842d2c57-1.jpg',
+  },
+  {
+    name: 'barbell',
+    image:
+      'https://mirafit.co.uk/wp/wp-content/uploads/2023/10/row-using-Mirafit-Olympic-Barbell-1024x683.jpg',
+  },
+  {
+    name: 'body weight',
+    image: '',
+  },
+  {
+    name: 'bosu ball',
+    image: '',
+  },
+  {
+    name: 'cable',
+    image: '',
+  },
+  {
+    name: 'dumbbell',
+    image: '',
+  },
+  {
+    name: 'elliptical machine',
+    image: '',
+  },
+  {
+    name: 'ez barbell',
+    image: '',
+  },
+  {
+    name: 'hammer',
+    image: '',
+  },
+  {
+    name: 'kettlebell',
+    image: '',
+  },
+  {
+    name: 'leverage machine',
+    image: '',
+  },
+  {
+    name: 'medicine ball',
+    image: '',
+  },
+  {
+    name: 'olympic barbell',
+    image: '',
+  },
+  {
+    name: 'resistance band',
+    image: '',
+  },
+  {
+    name: 'roller',
+    image: '',
+  },
+  {
+    name: 'rope',
+    image: '',
+  },
+  {
+    name: 'skierg machine',
+    image: '',
+  },
+  {
+    name: 'sled machine',
+    image: '',
+  },
+  {
+    name: 'mith machine',
+    image: '',
+  },
+  {
+    name: 'stability ball',
+    image: '',
+  },
+  {
+    name: 'stationary bike',
+    image: '',
+  },
+  {
+    name: 'stepmill machine',
+    image: '',
+  },
+  {
+    name: 'tire',
+    image: '',
+  },
+  {
+    name: 'trap bar',
+    image: '',
+  },
+  {
+    name: 'upper body ergometer',
+    image: '',
+  },
+  {
+    name: 'weighted',
+    image: '',
+  },
+  {
+    name: 'wheel roller',
+    image: '',
+  },
+];

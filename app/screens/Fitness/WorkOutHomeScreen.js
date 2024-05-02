@@ -45,7 +45,7 @@ export default function WorkOutHomeScreen() {
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             <View style={styles.topContainer}>
-              <Text style={styles.heading}>
+              <Text style={styles.myheading}>
                 Ready to{'\n'}
                 <Text style={{color: colors.dark_Red}}>Workout</Text>
               </Text>
@@ -212,5 +212,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.black,
     fontFamily: fontFamily.rubik_medium,
+  },
+  myheading: {
+    fontSize: 24,
+    color: colors.black,
+    textTransform: 'uppercase',
+    fontFamily: fontFamily.rubik_medium,
+    lineHeight: 34,
   },
 });

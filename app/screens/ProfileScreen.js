@@ -464,10 +464,10 @@ export default function ProfileScreen() {
             style={styles.btn}
             onPress={() => apiCallOpenAi('how are you')}
           /> */}
-          <FastImage
+          {/* <FastImage
             source={{uri: 'https://v2.exercisedb.io/image/I4XMjCBFhqaGoJ'}}
             style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}
-          />
+          /> */}
         </View>
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
