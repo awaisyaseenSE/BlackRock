@@ -460,7 +460,11 @@ export default function ProfileScreen() {
               }}
             /> */}
           </TouchableOpacity>
-          {/* <ButtonComponent title="chat gpt" style={styles.btn} onPress={{}} /> */}
+          {/* <ButtonComponent
+            title="Hello"
+            style={styles.btn}
+            onPress={{}}
+          /> */}
           {/* <FastImage
             source={{uri: 'https://v2.exercisedb.io/image/I4XMjCBFhqaGoJ'}}
             style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}

@@ -193,7 +193,7 @@ export default function SearchScreen() {
                       />
                     ) : (
                       <Image
-                        source={require('../assets/menu-burger.png')}
+                        source={require('../assets/food/ic_filter.png')}
                         style={styles.menuIcon}
                       />
                     )}

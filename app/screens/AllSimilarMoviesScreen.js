@@ -72,7 +72,7 @@ export default function AllSimilarMoviesScreen({route}) {
           <FlatList
             data={routeData}
             renderItem={({item}) => <ShowMovieCompo data={item} />}
-            numColumns={3}
+            numColumns={2}
             showsVerticalScrollIndicator={false}
             ItemSeparatorComponent={<View style={{marginVertical: 6}} />}
           />
@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingHorizontal: 4,
     overflow: 'hidden',
-    width: screenWidth / 3 - 14,
+    width: screenWidth / 2 - 18,
   },
   newposterImageStyle: {
-    width: screenWidth / 3 - 14,
+    width: screenWidth / 2 - 18,
     height: screenHeight * 0.2,
     borderRadius: 12,
   },

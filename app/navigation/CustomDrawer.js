@@ -68,15 +68,6 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.todoPink}}
           />
-          {/* <DrawerItemListCompo
-            image={require('../assets/favorite.png')}
-            title="Real Time Database"
-            onPress={() =>
-              navigation.navigate(navigationStrings.REAL_TIME_DATABASE)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          /> */}
           <DrawerItemListCompo
             image={require('../assets/tab_search.png')}
             title="Search Photos"
@@ -86,22 +77,6 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.white}}
           />
-          {/* <DrawerItemListCompo
-            image={require('../assets/user.png')}
-            title="About"
-            onPress={() => navigation.navigate(navigationStrings.ABOUT_SCREEN)}
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          /> */}
-          {/* <DrawerItemListCompo
-            image={require('../assets/schedule.png')}
-            title="Flah list"
-            onPress={() =>
-              navigation.navigate(navigationStrings.FlashList_Testing_Screen)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          /> */}
           <DrawerItemListCompo
             image={require('../assets/music-player.png')}
             title="Pixels Videos"
@@ -195,15 +170,6 @@ function CustomDrawer(props) {
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
           />
-          {/* <DrawerItemListCompo
-            image={require('../assets/tab_search.png')}
-            title="Fitness X"
-            onPress={() =>
-              navigation.navigate(navigationStrings.FitnessX_Onboarding_Screen)
-            }
-            txtStyle={{color: colors.lineColor}}
-            iconStyle={{tintColor: colors.lineColor}}
-          /> */}
           <DrawerItemListCompo
             image={require('../assets/tab_search.png')}
             title="Pixabay Photos"
@@ -318,6 +284,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     marginTop: 12,
+    marginBottom: 20,
   },
 });
 

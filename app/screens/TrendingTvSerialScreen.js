@@ -31,6 +31,8 @@ export default function TrendingTvSerialScreen() {
   const [endReached, setEndReached] = useState(false);
   const [allmoviesIDs, setAllMovieIDs] = useState([]);
 
+  const movieIdsSet = new Set();
+
   const getChangedMovies = async () => {
     try {
       setLoading(true);
@@ -48,6 +50,7 @@ export default function TrendingTvSerialScreen() {
         // console.log(res);
         setLoading(false);
         setTotalPages(res?.total_pages);
+        console.log(res.results?.length);
         setAllMovieIDs(prevData => [...prevData, ...res.results]);
       } else {
         setLoading(false);
@@ -59,14 +62,21 @@ export default function TrendingTvSerialScreen() {
   };
 
   useEffect(() => {
-    getChangedMovies();
+    getInitialData();
   }, []);
+
+  const getInitialData = () => {
+    setCurrentPage(1); // Reset currentPage
+    getChangedMovies(); // Fetch initial data
+  };
 
   const handleEndReached = () => {
     if (currentPage < totalPages && !loading) {
       // Fetch next page of data
       setCurrentPage(prevPage => prevPage + 1);
       getChangedMovies();
+
+      console.log('on handle end reach is called!');
     }
   };
 
@@ -91,6 +101,7 @@ export default function TrendingTvSerialScreen() {
                   textStyle={{width: screenWidth / 2 - 20}}
                 />
               )}
+              keyExtractor={item => item.id.toString()}
               numColumns={2}
               showsVerticalScrollIndicator={false}
               ItemSeparatorComponent={() => (

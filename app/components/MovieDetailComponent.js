@@ -32,6 +32,7 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${constants.theMovieDb_API_KEY}`,
         );
         const data = await response.json();
+        console.log(data?.backdrop_path);
         setMovieData(data);
         setIsLoading(false);
       } catch (error) {
@@ -52,8 +53,32 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
     });
   };
 
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          width: screenWidth / 3 - 16,
+          height: screenHeight * 0.2,
+          alignItems: 'center',
+        }}>
+        <LottieView
+          style={{width: 60, height: 60}}
+          source={require('../assets/animation/movie-loading-animation.json')}
+          loop={true}
+          autoPlay
+        />
+      </View>
+    );
+  }
+
+  if (!movieData?.backdrop_path) {
+    return null;
+  }
+
   return (
     <>
+      {/* {movieData && movieData.backdrop_path !== null && ( */}
       <View style={{...styles.container, ...style}}>
         {movieData ? (
           <TouchableOpacity onPress={handleNextScreen}>
@@ -100,6 +125,7 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
           </View>
         )}
       </View>
+      {/* )} */}
     </>
   );
 };
