@@ -36,7 +36,7 @@ const BottomTabNavigator = () => {
           paddingBottom: isIOS ? 14 : 16,
         },
       }}
-      initialRouteName="HomeScreen">
+      initialRouteName="ProfileScreen">
       <BottomTab.Screen
         component={HomeScreen}
         name="HomeScreen"

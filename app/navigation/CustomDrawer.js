@@ -78,6 +78,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.white}}
           />
           <DrawerItemListCompo
+            image={require('../assets/wallpaper/wallpaper_icon.png')}
+            title="Wallpaper App"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Walll_OnBoarding_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: null}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/music-player.png')}
             title="Pixels Videos"
             onPress={() =>

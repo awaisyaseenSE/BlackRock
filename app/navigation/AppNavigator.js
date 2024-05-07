@@ -59,6 +59,8 @@ import WorkOutDetailScreen from '../screens/Fitness/WorkOutDetailScreen';
 import WorkoutListScreen from '../screens/Fitness/WorkoutListScreen';
 import WorkOutListDetailScreen from '../screens/Fitness/WorkOutListDetailScreen';
 import WorkOutAllExercisesScreen from '../screens/Fitness/WorkOutAllExercisesScreen';
+import WallpaperHomeScreen from '../screens/Wallpaper/WallpaperHomeScreen';
+import WalllOnBoardingScreen from '../screens/Wallpaper/WalllOnBoardingScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -486,6 +488,20 @@ function AppNavigator() {
       <Stack.Screen
         name="WorkOutAllExercisesScreen"
         component={WorkOutAllExercisesScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="WallpaperHomeScreen"
+        component={WallpaperHomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="WalllOnBoardingScreen"
+        component={WalllOnBoardingScreen}
         options={{
           headerShown: false,
         }}

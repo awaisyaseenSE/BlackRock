@@ -54,6 +54,8 @@ export default {
   Workout_List_Screen: 'WorkoutListScreen',
   Work_Out_List_Detail_Screen: 'WorkOutListDetailScreen',
   WorkOut_All_Exercises_Screen: 'WorkOutAllExercisesScreen',
+  Wallpaper_Home_Screen: 'WallpaperHomeScreen',
+  Walll_OnBoarding_Screen: 'WalllOnBoardingScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',

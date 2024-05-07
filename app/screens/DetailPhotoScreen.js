@@ -113,7 +113,9 @@ export default function DetailPhotoScreen({route}) {
         <View
           style={[
             styles.container,
-            {backgroundColor: photoData?.avg_color || colors.moviesBg},
+            {
+              backgroundColor: photoData?.avg_color || colors.food_gray,
+            },
           ]}>
           <PanGestureHandler
             onGestureEvent={onPanEvent}

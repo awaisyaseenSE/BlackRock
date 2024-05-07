@@ -32,7 +32,6 @@ const MovieDetailComponent = ({movieId, imageStyle, style, textStyle}) => {
           `https://api.themoviedb.org/3/movie/${movieId}?api_key=${constants.theMovieDb_API_KEY}`,
         );
         const data = await response.json();
-        console.log(data?.backdrop_path);
         setMovieData(data);
         setIsLoading(false);
       } catch (error) {

@@ -64,4 +64,10 @@ export default {
   coffee_Light_White: '#F6F5F1',
   coffee_Light_Brown: '#CC9B69',
   coffee_Dark_Brown: '#814919',
+
+  // Wallpaper app
+  wallpaper_gray: '#EFEFEF',
+  wallpaper_white: '#FEFEFE',
+  wallpaper_Light_Black: '#313131',
+  wallpaper_Light_Yellow: '#FFF5E9',
 };
