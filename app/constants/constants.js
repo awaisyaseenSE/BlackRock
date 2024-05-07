@@ -15,6 +15,9 @@ export default {
   news_Api_Org: '31f9ee786fc34f3bb1d34a8a57ce284b',
   news_Api_Org: '31f9ee786fc34f3bb1d34a8a57ce284b',
   new_York_Times_API_KEY: 'rAFUAynUlvFoUxGMsR7OTXDt0rItke8g',
+  unsplash_Access_KEY: 'gdmjcD4vCxUbPCE-uNC082soRH8azbbK7Eb-sQzxrRA',
+  unsplash_Secret_KEY: 'qa5MbKAqmVHNa9fDzEpBSnPi59n_whB2HAAv9GGKvAM',
+  unsplash_Application_ID: '598550',
   shutterstock_Token:
     'v2/T3BMU2tmQ0VEUmFZUXdXZnVsQWZ3V3IxRXptcmxKazEvNDI5MTQ2MDU1L2N1c3RvbWVyLzQvTHR1QzlITGstZ01oaGNUanctTUF2YzJrbXFObXI4b2k5ZGxoVHJSRndUN0RtUU91ZGo5QjlUUWtSRFZxQUZadGo3TEc0N19IYk03MWlsRExKZWJaOUJrUGRKYTlQd1FzYW5KZ05xRDJhU1hsVkxyUTBjczJkMDZtcmZ5SVFET3d0U3IzSnBLaHhCY3VHQzNSUG1nTURuVklDMjhPSmNOMFNubXptZS1iaGY3YkhKam5mRE9aV2I1ekNaVGg2bGt5aV8zUkxiM25CaXpMa1g4aGFCdnlJQS9iaVhGNXNiX3Ixbng2aFdNWDkwRmZ3',
 };
