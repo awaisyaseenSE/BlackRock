@@ -13,7 +13,16 @@ const getFileNameFromUrl = url => {
   const parts = url.split('/');
   const filename = parts[parts.length - 1];
   const fileNameWithoutQuery = filename.split('?')[0];
-  let ff = fileNameWithoutQuery || `pixels_photo_${id}.jpg`;
+  let ff;
+  if (fileNameWithoutQuery.length < 20 && fileNameWithoutQuery.includes('.')) {
+    ff = fileNameWithoutQuery;
+  } else {
+    ff = `Photo_${id}.jpg`;
+  }
+  // let ff = fileNameWithoutQuery || `pixels_photo_${id}.jpg`;
+  console.log('......');
+  console.log('final file name from url is: ', ff);
+  console.log('......');
   return ff;
 };
 

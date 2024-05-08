@@ -87,6 +87,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: null}}
           />
           <DrawerItemListCompo
+            image={require('../assets/wallpaper/wallpaper_icon.png')}
+            title="Unsplash"
+            onPress={() =>
+              navigation.navigate(navigationStrings.Unsplash_Home_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: null}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/music-player.png')}
             title="Pixels Videos"
             onPress={() =>

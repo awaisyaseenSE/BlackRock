@@ -61,6 +61,7 @@ import WorkOutListDetailScreen from '../screens/Fitness/WorkOutListDetailScreen'
 import WorkOutAllExercisesScreen from '../screens/Fitness/WorkOutAllExercisesScreen';
 import WallpaperHomeScreen from '../screens/Wallpaper/WallpaperHomeScreen';
 import WalllOnBoardingScreen from '../screens/Wallpaper/WalllOnBoardingScreen';
+import UnsplashHomeScreen from '../screens/Unsplash/UnsplashHomeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -502,6 +503,13 @@ function AppNavigator() {
       <Stack.Screen
         name="WalllOnBoardingScreen"
         component={WalllOnBoardingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="UnsplashHomeScreen"
+        component={UnsplashHomeScreen}
         options={{
           headerShown: false,
         }}

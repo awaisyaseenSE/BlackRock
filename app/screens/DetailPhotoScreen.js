@@ -32,7 +32,9 @@ export default function DetailPhotoScreen({route}) {
   const insets = useSafeAreaInsets();
   const [isLoading, setIsLoading] = useState(true);
   const [downloadUrlLoading, setDownloadUrlLoading] = useState(false);
-  const [imgName, setImgName] = useState(photoData?.alt || '');
+  const [imgName, setImgName] = useState(
+    photoData?.alt || photoData?.alt_description || '',
+  );
   const [showIosToast, setShowIosToast] = useState(true);
 
   const [panEnabled, setPanEnabled] = useState(false);
@@ -114,7 +116,8 @@ export default function DetailPhotoScreen({route}) {
           style={[
             styles.container,
             {
-              backgroundColor: photoData?.avg_color || colors.food_gray,
+              backgroundColor:
+                photoData?.avg_color || photoData?.color || colors.food_gray,
             },
           ]}>
           <PanGestureHandler
@@ -135,6 +138,7 @@ export default function DetailPhotoScreen({route}) {
                     uri:
                       photoData?.src?.portrait ||
                       photoData?.largeImageURL ||
+                      photoData?.urls?.full ||
                       'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
                   }}
                   style={{
@@ -149,13 +153,6 @@ export default function DetailPhotoScreen({route}) {
               </PinchGestureHandler>
             </Animated.View>
           </PanGestureHandler>
-          {/* <FastImage
-            source={{uri: photoData?.src?.portrait || photoData?.largeImageURL}}
-            style={styles.imageStyle}
-            resizeMode="cover"
-            onLoadStart={handleLoadStart}
-            onLoadEnd={handleLoadEnd}
-          /> */}
           {isLoading && (
             <View style={styles.placeholder}>
               <ActivityIndicator size="large" color={colors.black} />
@@ -187,7 +184,9 @@ export default function DetailPhotoScreen({route}) {
             ]}
             onPress={() =>
               handleDownload(
-                photoData?.src?.portrait || photoData?.largeImageURL,
+                photoData?.src?.portrait ||
+                  photoData?.largeImageURL ||
+                  photoData?.urls?.full,
                 setDownloadUrlLoading,
               )
             }>
