@@ -5,7 +5,10 @@ import {
   ScrollView,
   ActivityIndicator,
   Dimensions,
+  Text,
   StatusBar,
+  Platform,
+  Button,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ScreenComponent from '../components/ScreenComponent';
@@ -16,6 +19,8 @@ import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import {Vintage} from 'react-native-color-matrix-image-filters';
+import RNFetchBlob from 'rn-fetch-blob';
+import constants from '../constants/constants';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -111,20 +116,6 @@ export default function AboutScreen() {
           </View>
         </ScrollView>
       </ScreenComponent>
-      {/* <ImageBackground
-          source={{
-            uri: 'https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          }}
-          style={{flex: 1, width: null, height: null}}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text style={{fontSize: 16, color: colors.blue}}>Your Contents</Text>
-          </View>
-        </ImageBackground> */}
       <MyIndicatorLoader visible={loading} />
     </>
   );

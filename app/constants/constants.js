@@ -18,6 +18,7 @@ export default {
   unsplash_Access_KEY: 'gdmjcD4vCxUbPCE-uNC082soRH8azbbK7Eb-sQzxrRA',
   unsplash_Secret_KEY: 'qa5MbKAqmVHNa9fDzEpBSnPi59n_whB2HAAv9GGKvAM',
   unsplash_Search_base_URL: 'https://api.unsplash.com/search/photos?',
+  dream_ai_API_KEY: '5RxROAHw7FL6gzXhxUZTSlPu9qKWX32T',
 
   unsplash_Application_ID: '598550',
   shutterstock_Token:

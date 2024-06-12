@@ -70,4 +70,9 @@ export default {
   wallpaper_white: '#FEFEFE',
   wallpaper_Light_Black: '#313131',
   wallpaper_Light_Yellow: '#FFF5E9',
+
+  // Investment app
+  invest_white: '#FAFAFA',
+  invest_green: '#32A062',
+  invest_red: '#FE555D',
 };

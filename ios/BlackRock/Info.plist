@@ -10,6 +10,12 @@
     <string>App need to access microphone to reocord voice</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Location Permission is required in order to fetch nearest locations to you</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+    <string>App need Location Permission</string>
+    <key>NSLocationUsageDescription</key>
+    <string>App required to use location...</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Location Permission required</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow app to access device photo library</string>
 	<key>CFBundleDevelopmentRegion</key>

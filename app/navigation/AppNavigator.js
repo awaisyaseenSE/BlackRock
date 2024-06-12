@@ -62,6 +62,8 @@ import WorkOutAllExercisesScreen from '../screens/Fitness/WorkOutAllExercisesScr
 import WallpaperHomeScreen from '../screens/Wallpaper/WallpaperHomeScreen';
 import WalllOnBoardingScreen from '../screens/Wallpaper/WalllOnBoardingScreen';
 import UnsplashHomeScreen from '../screens/Unsplash/UnsplashHomeScreen';
+import InvestGetStartedScreen from '../screens/InvestmentApp/InvestGetStartedScreen';
+import InvestHomeScreen from '../screens/InvestmentApp/InvestHomeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -510,6 +512,20 @@ function AppNavigator() {
       <Stack.Screen
         name="UnsplashHomeScreen"
         component={UnsplashHomeScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="InvestGetStartedScreen"
+        component={InvestGetStartedScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="InvestHomeScreen"
+        component={InvestHomeScreen}
         options={{
           headerShown: false,
         }}

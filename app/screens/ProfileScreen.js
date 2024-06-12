@@ -37,6 +37,7 @@ import constants from '../constants/constants';
 import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import {CachedImage} from '../utils/CachedImage';
 import ButtonComponent from '../components/ButtonComponent';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -49,6 +50,8 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const userImage = auth()?.currentUser?.photoURL;
   const [showImageModal, setShowImageModal] = useState(false);
+  const [base64Image, setBase64Image] = useState('');
+  const [localBase64Img, setLocalBase64Img] = useState('');
 
   const handleAddselectImages = newImage => {
     setSelectedImage(prevImages => [...prevImages, newImage]);
@@ -62,6 +65,7 @@ export default function ProfileScreen() {
     try {
       let res = await pickImage();
       if (!!res) {
+        // console.log(res);
         handleAddselectImages(res);
       }
     } catch (error) {
@@ -360,6 +364,59 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleConvertImgToBase64 = async () => {
+    try {
+      const fs = RNFetchBlob.fs;
+      let imagePath = null;
+      RNFetchBlob.config({
+        fileCache: true,
+      })
+        .fetch(
+          'GET',
+          'https://cdn.pixabay.com/photo/2014/12/07/09/30/milky-way-559641_1280.jpg',
+        )
+        // the image is now dowloaded to device's storage
+        .then(resp => {
+          // the image path you can use it directly with Image component
+          imagePath = resp.path();
+          return resp.readFile('base64');
+        })
+        .then(base64Data => {
+          // here's base64 encoded image
+          // console.log(base64Data);
+          setBase64Image(base64Data);
+          // remove the file from storage
+          return fs.unlink(imagePath);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBase64ToImage = async imgUri => {
+    try {
+      let fileUri = imgUri;
+      let filePath = '';
+      if (Platform.OS === 'ios') {
+        filePath = imgUri.replace('file:', '');
+      } else {
+        filePath = fileUri;
+      }
+
+      RNFetchBlob.fs
+        .readFile(filePath, 'base64')
+        .then(base64Data => {
+          console.log('local image is converted to base64 is: ', base64Data);
+          setLocalBase64Img(base64Data);
+        })
+        .catch(er =>
+          console.log('Error while converting local img to base 64: ', er),
+        );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -470,6 +527,73 @@ export default function ProfileScreen() {
             style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}
           /> */}
         </View>
+
+        {base64Image !== '' && (
+          <FastImage
+            source={{uri: `data:image/png;base64,${base64Image}`}}
+            style={{
+              width: 60,
+              height: 60,
+              alignSelf: 'center',
+              borderRadius: 30,
+              marginVertical: 14,
+            }}
+          />
+        )}
+
+        <ButtonComponent
+          title="Convert Image to base64"
+          onPress={handleConvertImgToBase64}
+          style={styles.btn}
+        />
+
+        <ButtonComponent
+          title="Select Image"
+          onPress={handleSelectImages}
+          style={styles.btn}
+        />
+
+        {selectedImage.length > 0 && (
+          <Image
+            source={{uri: selectedImage[0]?.uri}}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              marginVertical: 10,
+              alignSelf: 'center',
+            }}
+          />
+        )}
+
+        {selectedImage.length > 0 && (
+          <ButtonComponent
+            title="Convert local image to base64"
+            style={styles.btn}
+            onPress={() => handleBase64ToImage(selectedImage[0]?.uri)}
+          />
+        )}
+
+        {localBase64Img !== '' && (
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+              marginVertical: 6,
+            }}
+            onPress={() =>
+              console.log(`data:image/png;base64,${localBase64Img}`)
+            }>
+            <Image
+              source={{uri: `data:image/png;base64,${localBase64Img}`}}
+              style={{
+                width: 60,
+                height: 60,
+                alignSelf: 'center',
+                borderRadius: 30,
+              }}
+            />
+          </TouchableOpacity>
+        )}
 
         <Modal visible={showImageModal} style={{flex: 1}} transparent>
           <TouchableOpacity
@@ -602,6 +726,7 @@ const styles = StyleSheet.create({
     shadowRadius: 7.49,
 
     elevation: 12,
+    backgroundColor: colors.moviesBg,
   },
   modalImageStyle: {
     width: '100%',

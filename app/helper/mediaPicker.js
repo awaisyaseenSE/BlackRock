@@ -19,9 +19,7 @@ export const pickImage = (mediaType = 'mixed') => {
         console.log('ImagePicker Error: ', response.error);
       } else if (response?.assets[0]?.uri) {
         let res = response?.assets[0];
-        // resolve(res);
         if (res?.fileSize) {
-          // console.log('sdskdjfsdflks');
           const fileSizeInBytes = res?.fileSize;
           const fileSizeInMB = fileSizeInBytes / (1024 * 1024); // here i convert bytes into mb
           if (fileSizeInMB > 5) {

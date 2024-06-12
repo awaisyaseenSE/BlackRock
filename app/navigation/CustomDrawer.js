@@ -69,6 +69,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.todoPink}}
           />
           <DrawerItemListCompo
+            image={require('../assets/explore.png')}
+            title="Investment App"
+            onPress={() =>
+              navigation.navigate(navigationStrings.InvestGetStartedScreen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/tab_search.png')}
             title="Search Photos"
             onPress={() =>
@@ -256,6 +265,15 @@ function CustomDrawer(props) {
             title="Rotton Tomatos Movies"
             onPress={() =>
               navigation.navigate(navigationStrings.Rotton_Tomatos_Screen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.lineColor}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/emoji.png')}
+            title="FlahList"
+            onPress={() =>
+              navigation.navigate(navigationStrings.FlashList_Testing_Screen)
             }
             txtStyle={{color: colors.lineColor}}
             iconStyle={{tintColor: colors.lineColor}}
