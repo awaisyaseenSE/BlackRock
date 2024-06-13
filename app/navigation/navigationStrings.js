@@ -57,6 +57,7 @@ export default {
   Wallpaper_Home_Screen: 'WallpaperHomeScreen',
   Walll_OnBoarding_Screen: 'WalllOnBoardingScreen',
   Unsplash_Home_Screen: 'UnsplashHomeScreen',
+  AnimationPractiseScreen: 'AnimationPractiseScreen',
 
   // below screens for FitnessX
   FitnessX_Onboarding_Screen: 'FitnessXOnboardingScreen',
@@ -69,4 +70,6 @@ export default {
   // Investment app screens
   InvestGetStartedScreen: 'InvestGetStartedScreen',
   InvestHomeScreen: 'InvestHomeScreen',
+  InvestBottomTab: 'InvestBottomTab',
+  InvestProfileScreen: 'InvestProfileScreen',
 };

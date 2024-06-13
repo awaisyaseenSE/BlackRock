@@ -44,7 +44,7 @@ export default function InvestGetStartedScreen() {
               title="Get Started"
               style={styles.btn}
               onPress={() =>
-                navigation.navigate(navigationStrings.InvestHomeScreen)
+                navigation.navigate(navigationStrings.InvestBottomTab)
               }
             />
             <TouchableOpacity style={styles.loginBtnContainer}>

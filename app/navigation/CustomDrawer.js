@@ -78,6 +78,15 @@ function CustomDrawer(props) {
             iconStyle={{tintColor: colors.white}}
           />
           <DrawerItemListCompo
+            image={require('../assets/fitness.png')}
+            title="Animation Screen"
+            onPress={() =>
+              navigation.navigate(navigationStrings.AnimationPractiseScreen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          <DrawerItemListCompo
             image={require('../assets/tab_search.png')}
             title="Search Photos"
             onPress={() =>

@@ -9,8 +9,10 @@ import {
   Alert,
   ImageBackground,
   FlatList,
+  StatusBar,
+  ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import ScreenComponent from '../../components/ScreenComponent';
 import colors from '../../styles/colors';
 import fontFamily from '../../styles/fontFamily';
@@ -20,11 +22,16 @@ import navigationStrings from '../../navigation/navigationStrings';
 import InvestTopCompo from './components/InvestTopCompo';
 import LinearGradient from 'react-native-linear-gradient';
 import FastImage from 'react-native-fast-image';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import ShowInvestDetailModal from './components/ShowInvestDetailModal';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function InvestHomeScreen() {
+  const insets = useSafeAreaInsets();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedData, setSelectedData] = useState(null);
   const coinsData = [
     {
       id: 0,
@@ -110,7 +117,11 @@ export default function InvestHomeScreen() {
             marginRight: 18,
           },
         ]}
-        activeOpacity={0.6}>
+        activeOpacity={0.6}
+        onPress={() => {
+          setSelectedData(item);
+          setShowModal(true);
+        }}>
         <LinearGradient
           style={{borderRadius: 16}}
           start={{x: 0, y: 0}}
@@ -152,67 +163,90 @@ export default function InvestHomeScreen() {
   };
 
   return (
-    <ScreenComponent
-      style={{backgroundColor: colors.invest_white}}
-      content={Platform.OS === 'android' ? 'light-content' : 'dark-content'}>
-      <View style={styles.container}>
-        <View style={{paddingHorizontal: 20}}>
-          <InvestTopCompo
-            rightIcon={require('../../assets/bell.png')}
-            leftIcon={require('../../assets/invest/menu.png')}
-            onPress={() => {}}
-          />
-          <Text style={styles.heading}>Welcome, Jessie.</Text>
-          <View style={styles.card}>
-            <View style={{flex: 1}}>
-              <Text style={styles.cardbtnTxt}>Your total asset portfolio</Text>
-              <Text style={styles.cardTxt}>N203,934</Text>
+    <>
+      <StatusBar
+        backgroundColor={colors.black}
+        barStyle={Platform.OS === 'android' ? 'light-content' : 'dark-content'}
+      />
+      <View
+        style={{
+          paddingTop: Platform.OS === 'ios' ? insets.top : 10,
+          paddingHorizontal: 20,
+          backgroundColor: colors.invest_white,
+        }}>
+        <InvestTopCompo
+          rightIcon={require('../../assets/bell.png')}
+          leftIcon={require('../../assets/invest/menu.png')}
+          onPress={() => {}}
+        />
+      </View>
+      <ScrollView
+        style={{flex: 1, backgroundColor: colors.invest_white}}
+        showsVerticalScrollIndicator={false}>
+        <View style={[styles.container]}>
+          <View style={{paddingHorizontal: 20}}>
+            <Text style={styles.heading}>Welcome, Jessie.</Text>
+            <View style={styles.card}>
+              <View style={{flex: 1}}>
+                <Text style={styles.cardbtnTxt}>
+                  Your total asset portfolio
+                </Text>
+                <Text style={styles.cardTxt}>N203,934</Text>
+              </View>
+              <View style={{justifyContent: 'flex-end'}}>
+                <TouchableOpacity style={styles.btn1}>
+                  <Text style={styles.greenTxt}>Invest now</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={{justifyContent: 'flex-end'}}>
-              <TouchableOpacity style={styles.btn1}>
-                <Text style={styles.greenTxt}>Invest now</Text>
+            <View style={styles.row}>
+              <Text style={styles.h2}>Best Plans</Text>
+              <TouchableOpacity style={styles.sellBtn}>
+                <Text style={styles.seeAllTxt}>See All</Text>
+                <Image
+                  source={require('../../assets/invest/right-arrow.png')}
+                  style={styles.icon}
+                />
               </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.row}>
-            <Text style={styles.h2}>Best Plans</Text>
-            <TouchableOpacity style={styles.sellBtn}>
-              <Text style={styles.seeAllTxt}>See All</Text>
-              <Image
-                source={require('../../assets/invest/right-arrow.png')}
-                style={styles.icon}
-              />
-            </TouchableOpacity>
+          <View style={{height: 180}}>
+            <FlatList
+              data={coinsData}
+              renderItem={renderItem}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+            />
+          </View>
+          <View style={{paddingHorizontal: 20, marginTop: 16, flex: 1}}>
+            <Text style={styles.h2}>Investment guide</Text>
+            <FlatList
+              data={investmentData}
+              renderItem={investmentRenderCompo}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              // ListFooterComponent={<View style={{height: 50}} />}
+            />
           </View>
         </View>
-        <View style={{height: 180}}>
-          <FlatList
-            data={coinsData}
-            renderItem={renderItem}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-          />
-        </View>
-        <View style={{paddingHorizontal: 20, marginTop: 16, flex: 1}}>
-          <Text style={styles.h2}>Investment guide</Text>
-          <FlatList
-            data={investmentData}
-            renderItem={investmentRenderCompo}
-            keyExtractor={(item, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-            // ListFooterComponent={<View style={{height: 50}} />}
-          />
-        </View>
-      </View>
-    </ScreenComponent>
+      </ScrollView>
+      {showModal && (
+        <ShowInvestDetailModal
+          show={showModal}
+          setShow={setShowModal}
+          data={selectedData}
+        />
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: 22,
+    backgroundColor: colors.invest_white,
   },
   heading: {
     fontSize: 26,
