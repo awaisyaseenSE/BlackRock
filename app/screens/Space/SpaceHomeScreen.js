@@ -122,6 +122,33 @@ export default function SpaceHomeScreen() {
       shadow: 'rgba(249, 160, 101, 0.3)',
       dark: '#F9911D',
     },
+    {
+      id: 5,
+      title: 'Uranus',
+      desc: 'Uranus is the seventh planet from the Sun. It is a gaseous cyan-coloured ice giant.',
+      img: require('../../assets/space/uranus.png'),
+      bg: '#73FFFF',
+      shadow: 'rgba(5, 165, 170, 0.1)',
+      dark: '#05A5AA',
+    },
+    {
+      id: 6,
+      title: 'Neptune',
+      desc: 'Neptune is the eighth and farthest known planet from the Sun. It is the fourth-largest planet in the Solar System by diameter, the third-most-massive planet, and the densest giant planet.',
+      img: require('../../assets/space/neptune.png'),
+      bg: '#4FADFF',
+      shadow: 'rgba(11, 136, 252, 0.2)',
+      dark: '#2446B7',
+    },
+    {
+      id: 7,
+      title: 'Pluto',
+      desc: 'Pluto is a dwarf planet in the Kuiper belt, a ring of bodies beyond the orbit of Neptune. It is the ninth-largest and tenth-most-massive known object to directly orbit the Sun.',
+      img: require('../../assets/space/pluto.png'),
+      bg: '#CCA788',
+      shadow: 'rgba(153, 134, 117, 0.2)',
+      dark: '#726356',
+    },
   ];
 
   const renderItem = ({item, index}) => {
