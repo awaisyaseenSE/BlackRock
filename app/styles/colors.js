@@ -75,4 +75,10 @@ export default {
   invest_white: '#FAFAFA',
   invest_green: '#32A062',
   invest_red: '#FE555D',
+
+  // Space App
+  space_Black: '#1E1E1E',
+  space_gray: '#B4B4B4',
+  space_gray_light: '#565656',
+  space_black2: '#161616',
 };

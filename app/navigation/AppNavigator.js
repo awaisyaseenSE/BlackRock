@@ -67,6 +67,8 @@ import InvestHomeScreen from '../screens/InvestmentApp/InvestHomeScreen';
 import InvestBottomTab from '../screens/InvestmentApp/InvestBottomTab';
 import AnimationPractiseScreen from '../screens/Animation/AnimationPractiseScreen';
 import InvestProfileScreen from '../screens/InvestmentApp/InvestProfileScreen';
+import SpaceGetStartedScreen from '../screens/Space/SpaceGetStartedScreen';
+import SpaceHomeScreen from '../screens/Space/SpaceHomeScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -550,6 +552,20 @@ function AppNavigator() {
       <Stack.Screen
         name="InvestProfileScreen"
         component={InvestProfileScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SpaceGetStartedScreen"
+        component={SpaceGetStartedScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SpaceHomeScreen"
+        component={SpaceHomeScreen}
         options={{
           headerShown: false,
         }}

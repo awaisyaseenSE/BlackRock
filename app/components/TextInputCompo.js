@@ -26,10 +26,17 @@ function TextInputCompo({
   placeholderTextColor = colors.grey,
   clearIcon = '',
   onPressClear = () => {},
+  leftIcon = false,
   ...props
 }) {
   return (
     <View style={{...styles.inputStyle, ...inputStyle}}>
+      {leftIcon && (
+        <Image
+          source={require('../assets/tab_search.png')}
+          style={styles.search}
+        />
+      )}
       <TextInput
         style={{...styles.textStyle, ...textStyle}}
         value={value}
@@ -87,6 +94,13 @@ const styles = StyleSheet.create({
     height: 12,
     resizeMode: 'contain',
     tintColor: colors.lightGrey,
+  },
+  search: {
+    width: 18,
+    height: 18,
+    resizeMode: 'contain',
+    tintColor: colors.offWhite,
+    marginRight: 12,
   },
 });
 

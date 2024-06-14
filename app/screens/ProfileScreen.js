@@ -38,6 +38,7 @@ import MyIndicatorLoader from '../components/MyIndicatorLoader';
 import {CachedImage} from '../utils/CachedImage';
 import ButtonComponent from '../components/ButtonComponent';
 import RNFetchBlob from 'rn-fetch-blob';
+import DeviceInfo from 'react-native-device-info';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -52,6 +53,7 @@ export default function ProfileScreen() {
   const [showImageModal, setShowImageModal] = useState(false);
   const [base64Image, setBase64Image] = useState('');
   const [localBase64Img, setLocalBase64Img] = useState('');
+  const [location, setLocation] = useState(null);
 
   const handleAddselectImages = newImage => {
     setSelectedImage(prevImages => [...prevImages, newImage]);
@@ -417,6 +419,49 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleGetIpAddress = async () => {
+    try {
+      let res = await DeviceInfo.getIpAddress();
+      if (res) {
+        console.log('res: ', res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchPublicIp = async () => {
+    try {
+      setLoading(true);
+      // Fetch public IP address from an external service
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      const ip = ipData.ip;
+      // console.log('Ip address is: ', ip);
+
+      // Fetch location based on the public IP address
+      if (ip) {
+        const locationResponse = await fetch(`https://ipinfo.io/${ip}/geo`);
+        const locationData = await locationResponse.json();
+        if (locationData) {
+          let userLoc = `${locationData?.city}, ${locationData?.region} - ${locationData?.country}`;
+          // console.log('user location: ', userLoc);
+          setLocation(userLoc);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching IP address or location:', error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPublicIp();
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -477,55 +522,9 @@ export default function ProfileScreen() {
           <Text style={styles.profileTxt} selectable>
             {auth().currentUser?.email}
           </Text>
-          {/* <Text style={styles.profileTxt}>
-            Hello my name is awais and i am {'\n'}a react native student from{' '}
-            {'\n'}
-            sadiqabad i also study in kfueit.
-          </Text> */}
-          <TouchableOpacity>
-            {/* <FastImage
-              style={{
-                width: 100,
-                height: 100,
-                borderRadius: 100,
-                marginTop: 20,
-              }}
-              source={{
-                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              }}
-            /> */}
-            {/* <Animated.Image
-              style={{
-                height: 100,
-                width: 100,
-                marginVertical: 30,
-                transform: [{rotate: spin}],
-              }}
-              source={{
-                uri: 'https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png',
-              }}
-            /> */}
-            {/* <Animated.Image
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 100,
-                transform: [{rotate: spin}],
-              }}
-              source={{
-                uri: 'https://images.pexels.com/photos/20860153/pexels-photo-20860153/free-photo-of-wave-in-a-sea-in-black-and-white.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              }}
-            /> */}
-          </TouchableOpacity>
-          {/* <ButtonComponent
-            title="Hello"
-            style={styles.btn}
-            onPress={{}}
-          /> */}
-          {/* <FastImage
-            source={{uri: 'https://v2.exercisedb.io/image/I4XMjCBFhqaGoJ'}}
-            style={{width: 200, height: 200, marginTop: 20, borderRadius: 12}}
-          /> */}
+          {location !== null && (
+            <Text style={[styles.profileTxt, {marginTop: 8}]}>{location}</Text>
+          )}
         </View>
 
         {base64Image !== '' && (
@@ -540,19 +539,6 @@ export default function ProfileScreen() {
             }}
           />
         )}
-
-        <ButtonComponent
-          title="Convert Image to base64"
-          onPress={handleConvertImgToBase64}
-          style={styles.btn}
-        />
-
-        <ButtonComponent
-          title="Select Image"
-          onPress={handleSelectImages}
-          style={styles.btn}
-        />
-
         {selectedImage.length > 0 && (
           <Image
             source={{uri: selectedImage[0]?.uri}}
@@ -713,6 +699,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 22,
     backgroundColor: colors.blue2,
+  },
+  btn1: {
+    width: '40%',
+    alignSelf: 'center',
+    marginTop: 20,
+    borderRadius: 22,
+    backgroundColor: colors.black,
   },
   modalStyle: {
     width: screenWidth,

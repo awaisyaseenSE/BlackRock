@@ -8,6 +8,8 @@ import TopCompoWithHeading from '../../components/TopCompoWithHeading';
 import {useNavigation} from '@react-navigation/native';
 import navigationStrings from '../../navigation/navigationStrings';
 import * as Animatable from 'react-native-animatable';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import AnimatedBottomSheet from './AnimatedCustomBottomSheet';
 
 export default function AnimationPractiseScreen() {
   const navigation = useNavigation();
@@ -119,6 +121,8 @@ export default function AnimationPractiseScreen() {
       }, 1000);
     }
   };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -261,7 +265,7 @@ export default function AnimationPractiseScreen() {
             Zoom in Right !!!
           </Animatable.Text> */}
         {/* </View> */}
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <Animatable.View
             animation={anim}
             duration={5000}
@@ -290,7 +294,20 @@ export default function AnimationPractiseScreen() {
               </View>
             )}
           </Animatable.View>
-        </View>
+        </View> */}
+        {/* <GestureHandlerRootView style={{flex: 1}}>
+          <View style={styles.container}>
+            <ButtonComponent title="Open" onPress={() => setIsOpen(!isOpen)} />
+            <AnimatedBottomSheet
+              isOpen={isOpen}
+              backdropOnPress={() => setIsOpen(prevState => !prevState)}
+              height={500}>
+              <Text>Hello this is bottom sheet</Text>
+            </AnimatedBottomSheet>
+          </View>
+        </GestureHandlerRootView> */}
+
+        <View style={styles.container}></View>
       </ScreenComponent>
     </>
   );
@@ -299,8 +316,8 @@ export default function AnimationPractiseScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    // paddingHorizontal: 20,
+    // paddingVertical: 20,
   },
   txt: {
     fontSize: 14,

@@ -72,4 +72,8 @@ export default {
   InvestHomeScreen: 'InvestHomeScreen',
   InvestBottomTab: 'InvestBottomTab',
   InvestProfileScreen: 'InvestProfileScreen',
+
+  // Space App Screens
+  SpaceGetStartedScreen: 'SpaceGetStartedScreen',
+  SpaceHomeScreen: 'SpaceHomeScreen',
 };

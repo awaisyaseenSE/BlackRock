@@ -70,6 +70,15 @@ function CustomDrawer(props) {
           />
           <DrawerItemListCompo
             image={require('../assets/explore.png')}
+            title="Space App"
+            onPress={() =>
+              navigation.navigate(navigationStrings.SpaceGetStartedScreen)
+            }
+            txtStyle={{color: colors.lineColor}}
+            iconStyle={{tintColor: colors.white}}
+          />
+          <DrawerItemListCompo
+            image={require('../assets/explore.png')}
             title="Investment App"
             onPress={() =>
               navigation.navigate(navigationStrings.InvestGetStartedScreen)
