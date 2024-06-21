@@ -16,9 +16,10 @@ import navigationStrings from '../../navigation/navigationStrings';
 
 const {width, height} = Dimensions.get('window');
 
-const ShowSpaceCompo = ({data, index}) => {
+const ShowSpaceCompo = ({data, index, onPress}) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
       style={[
         styles.container,
         {
@@ -59,7 +60,7 @@ const ShowSpaceCompo = ({data, index}) => {
           style={styles.icon}
         />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

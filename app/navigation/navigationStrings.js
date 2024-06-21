@@ -76,4 +76,5 @@ export default {
   // Space App Screens
   SpaceGetStartedScreen: 'SpaceGetStartedScreen',
   SpaceHomeScreen: 'SpaceHomeScreen',
+  SpaceDetailScreen: 'SpaceDetailScreen',
 };

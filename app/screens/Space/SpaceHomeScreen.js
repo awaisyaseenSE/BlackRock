@@ -80,7 +80,7 @@ export default function SpaceHomeScreen() {
     {
       id: 0,
       title: 'Mother Earth',
-      desc: 'Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km.',
+      desc: 'Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km. Earth is the third largest planet from the sun and the only known planet to support life. It has a diameter of 12,742 km.',
       img: require('../../assets/space/earth.png'),
       bg: '#B6F3FF',
       shadow: 'rgba(132, 207, 224, 0.2)',
@@ -225,7 +225,15 @@ export default function SpaceHomeScreen() {
               <FlatList
                 data={cardData}
                 renderItem={({item, index}) => (
-                  <ShowSpaceCompo data={item} index={index} />
+                  <ShowSpaceCompo
+                    data={item}
+                    index={index}
+                    onPress={() =>
+                      navigation.navigate(navigationStrings.SpaceDetailScreen, {
+                        data: item,
+                      })
+                    }
+                  />
                 )}
                 showsHorizontalScrollIndicator={false}
                 keyExtractor={(item, index) => index.toString()}

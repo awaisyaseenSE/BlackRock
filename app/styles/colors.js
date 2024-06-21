@@ -81,4 +81,6 @@ export default {
   space_gray: '#B4B4B4',
   space_gray_light: '#565656',
   space_black2: '#161616',
+  space_black1: '#0F0F0F',
+  space_pink: '#FF3798',
 };
