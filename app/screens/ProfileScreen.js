@@ -15,6 +15,7 @@ import {
   Animated,
   Easing,
   TextInput,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../styles/colors';
@@ -462,6 +463,50 @@ export default function ProfileScreen() {
     fetchPublicIp();
   }, []);
 
+  const requestLocationPermission = async () => {
+    console.log('sfds');
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message:
+              'This app needs access to your location to provide a better experience.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        console.log('granted is: ', granted);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the location');
+        } else {
+          console.log('Location permission denied');
+          Alert.alert(
+            'Storage Permission Required!',
+            'Please enable storage permission to download file.',
+            [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {
+                text: 'Enable',
+                onPress: () => {
+                  Linking.openSettings();
+                },
+              },
+            ],
+          );
+        }
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -526,6 +571,7 @@ export default function ProfileScreen() {
             <Text style={[styles.profileTxt, {marginTop: 8}]}>{location}</Text>
           )}
         </View>
+        <ButtonComponent title="hello" onPress={requestLocationPermission} />
 
         {base64Image !== '' && (
           <FastImage
